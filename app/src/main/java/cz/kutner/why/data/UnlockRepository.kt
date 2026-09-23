@@ -35,7 +35,8 @@ class UnlockRepository(
         val active = reasonDao.active()
         val answers = unlockDao.reasonAnswers(answersSince).map { it.reasonId to it.unlockedAt }
         val typed = TypedReasons.suggestions(TypedReasons.group(unlockDao.customEntries()), active, order)
-        return PromptChoices(order.order(active, answers), typed)
+        val ordered = order.order(active, answers)
+        return PromptChoices(ordered, typed)
     }
 
     suspend fun dueOfferFor(text: String): TypedReasons.Group? {

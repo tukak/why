@@ -1,5 +1,13 @@
 package cz.kutner.why.ui
 
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -53,15 +61,33 @@ fun WhyNavigation() {
                 rememberSaveableStateHolderNavEntryDecorator(),
                 rememberViewModelStoreNavEntryDecorator(),
             ),
+            transitionSpec = { fadeThrough() },
+            popTransitionSpec = { fadeThrough() },
+            predictivePopTransitionSpec = { fadeThrough() },
             entryProvider = entryProvider {
                 entry<TodayKey> { TodayScreen(onSettings = { backStack.add(SettingsKey) }) }
                 entry<WeekKey> { WeekScreen() }
                 entry<ReasonsKey> { ReasonsScreen() }
-                entry<SettingsKey> { SettingsScreen(onBack = { backStack.removeLastOrNull() }) }
+                entry<SettingsKey>(
+                    metadata = NavDisplay.transitionSpec { sharedAxisX(forward = true) } +
+                        NavDisplay.popTransitionSpec { sharedAxisX(forward = false) } +
+                        NavDisplay.predictivePopTransitionSpec { sharedAxisX(forward = false) },
+                ) { SettingsScreen(onBack = { backStack.removeLastOrNull() }) }
             },
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding()),
         )
     }
+}
+
+/** Material "fade through": for switching between top-level tabs. */
+private fun fadeThrough(): ContentTransform =
+    (fadeIn(tween(210, delayMillis = 90)) + scaleIn(tween(210, delayMillis = 90), initialScale = 0.92f)) togetherWith fadeOut(tween(90))
+
+/** Material "shared axis X": for going one level deeper and back. */
+private fun sharedAxisX(forward: Boolean): ContentTransform {
+    val direction = if (forward) 1 else -1
+    return (slideInHorizontally(tween(300)) { direction * it / 5 } + fadeIn(tween(300))) togetherWith
+        (slideOutHorizontally(tween(300)) { -direction * it / 5 } + fadeOut(tween(150)))
 }
 
 /** Today is the root; other tabs sit one level above it, so Back returns to Today. */

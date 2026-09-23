@@ -30,13 +30,22 @@ object TypedReasons {
     /** The label is the spelling used most often; on a tie, the latest one. */
     fun group(entries: List<CustomEntry>): List<Group> =
         entries
-            .filter { normalize(it.text).isNotEmpty() }
-            .groupBy { normalize(it.text) }
+            .map { normalize(it.text) to it }
+            .filter { it.first.isNotEmpty() }
+            .groupBy({ it.first }, { it.second })
             .map { (key, list) ->
                 val spellings = list.groupBy { it.text.trim().replace(spaces, " ") }
                 val label = spellings.maxWith(compareBy({ it.value.size }, { s -> s.value.maxOf { it.unlockedAt } })).key
-                Group(key, label, list.map { it.unlockedAt }, list.map { it.id })
+                Group(key, calm(label), list.map { it.unlockedAt }, list.map { it.id })
             }
+
+    /** A label typed in capitals reads as shouting; show it with only the first letter capital. */
+    private fun calm(label: String): String =
+        if (label.length > 3 && label.any { it.isLetter() } && label == label.uppercase()) {
+            label.lowercase().replaceFirstChar { it.titlecase() }
+        } else {
+            label
+        }
 
     fun isDue(group: Group, offer: TypedOffer?): Boolean {
         if (offer?.never == true) return false

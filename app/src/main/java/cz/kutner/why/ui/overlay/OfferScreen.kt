@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cz.kutner.why.R
 import cz.kutner.why.data.OfferDecision
@@ -57,7 +58,7 @@ fun OfferScreen(label: String, count: Int, onDecide: (OfferDecision) -> Unit) {
                     Pebble(PebbleStyle.Other, 34.dp)
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("“$label”", style = MaterialTheme.typography.headlineSmall)
+                    Text("“$label”", style = MaterialTheme.typography.headlineSmall, maxLines = 3, overflow = TextOverflow.Ellipsis)
                     Text(pluralStringResource(R.plurals.offer_text, count, count), style = MaterialTheme.typography.bodyLarge, color = colors.onSurfaceVariant)
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {

@@ -27,6 +27,12 @@ class TypedReasonsTest {
     }
 
     @Test
+    fun `a label typed in capitals is shown calmly, short ones stay`() {
+        assertEquals("Parkování", TypedReasons.group(entries("PARKOVÁNÍ", "PARKOVÁNÍ", "parkovani")).single().label)
+        assertEquals("ATM", TypedReasons.group(entries("ATM")).single().label)
+    }
+
+    @Test
     fun `an answer is offered at 5, again at 10 after not now, and never after dont ask`() {
         fun group(count: Int) = TypedReasons.group(entries(*Array(count) { "Parking" })).single()
         assertFalse(TypedReasons.isDue(group(4), null))

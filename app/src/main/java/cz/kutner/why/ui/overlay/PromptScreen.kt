@@ -1,31 +1,29 @@
 package cz.kutner.why.ui.overlay
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -57,6 +55,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cz.kutner.why.R
 import cz.kutner.why.data.db.Reason
@@ -106,7 +105,7 @@ fun PromptScreen(
         Box(Modifier.weight(1f, fill = false)) {
             Column(Modifier.verticalScroll(grid), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 reasons.chunked(2).forEachIndexed { row, pair ->
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         pair.forEachIndexed { col, reason ->
                             ReasonChip(reason, index = row * 2 + col, onClick = { onReason(reason) }, modifier = Modifier.weight(1f))
                         }
@@ -149,7 +148,8 @@ private fun ReasonChip(reason: Reason, index: Int, onClick: () -> Unit, modifier
         color = style.color.tones.container,
         contentColor = MaterialTheme.colorScheme.onSurface,
         modifier = modifier
-            .height(92.dp)
+            .heightIn(min = 92.dp)
+            .fillMaxHeight()
             .graphicsLayer {
                 alpha = appear.value.coerceIn(0f, 1f)
                 translationY = (1f - appear.value) * 40f
@@ -159,25 +159,26 @@ private fun ReasonChip(reason: Reason, index: Int, onClick: () -> Unit, modifier
     ) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 14.dp), verticalArrangement = Arrangement.SpaceBetween) {
             Pebble(style, 30.dp)
-            Text(reason.label, style = MaterialTheme.typography.labelLarge, maxLines = 2)
+            Text(reason.label, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
     }
 }
 
 @Composable
 private fun HabitButton(onClick: () -> Unit) {
-    val spin = rememberInfiniteTransition(label = "burst")
-    val angle by spin.animateFloat(0f, 360f, infiniteRepeatable(tween(18_000, easing = LinearEasing), RepeatMode.Restart), label = "angle")
+    // One turn on appear; a never-ending spin would redraw the window all the time.
+    val angle = remember { Animatable(0f) }
+    LaunchedEffect(Unit) { angle.animateTo(360f, tween(1_400, easing = FastOutSlowInEasing)) }
     val tones = ReasonColor.Ember.tones
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(28.dp),
         color = tones.container,
         contentColor = MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier.fillMaxWidth().height(76.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp),
     ) {
-        Row(Modifier.padding(horizontal = 18.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Pebble(PebbleStyle.Habit, 40.dp, Modifier.rotate(angle))
+        Row(Modifier.padding(horizontal = 18.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+            Pebble(PebbleStyle.Habit, 40.dp, Modifier.rotate(angle.value))
             Column {
                 Text(stringResource(R.string.habit), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.habit_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)
@@ -240,7 +241,7 @@ private fun OtherReasonField(typedBefore: List<String>, onSubmit: (String) -> Un
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             Pebble(PebbleStyle.Other, 14.dp)
-                            Text(earlier, style = MaterialTheme.typography.labelLarge)
+                            Text(earlier, style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
                     }
                 }

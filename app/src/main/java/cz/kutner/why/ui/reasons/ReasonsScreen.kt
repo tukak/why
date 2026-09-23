@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,12 +41,13 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cz.kutner.why.R
-import cz.kutner.why.data.OfferDecision
 import cz.kutner.why.container
+import cz.kutner.why.data.OfferDecision
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
@@ -137,12 +139,12 @@ private fun ReasonListRow(row: ReasonRow, onEdit: () -> Unit) {
     val colors = MaterialTheme.colorScheme
     val editLabel = stringResource(R.string.reasons_edit, row.reason.label)
     Row(
-        Modifier.fillMaxWidth().height(56.dp).clickable(onClick = onEdit).padding(start = 16.dp, end = 4.dp),
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = onEdit).padding(start = 16.dp, end = 4.dp, top = 6.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         ShapeBadge(row.reason.style)
-        Text(row.reason.label, style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+        Text(row.reason.label, style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
         Text(stringResource(R.string.reasons_count, row.count), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
         IconButton(onClick = onEdit, modifier = Modifier.semantics { contentDescription = editLabel }) {
             LineIcon(Icons.Pencil, colors.onSurfaceVariant, size = 18.dp)
@@ -153,12 +155,12 @@ private fun ReasonListRow(row: ReasonRow, onEdit: () -> Unit) {
 @Composable
 private fun HabitRow() {
     Row(
-        Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 16.dp),
+        Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 16.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         ShapeBadge(PebbleStyle.Habit)
-        Text(stringResource(R.string.habit), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+        Text(stringResource(R.string.habit), style = MaterialTheme.typography.labelLarge, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
         Text(stringResource(R.string.reasons_always_shown), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
@@ -178,7 +180,7 @@ private fun OfferCard(label: String, count: Int, onDecide: (OfferDecision) -> Un
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(stringResource(R.string.reasons_suggested), style = MaterialTheme.typography.labelSmall, color = tones.ink)
-        Text("“$label”", style = MaterialTheme.typography.titleMedium)
+        Text("“$label”", style = MaterialTheme.typography.titleMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
         Text(pluralStringResource(R.plurals.offer_text, count, count), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
             Button(onClick = { onDecide(OfferDecision.Add) }) { Text(stringResource(R.string.reasons_add)) }

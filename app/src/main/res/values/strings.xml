@@ -51,6 +51,8 @@
         <item quantity="one">%d more than usual</item>
         <item quantity="other">%d more than usual</item>
     </plurals>
+    <string name="today_legend_more">+ %d more</string>
+    <string name="today_legend_less">Show less</string>
     <string name="today_on_screen">on screen</string>
     <string name="today_per_unlock">per unlock</string>
 

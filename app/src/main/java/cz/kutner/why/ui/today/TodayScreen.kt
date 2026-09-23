@@ -2,24 +2,11 @@ package cz.kutner.why.ui.today
 
 import android.provider.Settings
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.BoxWithConstraintsScope
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.drawscope.rotate
-import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.unit.LayoutDirection
-import cz.kutner.why.ui.theme.PebbleShape
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -37,13 +24,29 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
@@ -53,8 +56,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -65,6 +70,7 @@ import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
 import cz.kutner.why.ui.formatAverage
 import cz.kutner.why.ui.formatDuration
+import cz.kutner.why.ui.theme.PebbleShape
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import java.time.format.DateTimeFormatter
@@ -72,6 +78,8 @@ import java.time.format.FormatStyle
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 
 @Composable
 fun TodayScreen(onSettings: () -> Unit) {
@@ -138,9 +146,14 @@ private fun PebbleJar(state: TodayUiState) {
         val layout = remember(state.pebbles.size, maxWidth) { jarLayout(state.pebbles.size, maxWidth, maxHeight) }
         if (animationsOff()) StaticPile(state.pebbles, layout) else FallingPile(state.pebbles, layout)
 
-        Row(Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 20.dp), verticalAlignment = Alignment.Top) {
-            Column(Modifier.weight(1f)) {
-                Text("${state.unlocks}", style = MaterialTheme.typography.displayLarge)
+        // The badge sits top right; only when a large font leaves no room does it wrap below the number.
+        FlowRow(
+            Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Column(Modifier.padding(end = 12.dp)) {
+                Text("${state.unlocks}", style = MaterialTheme.typography.displayLarge, maxLines = 1, softWrap = false)
                 Text(
                     pluralStringResource(R.plurals.today_unlocks, state.unlocks),
                     style = MaterialTheme.typography.labelMedium,
@@ -156,13 +169,17 @@ private fun PebbleJar(state: TodayUiState) {
 @Composable
 private fun BoxWithConstraintsScope.FallingPile(pebbles: List<PebbleStyle>, layout: JarLayout) {
     val density = LocalDensity.current
+    val wakes = remember { MutableStateFlow(0) }
     val sizePx = with(density) { layout.size.toPx() }
-    val world = remember(constraints.maxWidth, constraints.maxHeight) {
+    val world = remember {
         with(density) {
             PebbleWorld(constraints.maxWidth.toFloat(), constraints.maxHeight.toFloat(), JAR_CORNER.toPx(), 4.dp.toPx(), restSpeed = 30.dp.toPx())
         }
     }
-    val wakes = remember { MutableStateFlow(0) }
+    LaunchedEffect(constraints.maxWidth, constraints.maxHeight) {
+        world.resize(constraints.maxWidth.toFloat(), constraints.maxHeight.toFloat())
+        wakes.value++
+    }
     val tilt = rememberTiltSensor { wakes.value++ }
     val pxPerMeter = with(density) { PX_PER_METER.toPx() }
 
@@ -205,20 +222,36 @@ private fun BoxWithConstraintsScope.FallingPile(pebbles: List<PebbleStyle>, layo
         }
     }
 
-    val outlines = remember(sizePx) {
-        PebbleShape.entries.associateWith { it.shape.createOutline(Size(sizePx, sizePx), LayoutDirection.Ltr, density) }
-    }
+    // Stamping a ready bitmap is much cheaper than filling hundreds of vector paths every frame.
     val inks = ReasonColor.entries.associateWith { it.tones.ink }
+    val styles = pebbles.toSet()
+    val stamps = remember(sizePx, inks, styles) { PebbleStamps(sizePx.toInt().coerceAtLeast(1), inks, density, styles) }
     Canvas(Modifier.matchParentSize()) {
         frame
         world.bodies.forEachIndexed { i, body ->
             val style = pebbles.getOrNull(i) ?: return@forEachIndexed
-            translate(body.x - sizePx / 2, body.y - sizePx / 2) {
-                rotate(Math.toDegrees(body.angle.toDouble()).toFloat(), pivot = Offset(sizePx / 2, sizePx / 2)) {
-                    drawOutline(outlines.getValue(style.shape), inks.getValue(style.color))
-                }
+            rotate(Math.toDegrees(body.angle.toDouble()).toFloat(), pivot = Offset(body.x, body.y)) {
+                drawImage(stamps.of(style), Offset(body.x - stamps.size / 2f, body.y - stamps.size / 2f))
             }
         }
+    }
+}
+
+/** One bitmap per style, drawn and uploaded before the first frame that uses it. */
+private class PebbleStamps(val size: Int, private val inks: Map<ReasonColor, Color>, private val density: Density, styles: Set<PebbleStyle>) {
+    private val cache = styles.associateWith { render(it) }
+
+    fun of(style: PebbleStyle): ImageBitmap = cache[style] ?: render(style)
+
+    private fun render(style: PebbleStyle): ImageBitmap {
+        val bitmap = ImageBitmap(size, size)
+        val area = Size(size.toFloat(), size.toFloat())
+        val outline = style.shape.shape.createOutline(area, LayoutDirection.Ltr, density)
+        CanvasDrawScope().draw(density, LayoutDirection.Ltr, Canvas(bitmap), area) {
+            drawOutline(outline, inks.getValue(style.color))
+        }
+        bitmap.prepareToDraw()
+        return bitmap
     }
 }
 
@@ -257,8 +290,10 @@ private fun UsualBadge(fewer: Int) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Legend(items: List<LegendItem>) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val shown = if (expanded) items else items.take(LEGEND_LIMIT)
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items.forEach { item ->
+        shown.forEach { item ->
             Row(
                 Modifier
                     .height(36.dp)
@@ -268,12 +303,22 @@ private fun Legend(items: List<LegendItem>) {
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Pebble(item.style, 18.dp)
-                Text(item.label.resolve(), style = MaterialTheme.typography.labelMedium)
+                Text(item.label.resolve(), style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                 Text("${item.count}", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold))
+            }
+        }
+        if (items.size > LEGEND_LIMIT) {
+            TextButton(onClick = { expanded = !expanded }, modifier = Modifier.height(36.dp)) {
+                Text(
+                    if (expanded) stringResource(R.string.today_legend_less) else stringResource(R.string.today_legend_more, items.size - LEGEND_LIMIT),
+                    style = MaterialTheme.typography.labelMedium,
+                )
             }
         }
     }
 }
+
+private const val LEGEND_LIMIT = 6
 
 private data class Slot(val x: Dp, val y: Dp, val size: Dp, val rotation: Float)
 
@@ -292,6 +337,7 @@ private class JarLayout(val size: Dp, private val perRow: Int, private val width
 }
 
 private val JAR_HEIGHT = 330.dp
+private val MIN_PEBBLE = 10.dp
 private val JAR_CORNER = 40.dp
 
 /** How far one m/s² moves a pebble; picked so a pebble falls through the jar in about 0.4 s. */
@@ -306,7 +352,7 @@ private fun jarLayout(count: Int, width: Dp, height: Dp): JarLayout {
     while (true) {
         val perRow = floor(((width - 24.dp - size / 2) / (size * 0.95f))).toInt().coerceAtLeast(1)
         val rows = ceil(count / perRow.toFloat())
-        if (size <= 14.dp || size * 0.8f * rows + size * 0.2f <= height * 0.6f) return JarLayout(size, perRow, width, height)
+        if (size <= MIN_PEBBLE || size * 0.8f * rows + size * 0.2f <= height * 0.6f) return JarLayout(size, perRow, width, height)
         size -= 2.dp
     }
 }
