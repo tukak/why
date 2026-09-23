@@ -46,7 +46,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -63,7 +62,7 @@ import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
-import cz.kutner.why.ui.theme.PebbleShape
+import cz.kutner.why.ui.style
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import kotlinx.coroutines.delay
@@ -136,7 +135,7 @@ fun PromptScreen(
 
 @Composable
 private fun ReasonChip(reason: Reason, index: Int, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    val style = PebbleStyle(PebbleShape.of(reason.shape), ReasonColor.of(reason.color))
+    val style = reason.style
     val appear = remember { Animatable(0f) }
     LaunchedEffect(Unit) {
         delay(index * 45L)
@@ -178,7 +177,7 @@ private fun HabitButton(onClick: () -> Unit) {
         modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp),
     ) {
         Row(Modifier.padding(horizontal = 18.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-            Pebble(PebbleStyle.Habit, 40.dp, Modifier.rotate(angle.value))
+            Pebble(PebbleStyle.Habit, 40.dp, Modifier.graphicsLayer { rotationZ = angle.value })
             Column {
                 Text(stringResource(R.string.habit), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.habit_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onTertiaryContainer)

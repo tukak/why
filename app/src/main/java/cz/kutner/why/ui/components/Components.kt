@@ -54,7 +54,6 @@ object Icons {
             "L10.67 2.09 L13.33 2.09 L13.77 4.61 L15.97 5.52 L18.07 4.05 L19.95 5.93 L18.48 8.03Z M12 9a3 3 0 1 1 0 6a3 3 0 1 1 0-6z"
     const val Pencil = "M4 20h4L19 9l-4-4L4 16v4z"
     const val Plus = "M12 5v14 M5 12h14"
-    const val Chevron = "M9 6l6 6-6 6"
     const val Coffee = "M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z M17 11h1.5a2.5 2.5 0 0 1 0 5H17 M8 3v2 M12 3v2"
 }
 

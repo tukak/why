@@ -9,6 +9,7 @@ import androidx.compose.ui.res.stringResource
 import cz.kutner.why.R
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.domain.Answer
+import cz.kutner.why.ui.components.UiText
 import cz.kutner.why.ui.theme.PebbleShape
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
@@ -26,6 +27,19 @@ fun styleOf(answer: Answer, byId: Map<Long, Reason>): PebbleStyle = when (answer
     Answer.Other -> PebbleStyle.Other
     Answer.None -> PebbleStyle.Unanswered
     is Answer.Picked -> byId[answer.reasonId]?.style ?: PebbleStyle.Other
+}
+
+fun labelOf(answer: Answer, byId: Map<Long, Reason>): UiText = when (answer) {
+    Answer.Habit -> UiText.Res(R.string.habit)
+    Answer.Other -> UiText.Res(R.string.answer_other)
+    Answer.None -> UiText.Res(R.string.answer_none)
+    is Answer.Picked -> byId[answer.reasonId]?.let { UiText.Raw(it.label) } ?: UiText.Res(R.string.answer_other)
+}
+
+fun usualComparison(res: Resources, vsUsual: Int): String = when {
+    vsUsual < 0 -> res.getQuantityString(R.plurals.today_fewer, -vsUsual, -vsUsual)
+    vsUsual > 0 -> res.getQuantityString(R.plurals.today_more, vsUsual, vsUsual)
+    else -> res.getString(R.string.reflection_as_usual)
 }
 
 /** Emits now and every minute, so live stats move forward while a screen is open. */

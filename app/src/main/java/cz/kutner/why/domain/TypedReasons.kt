@@ -30,9 +30,7 @@ object TypedReasons {
     /** The label is the spelling used most often; on a tie, the latest one. */
     fun group(entries: List<CustomEntry>): List<Group> =
         entries
-            .map { normalize(it.text) to it }
-            .filter { it.first.isNotEmpty() }
-            .groupBy({ it.first }, { it.second })
+            .groupBy { it.key }
             .map { (key, list) ->
                 val spellings = list.groupBy { it.text.trim().replace(spaces, " ") }
                 val label = spellings.maxWith(compareBy({ it.value.size }, { s -> s.value.maxOf { it.unlockedAt } })).key

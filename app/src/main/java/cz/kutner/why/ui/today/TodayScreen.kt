@@ -4,7 +4,6 @@ import android.provider.Settings
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
@@ -48,6 +47,7 @@ import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -70,12 +70,11 @@ import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
 import cz.kutner.why.ui.formatAverage
 import cz.kutner.why.ui.formatDuration
-import cz.kutner.why.ui.theme.PebbleShape
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
+import cz.kutner.why.ui.usualComparison
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -160,7 +159,7 @@ private fun PebbleJar(state: TodayUiState) {
                     color = colors.onSurfaceVariant,
                 )
             }
-            state.fewerThanUsual?.takeIf { it != 0 }?.let { UsualBadge(it) }
+            state.vsUsual?.takeIf { it != 0 }?.let { UsualBadge(it) }
         }
     }
 }
@@ -198,7 +197,6 @@ private fun BoxWithConstraintsScope.FallingPile(pebbles: List<PebbleStyle>, layo
                 world.add(constraints.maxWidth / 2f + jitter, sizePx, sizePx, 0f, shape)
             }
         }
-        world.wake()
         wakes.value++
     }
 
@@ -272,8 +270,8 @@ private fun animationsOff(): Boolean {
 }
 
 @Composable
-private fun UsualBadge(fewer: Int) {
-    val good = fewer > 0
+private fun UsualBadge(vsUsual: Int) {
+    val good = vsUsual < 0
     val tones = if (good) ReasonColor.Green.tones else ReasonColor.Ember.tones
     Row(
         Modifier.background(tones.container, RoundedCornerShape(50)).padding(horizontal = 12.dp, vertical = 7.dp),
@@ -282,7 +280,7 @@ private fun UsualBadge(fewer: Int) {
     ) {
         LineIcon(if (good) Icons.ArrowDown else Icons.ArrowUp, tones.ink, size = 14.dp, strokeWidth = 3f)
         Text(
-            pluralStringResource(if (good) R.plurals.today_fewer else R.plurals.today_more, abs(fewer), abs(fewer)),
+            usualComparison(LocalResources.current, vsUsual),
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
             color = tones.ink,
         )

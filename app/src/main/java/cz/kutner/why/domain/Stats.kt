@@ -28,29 +28,37 @@ val UnlockEvent.answer: Answer
         else -> Answer.None
     }
 
-fun startOfDay(epochMillis: Long, zone: ZoneId): Long =
-    Instant.ofEpochMilli(epochMillis).atZone(zone).toLocalDate().atStartOfDay(zone).toInstant().toEpochMilli()
+fun startOfDay(epochMillis: Long, zone: ZoneId): Long = daysBack(epochMillis, zone, 0)
+
+/** Local midnight [days] calendar days before the day of [epochMillis]; stays on midnight across daylight saving changes. */
+fun daysBack(epochMillis: Long, zone: ZoneId, days: Int): Long =
+    Instant.ofEpochMilli(epochMillis).atZone(zone).toLocalDate().minusDays(days.toLong()).atStartOfDay(zone).toInstant().toEpochMilli()
+
+/** Earlier days that "usual" is averaged over. */
+const val USUAL_DAYS = 7
 
 data class DaySummary(
     val unlocks: Int,
+    val habit: Int,
     val screenMillis: Long,
     val avgMillis: Long,
-    /** Average unlock count on earlier days by this time of day; null without history. */
-    val usualSoFar: Int?,
+    /** Unlocks minus the average of earlier days by this time of day; null without history. */
+    val vsUsual: Int?,
 )
 
 fun summarizeDay(today: List<UnlockEvent>, history: List<UnlockEvent>, now: Long, zone: ZoneId): DaySummary {
     val screen = today.sumOf { it.durationMillis(now) }
     return DaySummary(
         unlocks = today.size,
+        habit = today.count { it.answer == Answer.Habit },
         screenMillis = screen,
         avgMillis = if (today.isEmpty()) 0 else screen / today.size,
-        usualSoFar = usualSoFar(history, now, zone),
+        vsUsual = usualSoFar(history, now, zone)?.let { today.size - it },
     )
 }
 
 /** Counts only earlier days that have any data, so the days before install do not pull the average down. */
-fun usualSoFar(history: List<UnlockEvent>, now: Long, zone: ZoneId, days: Int = 7): Int? {
+fun usualSoFar(history: List<UnlockEvent>, now: Long, zone: ZoneId, days: Int = USUAL_DAYS): Int? {
     val nowZ = Instant.ofEpochMilli(now).atZone(zone)
     val sinceMidnight = Duration.between(nowZ.toLocalDate().atStartOfDay(zone), nowZ)
     val counts = (1..days).mapNotNull { back ->

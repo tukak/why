@@ -9,17 +9,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ReasonDao {
-    @Query("SELECT * FROM reason ORDER BY position")
+    @Query("SELECT * FROM reason ORDER BY id")
     fun observeAll(): Flow<List<Reason>>
 
-    @Query("SELECT * FROM reason WHERE archived = 0 ORDER BY position")
+    @Query("SELECT * FROM reason WHERE archived = 0 ORDER BY id")
     suspend fun active(): List<Reason>
 
     @Query("SELECT COUNT(*) FROM reason")
     suspend fun count(): Int
-
-    @Query("SELECT COALESCE(MAX(position), -1) + 1 FROM reason")
-    suspend fun nextPosition(): Int
 
     @Insert
     suspend fun insert(reason: Reason): Long
@@ -28,7 +25,7 @@ interface ReasonDao {
     suspend fun insertAll(reasons: List<Reason>)
 
     @Update
-    suspend fun update(reasons: List<Reason>)
+    suspend fun update(reason: Reason)
 }
 
 @Dao
@@ -49,8 +46,8 @@ interface UnlockDao {
     @Query("UPDATE unlock_event SET lockedAt = NULL WHERE id = :id")
     suspend fun reopen(id: Long)
 
-    @Query("UPDATE unlock_event SET reasonId = :reasonId, isHabit = :isHabit, customText = :customText WHERE id = :id")
-    suspend fun answer(id: Long, reasonId: Long?, isHabit: Boolean, customText: String?)
+    @Query("UPDATE unlock_event SET reasonId = :reasonId, isHabit = :isHabit, customText = :customText, customKey = :customKey WHERE id = :id")
+    suspend fun answer(id: Long, reasonId: Long?, isHabit: Boolean, customText: String?, customKey: String?)
 
     @Query("SELECT COUNT(*) FROM unlock_event WHERE unlockedAt >= :from")
     suspend fun countSince(from: Long): Int
@@ -58,13 +55,13 @@ interface UnlockDao {
     @Query("SELECT * FROM unlock_event WHERE unlockedAt >= :from ORDER BY unlockedAt")
     fun observeSince(from: Long): Flow<List<UnlockEvent>>
 
-    @Query("SELECT id, customText AS text, unlockedAt FROM unlock_event WHERE customText IS NOT NULL")
+    @Query("SELECT id, customText AS text, customKey AS `key`, unlockedAt FROM unlock_event WHERE customKey IS NOT NULL")
     suspend fun customEntries(): List<CustomEntry>
 
-    @Query("SELECT id, customText AS text, unlockedAt FROM unlock_event WHERE customText IS NOT NULL")
+    @Query("SELECT id, customText AS text, customKey AS `key`, unlockedAt FROM unlock_event WHERE customKey IS NOT NULL")
     fun observeCustomEntries(): Flow<List<CustomEntry>>
 
-    @Query("UPDATE unlock_event SET reasonId = :reasonId, customText = NULL WHERE id IN (:ids)")
+    @Query("UPDATE unlock_event SET reasonId = :reasonId, customText = NULL, customKey = NULL WHERE id IN (:ids)")
     suspend fun assignReason(ids: List<Long>, reasonId: Long)
 
     @Query("SELECT reasonId, unlockedAt FROM unlock_event WHERE reasonId IS NOT NULL AND unlockedAt >= :from")

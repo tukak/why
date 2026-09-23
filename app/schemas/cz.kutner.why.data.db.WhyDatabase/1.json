@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8a2afc3aa602fcb3d1fb6c31f0ad884f",
+    "identityHash": "08a121e8516a575b5744af9bc56442fc",
     "entities": [
       {
         "tableName": "reason",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `label` TEXT NOT NULL, `shape` TEXT NOT NULL, `color` TEXT NOT NULL, `position` INTEGER NOT NULL, `archived` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `label` TEXT NOT NULL, `shape` TEXT NOT NULL, `color` TEXT NOT NULL, `archived` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -33,12 +33,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "position",
-            "columnName": "position",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "archived",
             "columnName": "archived",
             "affinity": "INTEGER",
@@ -54,7 +48,7 @@
       },
       {
         "tableName": "unlock_event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `unlockedAt` INTEGER NOT NULL, `lockedAt` INTEGER, `reasonId` INTEGER, `isHabit` INTEGER NOT NULL, `customText` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `unlockedAt` INTEGER NOT NULL, `lockedAt` INTEGER, `reasonId` INTEGER, `isHabit` INTEGER NOT NULL, `customText` TEXT, `customKey` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -88,6 +82,11 @@
             "fieldPath": "customText",
             "columnName": "customText",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customKey",
+            "columnName": "customKey",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -105,13 +104,52 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_unlock_event_unlockedAt` ON `${TABLE_NAME}` (`unlockedAt`)"
+          },
+          {
+            "name": "index_unlock_event_customKey",
+            "unique": false,
+            "columnNames": [
+              "customKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_unlock_event_customKey` ON `${TABLE_NAME}` (`customKey`)"
           }
         ]
+      },
+      {
+        "tableName": "typed_offer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `lastOfferedCount` INTEGER NOT NULL, `never` INTEGER NOT NULL, PRIMARY KEY(`key`))",
+        "fields": [
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastOfferedCount",
+            "columnName": "lastOfferedCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "never",
+            "columnName": "never",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "key"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8a2afc3aa602fcb3d1fb6c31f0ad884f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '08a121e8516a575b5744af9bc56442fc')"
     ]
   }
 }

@@ -10,7 +10,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class TypedReasonsTest {
-    private fun entries(vararg texts: String) = texts.mapIndexed { i, t -> CustomEntry(id = i.toLong() + 1, text = t, unlockedAt = i * 1000L) }
+    private fun entries(vararg texts: String) = texts.mapIndexed { i, t -> CustomEntry(id = i.toLong() + 1, text = t, key = TypedReasons.normalize(t), unlockedAt = i * 1000L) }
 
     @Test
     fun `spelling differences count as the same answer`() {
@@ -46,7 +46,7 @@ class TypedReasonsTest {
     @Test
     fun `a typed answer that already is a reason is not offered again`() {
         val groups = TypedReasons.group(entries(*Array(5) { "navigate" }))
-        val reasons = listOf(Reason(id = 1, label = "Navigate", shape = "", color = "", position = 0))
+        val reasons = listOf(Reason(id = 1, label = "Navigate", shape = "", color = ""))
         assertTrue(TypedReasons.due(groups, emptyList(), reasons).isEmpty())
     }
 

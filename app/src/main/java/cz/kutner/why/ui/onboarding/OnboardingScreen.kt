@@ -2,7 +2,6 @@ package cz.kutner.why.ui.onboarding
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
@@ -29,8 +28,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,7 +45,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import cz.kutner.why.R
 import cz.kutner.why.ui.components.BackgroundHelp
@@ -100,7 +98,7 @@ fun OnboardingScreen(permissionLost: Boolean = false, onDone: () -> Unit) {
             Column(Modifier.background(colors.surfaceContainerLowest, RoundedCornerShape(28.dp)).padding(vertical = 6.dp)) {
                 PermissionRow(Icons.Check, ReasonColor.Green, R.string.onboarding_unlocks, R.string.onboarding_unlocks_hint, granted = true, onAllow = {})
                 PermissionRow(Icons.Layers, ReasonColor.Ember, R.string.onboarding_overlay, R.string.onboarding_overlay_hint, granted = overlayGranted) {
-                    context.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "package:${context.packageName}".toUri()))
+                    BackgroundHelp.openOverlaySettings(context)
                 }
                 PermissionRow(Icons.Bell, ReasonColor.Blue, R.string.onboarding_notification, R.string.onboarding_notification_hint, granted = notificationsGranted) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)

@@ -101,7 +101,6 @@ class JarWorld(
         height = newHeight
         buildWalls()
         sync()
-        wake()
     }
 
     fun step(dt: Float, ax: Float, ay: Float) {

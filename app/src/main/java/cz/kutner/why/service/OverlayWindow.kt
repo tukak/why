@@ -84,11 +84,11 @@ class OverlayController(private val context: Context) {
 
     fun canShow(): Boolean = Settings.canDrawOverlays(context)
 
-    fun show(content: @Composable () -> Unit): Boolean {
+    fun show(content: @Composable () -> Unit) {
         dismiss()
-        if (!canShow()) return false
+        if (!canShow()) return
         val window = OverlayWindow(context, content)
-        return window.show().also { shown -> if (shown) current = window }
+        if (window.show()) current = window
     }
 
     fun dismiss() {

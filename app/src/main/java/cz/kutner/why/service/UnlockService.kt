@@ -11,9 +11,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ServiceInfo
-import android.os.Build
 import android.media.AudioManager
+import android.os.Build
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
@@ -30,16 +31,17 @@ import cz.kutner.why.domain.TimeOfDayOrder
 import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.domain.answer
 import cz.kutner.why.domain.startOfDay
-import cz.kutner.why.ui.timeFormatter
 import cz.kutner.why.ui.overlay.NudgeScreen
 import cz.kutner.why.ui.overlay.OfferScreen
 import cz.kutner.why.ui.overlay.PromptScreen
-import cz.kutner.why.ui.theme.PebbleShape
+import cz.kutner.why.ui.style
 import cz.kutner.why.ui.theme.PebbleStyle
-import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.theme.WhyTheme
+import cz.kutner.why.ui.timeFormatter
 import java.time.Instant
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -102,6 +104,7 @@ class UnlockService : LifecycleService() {
         val now = app.clock.millis()
         val settings = app.settings.current()
         val previous = currentId?.let { app.unlocks.event(it) }
+        val canShow = overlays.canShow()
         val decision = PromptPolicy.decide(
             now = now,
             lastLockAt = lastLockAt,
@@ -109,7 +112,7 @@ class UnlockService : LifecycleService() {
             previousOpen = previous != null && previous.lockedAt == null,
             previousAnswered = previous != null && previous.answer != Answer.None,
             pausedUntil = settings.pausedUntil,
-            canShowOverlay = overlays.canShow(),
+            canShowOverlay = canShow,
             inCall = inCall(),
         )
         val id = if (decision.resumePrevious && previous != null) {
@@ -119,7 +122,6 @@ class UnlockService : LifecycleService() {
             app.unlocks.startSession(now)
         }
         currentId = id
-        val canShow = overlays.canShow()
         if (canShow == showingPermissionHint) {
             showingPermissionHint = !canShow
             getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, notification())
@@ -140,49 +142,44 @@ class UnlockService : LifecycleService() {
         val choices = app.unlocks.promptChoices(TimeOfDayOrder(now, app.clock.zone), answersSince = now - ORDER_HISTORY_MS)
         val unlockNumber = app.unlocks.countSince(startOfDay(now, app.clock.zone))
         val time = timeFormatter(this).format(Instant.ofEpochMilli(now).atZone(app.clock.zone))
-        overlays.show {
-            WhyTheme(settings.themeMode, settings.dynamicColor) {
-                PromptScreen(
-                    time = time,
-                    unlockNumber = unlockNumber,
-                    reasons = choices.reasons,
-                    typedBefore = choices.typed,
-                    onReason = { answer(id, settings, reason = it) },
-                    onHabit = { answer(id, settings, habit = true) },
-                    onOther = { answer(id, settings, text = it) },
-                    onPause = {
-                        lifecycleScope.launch {
-                            app.settings.setPausedUntil(app.clock.millis() + 1.hours.inWholeMilliseconds)
-                            overlays.dismiss()
-                        }
-                    },
-                )
-            }
+        showThemed(settings) {
+            PromptScreen(
+                time = time,
+                unlockNumber = unlockNumber,
+                reasons = choices.reasons,
+                typedBefore = choices.typed,
+                onReason = { answer(id, settings, reason = it) },
+                onHabit = { answer(id, settings, habit = true) },
+                onOther = { answer(id, settings, text = it) },
+                onPause = {
+                    lifecycleScope.launch {
+                        app.settings.setPausedUntil(app.clock.millis() + 1.hours.inWholeMilliseconds)
+                        overlays.dismiss()
+                    }
+                },
+            )
         }
     }
+
+    private fun showThemed(settings: AppSettings, content: @Composable () -> Unit) =
+        overlays.show { WhyTheme(settings.themeMode, settings.dynamicColor, content = content) }
 
     private fun answer(id: Long, settings: AppSettings, reason: Reason? = null, habit: Boolean = false, text: String? = null) {
         lifecycleScope.launch {
             app.unlocks.answer(id, reasonId = reason?.id, isHabit = habit, customText = text)
             val offer = text?.let { app.unlocks.dueOfferFor(it) }
             if (offer != null) showOffer(offer, settings) else overlays.dismiss()
-            val style = when {
-                reason != null -> PebbleStyle(PebbleShape.of(reason.shape), ReasonColor.of(reason.color))
-                habit -> PebbleStyle.Habit
-                else -> PebbleStyle.Other
-            }
+            val style = reason?.style ?: if (habit) PebbleStyle.Habit else PebbleStyle.Other
             scheduleNudge(id, settings, NudgeTarget(reason?.label ?: text, style), settings.nudgeMinutes)
         }
     }
 
     private fun showOffer(offer: TypedReasons.Group, settings: AppSettings) {
-        overlays.show {
-            WhyTheme(settings.themeMode, settings.dynamicColor) {
-                OfferScreen(label = offer.label, count = offer.count) { decision ->
-                    lifecycleScope.launch {
-                        app.unlocks.decide(offer, decision)
-                        overlays.dismiss()
-                    }
+        showThemed(settings) {
+            OfferScreen(label = offer.label, count = offer.count) { decision ->
+                lifecycleScope.launch {
+                    app.unlocks.decide(offer, decision)
+                    overlays.dismiss()
                 }
             }
         }
@@ -199,24 +196,22 @@ class UnlockService : LifecycleService() {
                 scheduleNudge(id, settings, target, SNOOZE_MINUTES)
                 return@launch
             }
-            val minutes = ((app.clock.millis() - event.unlockedAt) / 60_000).toInt()
-            overlays.show {
-                WhyTheme(settings.themeMode, settings.dynamicColor) {
-                    NudgeScreen(
-                        minutes = minutes,
-                        reasonLabel = target.label,
-                        style = target.style,
-                        onDone = {
-                            goHome()
-                            overlays.dismiss()
-                        },
-                        onMore = {
-                            overlays.dismiss()
-                            scheduleNudge(id, settings, target, SNOOZE_MINUTES)
-                        },
-                        onSwitched = { lifecycleScope.launch { showPrompt(id, settings) } },
-                    )
-                }
+            val minutes = (app.clock.millis() - event.unlockedAt).milliseconds.inWholeMinutes.toInt()
+            showThemed(settings) {
+                NudgeScreen(
+                    minutes = minutes,
+                    reasonLabel = target.label,
+                    style = target.style,
+                    onDone = {
+                        goHome()
+                        overlays.dismiss()
+                    },
+                    onMore = {
+                        overlays.dismiss()
+                        scheduleNudge(id, settings, target, SNOOZE_MINUTES)
+                    },
+                    onSwitched = { lifecycleScope.launch { showPrompt(id, settings) } },
+                )
             }
         }
     }
@@ -269,7 +264,7 @@ class UnlockService : LifecycleService() {
         private const val CHANNEL_ID = "unlock_service"
         private const val NOTIFICATION_ID = 1
         private const val SNOOZE_MINUTES = 5
-        private const val ORDER_HISTORY_MS = 30 * 24 * 60 * 60 * 1000L
+        private val ORDER_HISTORY_MS = 30.days.inWholeMilliseconds
 
         fun start(context: Context) {
             try {

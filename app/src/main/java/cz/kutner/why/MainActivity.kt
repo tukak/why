@@ -7,21 +7,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import cz.kutner.why.data.settings.ThemeMode
 import cz.kutner.why.service.UnlockService
 import cz.kutner.why.ui.WhyNavigation
 import cz.kutner.why.ui.onboarding.OnboardingScreen
+import cz.kutner.why.ui.theme.LocalIsDark
 import cz.kutner.why.ui.theme.WhyTheme
 import kotlinx.coroutines.launch
 
@@ -44,16 +43,12 @@ class MainActivity : ComponentActivity() {
             }
             settings?.let { current ->
                 ready = true
-                val dark = when (current.themeMode) {
-                    ThemeMode.System -> isSystemInDarkTheme()
-                    ThemeMode.Light -> false
-                    ThemeMode.Dark -> true
-                }
-                LaunchedEffect(dark) {
-                    val bars = if (dark) SystemBarStyle.dark(Color.TRANSPARENT) else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
-                    enableEdgeToEdge(statusBarStyle = bars, navigationBarStyle = bars)
-                }
                 WhyTheme(current.themeMode, current.dynamicColor) {
+                    val dark = LocalIsDark.current
+                    LaunchedEffect(dark) {
+                        val bars = if (dark) SystemBarStyle.dark(Color.TRANSPARENT) else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+                        enableEdgeToEdge(statusBarStyle = bars, navigationBarStyle = bars)
+                    }
                     if (current.onboardingDone && overlayGranted) {
                         WhyNavigation()
                     } else {

@@ -1,6 +1,5 @@
 package cz.kutner.why.ui.settings
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,8 +30,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,13 +50,13 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.data.settings.ThemeMode
-import cz.kutner.why.ui.timeFormatter
 import cz.kutner.why.ui.components.BackgroundHelp
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
+import cz.kutner.why.ui.timeFormatter
 import java.time.LocalTime
 import kotlinx.coroutines.launch
 
@@ -177,12 +176,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                 Text(stringResource(R.string.settings_free_title), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.settings_free_text), style = MaterialTheme.typography.bodySmall, color = colors.onTertiaryContainer)
             }
-            Button(onClick = {
-                try {
-                    context.startActivity(Intent(Intent.ACTION_VIEW, BUY_ME_A_COFFEE_URL.toUri()))
-                } catch (_: ActivityNotFoundException) {
-                }
-            }) {
+            Button(onClick = { BackgroundHelp.open(context, Intent(Intent.ACTION_VIEW, BUY_ME_A_COFFEE_URL.toUri())) }) {
                 LineIcon(Icons.Coffee, colors.onPrimary, size = 18.dp)
                 Text(stringResource(R.string.settings_coffee), modifier = Modifier.padding(start = 6.dp))
             }

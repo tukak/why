@@ -18,6 +18,9 @@ object BackgroundHelp {
     fun openAppSettings(context: Context) =
         open(context, Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:${context.packageName}".toUri()))
 
+    fun openOverlaySettings(context: Context) =
+        open(context, Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, "package:${context.packageName}".toUri()))
+
     fun openManufacturerTips(context: Context) = open(context, Intent(Intent.ACTION_VIEW, tipsUrl().toUri()))
 
     val manufacturer: String get() = Build.MANUFACTURER.replaceFirstChar { it.uppercase() }
@@ -30,7 +33,8 @@ object BackgroundHelp {
         return "https://dontkillmyapp.com/" + (pageNames[key] ?: key.replace(" ", "-"))
     }
 
-    private fun open(context: Context, intent: Intent) {
+    /** Some phones lack a settings screen or a browser; then the tap does nothing instead of crashing. */
+    fun open(context: Context, intent: Intent) {
         try {
             context.startActivity(intent)
         } catch (_: ActivityNotFoundException) {

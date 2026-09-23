@@ -13,10 +13,14 @@ import cz.kutner.why.MainActivity
 import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.settings.AppSettings
+import cz.kutner.why.domain.USUAL_DAYS
+import cz.kutner.why.domain.daysBack
 import cz.kutner.why.domain.nextTimeOfDay
 import cz.kutner.why.domain.reflectOnDay
 import cz.kutner.why.domain.startOfDay
 import cz.kutner.why.ui.formatDuration
+import cz.kutner.why.ui.usualComparison
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -24,8 +28,7 @@ import kotlinx.coroutines.launch
 object EveningReflection {
     private const val CHANNEL_ID = "evening_reflection"
     private const val NOTIFICATION_ID = 2
-    private const val WINDOW_MS = 10 * 60 * 1000L
-    private const val HISTORY_MS = 7 * 24 * 60 * 60 * 1000L
+    private val WINDOW_MS = 10.minutes.inWholeMilliseconds
 
     /** An inexact window needs no exact-alarm permission; a few minutes late is fine for a summary. */
     fun schedule(context: Context, settings: AppSettings) {
@@ -44,7 +47,7 @@ object EveningReflection {
         val app = context.container
         val now = app.clock.millis()
         val dayStart = startOfDay(now, app.clock.zone)
-        val (today, history) = app.unlocks.eventsSince(dayStart - HISTORY_MS).first().partition { it.unlockedAt >= dayStart }
+        val (today, history) = app.unlocks.eventsSince(daysBack(now, app.clock.zone, USUAL_DAYS)).first().partition { it.unlockedAt >= dayStart }
         val day = reflectOnDay(today, history, now, app.clock.zone) ?: return
         val res = context.resources
         val numbers = listOf(
@@ -52,12 +55,7 @@ object EveningReflection {
             res.getQuantityString(R.plurals.reflection_habit, day.habit, day.habit),
             res.getString(R.string.reflection_screen, formatDuration(res, day.screenMillis)),
         ).joinToString(" · ")
-        val comparison = when {
-            day.vsUsual == null -> null
-            day.vsUsual < 0 -> res.getQuantityString(R.plurals.today_fewer, -day.vsUsual, -day.vsUsual)
-            day.vsUsual > 0 -> res.getQuantityString(R.plurals.today_more, day.vsUsual, day.vsUsual)
-            else -> res.getString(R.string.reflection_as_usual)
-        }
+        val comparison = day.vsUsual?.let { usualComparison(res, it) }
         val text = listOfNotNull(numbers, comparison).joinToString("\n")
 
         val manager = context.getSystemService(NotificationManager::class.java)

@@ -53,7 +53,7 @@ class TimeOfDayOrder(
         return reasons.sortedWith(
             compareByDescending<Reason> { rank.forNow[it.id] ?: 0 }
                 .thenByDescending { rank.overall[it.id] ?: 0 }
-                .thenBy { it.position },
+                .thenBy { it.id },
         )
     }
 

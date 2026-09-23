@@ -2,14 +2,16 @@ package cz.kutner.why.ui.today
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cz.kutner.why.R
 import cz.kutner.why.data.UnlockRepository
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.domain.Answer
+import cz.kutner.why.domain.USUAL_DAYS
 import cz.kutner.why.domain.answer
+import cz.kutner.why.domain.daysBack
 import cz.kutner.why.domain.startOfDay
 import cz.kutner.why.domain.summarizeDay
 import cz.kutner.why.ui.components.UiText
+import cz.kutner.why.ui.labelOf
 import cz.kutner.why.ui.minuteTicker
 import cz.kutner.why.ui.styleOf
 import cz.kutner.why.ui.theme.PebbleStyle
@@ -26,8 +28,8 @@ data class LegendItem(val label: UiText, val style: PebbleStyle, val count: Int)
 data class TodayUiState(
     val date: LocalDate,
     val unlocks: Int,
-    /** Positive: fewer unlocks than usual by now. Null without history. */
-    val fewerThanUsual: Int?,
+    /** Unlocks minus the usual count by now; null without history. */
+    val vsUsual: Int?,
     val screenMillis: Long,
     val avgMillis: Long,
     val pebbles: List<PebbleStyle>,
@@ -36,11 +38,11 @@ data class TodayUiState(
 
 class TodayViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewModel() {
 
-    private val weekAgo = startOfDay(clock.millis(), clock.zone) - 7 * DAY_MS
+    private val historyStart = daysBack(clock.millis(), clock.zone, USUAL_DAYS)
 
     val state: StateFlow<TodayUiState?> = combine(
         unlocks.reasons,
-        unlocks.eventsSince(weekAgo),
+        unlocks.eventsSince(historyStart),
         minuteTicker(),
     ) { reasons, events, _ ->
         val now = clock.millis()
@@ -51,7 +53,7 @@ class TodayViewModel(unlocks: UnlockRepository, private val clock: Clock) : View
         TodayUiState(
             date = Instant.ofEpochMilli(now).atZone(clock.zone).toLocalDate(),
             unlocks = summary.unlocks,
-            fewerThanUsual = summary.usualSoFar?.let { it - summary.unlocks },
+            vsUsual = summary.vsUsual,
             screenMillis = summary.screenMillis,
             avgMillis = summary.avgMillis,
             pebbles = today.map { styleOf(it.answer, byId) },
@@ -63,15 +65,4 @@ class TodayViewModel(unlocks: UnlockRepository, private val clock: Clock) : View
         answers.groupingBy { it }.eachCount().entries
             .sortedByDescending { it.value }
             .map { (answer, count) -> LegendItem(labelOf(answer, byId), styleOf(answer, byId), count) }
-
-    private fun labelOf(answer: Answer, byId: Map<Long, Reason>): UiText = when (answer) {
-        Answer.Habit -> UiText.Res(R.string.habit)
-        Answer.Other -> UiText.Res(R.string.answer_other)
-        Answer.None -> UiText.Res(R.string.answer_none)
-        is Answer.Picked -> byId[answer.reasonId]?.let { UiText.Raw(it.label) } ?: UiText.Res(R.string.answer_other)
-    }
-
-    private companion object {
-        const val DAY_MS = 24 * 60 * 60 * 1000L
-    }
 }

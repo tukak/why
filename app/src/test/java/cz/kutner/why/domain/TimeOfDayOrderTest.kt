@@ -12,9 +12,9 @@ class TimeOfDayOrderTest {
     private val tuesday = LocalDate.of(2026, 9, 22)
     private val saturday = LocalDate.of(2026, 9, 26)
 
-    private val calendar = Reason(id = 1, label = "Calendar", shape = "", color = "", position = 0)
-    private val music = Reason(id = 2, label = "Music", shape = "", color = "", position = 1)
-    private val photo = Reason(id = 3, label = "Photo", shape = "", color = "", position = 2)
+    private val calendar = Reason(id = 1, label = "Calendar", shape = "", color = "")
+    private val music = Reason(id = 2, label = "Music", shape = "", color = "")
+    private val photo = Reason(id = 3, label = "Photo", shape = "", color = "")
     private val reasons = listOf(calendar, music, photo)
 
     private fun at(date: LocalDate, hour: Int, minute: Int = 0) =

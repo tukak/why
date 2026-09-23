@@ -51,13 +51,14 @@ import cz.kutner.why.data.UnlockRepository
 import cz.kutner.why.domain.Answer
 import cz.kutner.why.domain.DayBar
 import cz.kutner.why.domain.HabitHeatMap
+import cz.kutner.why.domain.daysBack
 import cz.kutner.why.domain.habitHeatMap
-import cz.kutner.why.domain.startOfDay
 import cz.kutner.why.domain.summarizeWeek
 import cz.kutner.why.ui.components.Pebble
 import cz.kutner.why.ui.components.UiText
 import cz.kutner.why.ui.formatAverage
 import cz.kutner.why.ui.formatDuration
+import cz.kutner.why.ui.labelOf
 import cz.kutner.why.ui.minuteTicker
 import cz.kutner.why.ui.styleOf
 import cz.kutner.why.ui.theme.PebbleStyle
@@ -84,11 +85,13 @@ data class WeekUiState(
 )
 
 class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewModel() {
-    private val from = startOfDay(clock.millis(), clock.zone) - 6 * DAY_MS
-    private val heatMapFrom = startOfDay(clock.millis(), clock.zone) - (HEAT_MAP_DAYS - 1) * DAY_MS
+    private val queryFrom = daysBack(clock.millis(), clock.zone, HEAT_MAP_DAYS - 1)
 
-    val state: StateFlow<WeekUiState?> = combine(unlocks.reasons, unlocks.eventsSince(heatMapFrom), minuteTicker()) { reasons, events, _ ->
-        val summary = summarizeWeek(events.filter { it.unlockedAt >= from }, clock.millis(), clock.zone)
+    val state: StateFlow<WeekUiState?> = combine(unlocks.reasons, unlocks.eventsSince(queryFrom), minuteTicker()) { reasons, events, _ ->
+        val now = clock.millis()
+        val weekFrom = daysBack(now, clock.zone, 6)
+        val heatMapFrom = daysBack(now, clock.zone, HEAT_MAP_DAYS - 1)
+        val summary = summarizeWeek(events.filter { it.unlockedAt >= weekFrom }, now, clock.zone)
         val byId = reasons.associateBy { it.id }
         val rows = summary.timeByAnswer.filterKeys { it != Answer.None }.entries.sortedByDescending { it.value }.take(4)
         val max = rows.firstOrNull()?.value?.coerceAtLeast(1) ?: 1
@@ -96,20 +99,12 @@ class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewM
             days = summary.days,
             habitAvgMillis = summary.habitAvgMillis,
             reasonAvgMillis = summary.reasonAvgMillis,
-            time = rows.map { (answer, millis) ->
-                val label = when (answer) {
-                    Answer.Habit -> UiText.Res(R.string.habit)
-                    is Answer.Picked -> byId[answer.reasonId]?.let { UiText.Raw(it.label) } ?: UiText.Res(R.string.answer_other)
-                    else -> UiText.Res(R.string.answer_other)
-                }
-                TimeRow(label, styleOf(answer, byId), millis, millis / max.toFloat())
-            },
-            heatMap = habitHeatMap(events, clock.zone),
+            time = rows.map { (answer, millis) -> TimeRow(labelOf(answer, byId), styleOf(answer, byId), millis, millis / max.toFloat()) },
+            heatMap = habitHeatMap(events.filter { it.unlockedAt >= heatMapFrom }, clock.zone),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
     private companion object {
-        const val DAY_MS = 24 * 60 * 60 * 1000L
         const val HEAT_MAP_DAYS = 28
     }
 }

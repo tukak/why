@@ -30,15 +30,16 @@ data class AppSettings(
 class SettingsRepository(private val store: DataStore<Preferences>) {
 
     val settings: Flow<AppSettings> = store.data.map { p ->
+        val d = AppSettings()
         AppSettings(
-            themeMode = p[THEME]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.System,
-            dynamicColor = p[DYNAMIC_COLOR] ?: false,
-            nudgeMinutes = p[NUDGE_MINUTES] ?: 10,
-            resumeSeconds = p[RESUME_SECONDS] ?: 3,
-            pausedUntil = p[PAUSED_UNTIL] ?: 0,
-            onboardingDone = p[ONBOARDING_DONE] ?: false,
-            reflectionEnabled = p[REFLECTION_ENABLED] ?: true,
-            reflectionMinute = p[REFLECTION_MINUTE] ?: (21 * 60),
+            themeMode = p[THEME]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: d.themeMode,
+            dynamicColor = p[DYNAMIC_COLOR] ?: d.dynamicColor,
+            nudgeMinutes = p[NUDGE_MINUTES] ?: d.nudgeMinutes,
+            resumeSeconds = p[RESUME_SECONDS] ?: d.resumeSeconds,
+            pausedUntil = p[PAUSED_UNTIL] ?: d.pausedUntil,
+            onboardingDone = p[ONBOARDING_DONE] ?: d.onboardingDone,
+            reflectionEnabled = p[REFLECTION_ENABLED] ?: d.reflectionEnabled,
+            reflectionMinute = p[REFLECTION_MINUTE] ?: d.reflectionMinute,
         )
     }
 

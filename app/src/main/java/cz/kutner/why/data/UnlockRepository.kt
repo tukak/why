@@ -68,11 +68,11 @@ class UnlockRepository(
         val pickedShape = shape ?: PebbleShape.pickable.minBy { s -> active.count { it.shape == s.name } }
         val pickedColor = color ?: ReasonColor.pickable.minBy { c -> active.count { it.color == c.name } }
         return reasonDao.insert(
-            Reason(label = label.trim(), shape = pickedShape.name, color = pickedColor.name, position = reasonDao.nextPosition()),
+            Reason(label = label.trim(), shape = pickedShape.name, color = pickedColor.name),
         )
     }
 
-    suspend fun updateReasons(reasons: List<Reason>) = reasonDao.update(reasons)
+    suspend fun updateReason(reason: Reason) = reasonDao.update(reason)
 
     suspend fun startSession(at: Long): Long = unlockDao.insert(UnlockEvent(unlockedAt = at))
 
@@ -84,8 +84,10 @@ class UnlockRepository(
 
     suspend fun closeOrphanSessions() = unlockDao.closeOrphans()
 
-    suspend fun answer(id: Long, reasonId: Long? = null, isHabit: Boolean = false, customText: String? = null) =
-        unlockDao.answer(id, reasonId, isHabit, customText?.trim()?.takeIf { it.isNotEmpty() })
+    suspend fun answer(id: Long, reasonId: Long? = null, isHabit: Boolean = false, customText: String? = null) {
+        val text = customText?.trim()?.takeIf { it.isNotEmpty() }
+        unlockDao.answer(id, reasonId, isHabit, text, text?.let(TypedReasons::normalize)?.takeIf { it.isNotEmpty() })
+    }
 
     suspend fun countSince(from: Long): Int = unlockDao.countSince(from)
 
