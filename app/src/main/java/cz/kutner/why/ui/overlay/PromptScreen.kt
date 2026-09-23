@@ -22,6 +22,10 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -45,6 +49,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
@@ -54,6 +60,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import cz.kutner.why.R
 import cz.kutner.why.data.db.Reason
+import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
@@ -67,6 +74,7 @@ fun PromptScreen(
     time: String,
     unlockNumber: Int,
     reasons: List<Reason>,
+    typedBefore: List<String>,
     onReason: (Reason) -> Unit,
     onHabit: () -> Unit,
     onOther: (String) -> Unit,
@@ -79,11 +87,9 @@ fun PromptScreen(
             .background(colors.background)
             .safeDrawingPadding()
             .imePadding()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(22.dp),
+            .padding(horizontal = 20.dp),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
+        Column(Modifier.padding(top = 24.dp, bottom = 20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text(
                 stringResource(R.string.prompt_header, time, unlockNumber),
                 style = MaterialTheme.typography.labelMedium,
@@ -95,20 +101,35 @@ fun PromptScreen(
             Text(stringResource(R.string.prompt_title), style = MaterialTheme.typography.displaySmall, color = colors.onSurface)
         }
 
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            reasons.chunked(2).forEachIndexed { row, pair ->
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    pair.forEachIndexed { col, reason ->
-                        ReasonChip(reason, index = row * 2 + col, onClick = { onReason(reason) }, modifier = Modifier.weight(1f))
+        // Only the reasons scroll, so "Just habit" and "Something else" stay reachable with any number of reasons.
+        val grid = rememberScrollState()
+        Box(Modifier.weight(1f, fill = false)) {
+            Column(Modifier.verticalScroll(grid), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                reasons.chunked(2).forEachIndexed { row, pair ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        pair.forEachIndexed { col, reason ->
+                            ReasonChip(reason, index = row * 2 + col, onClick = { onReason(reason) }, modifier = Modifier.weight(1f))
+                        }
+                        if (pair.size == 1) Spacer(Modifier.weight(1f))
                     }
-                    if (pair.size == 1) Spacer(Modifier.weight(1f))
                 }
+            }
+            if (grid.canScrollForward) {
+                Box(
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .background(Brush.verticalGradient(listOf(Color.Transparent, colors.background))),
+                )
             }
         }
 
+        Spacer(Modifier.height(16.dp))
         HabitButton(onHabit)
-        OtherReasonField(onOther)
-        TextButton(onClick = onPause, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+        Spacer(Modifier.height(16.dp))
+        OtherReasonField(typedBefore, onOther)
+        TextButton(onClick = onPause, modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 4.dp)) {
             Text(stringResource(R.string.prompt_pause), color = colors.onSurfaceVariant)
         }
     }
@@ -165,12 +186,15 @@ private fun HabitButton(onClick: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun OtherReasonField(onSubmit: (String) -> Unit) {
+private fun OtherReasonField(typedBefore: List<String>, onSubmit: (String) -> Unit) {
     var text by rememberSaveable { mutableStateOf("") }
+    var focused by remember { mutableStateOf(false) }
     val colors = MaterialTheme.colorScheme
     val submit = { if (text.isNotBlank()) onSubmit(text) }
     val saveLabel = stringResource(R.string.prompt_save)
+    val shown = typedBefore.filter { TypedReasons.matches(it, text) && TypedReasons.normalize(it) != TypedReasons.normalize(text) }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.prompt_other_label), style = MaterialTheme.typography.labelMedium, color = colors.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -188,7 +212,7 @@ private fun OtherReasonField(onSubmit: (String) -> Unit) {
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                 ),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).onFocusChanged { focused = it.isFocused },
             )
             FilledIconButton(
                 onClick = submit,
@@ -198,6 +222,28 @@ private fun OtherReasonField(onSubmit: (String) -> Unit) {
                 modifier = Modifier.size(56.dp).semantics { contentDescription = saveLabel },
             ) {
                 Box { LineIcon(Icons.ArrowRight, colors.onPrimary) }
+            }
+        }
+        // Below the field, so the field does not move under the finger when the chips appear.
+        AnimatedVisibility(focused && shown.isNotEmpty()) {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                shown.forEach { earlier ->
+                    Surface(
+                        onClick = { onSubmit(earlier) },
+                        shape = RoundedCornerShape(50),
+                        color = PebbleStyle.Other.color.tones.container,
+                        contentColor = colors.onSurface,
+                    ) {
+                        Row(
+                            Modifier.heightIn(min = 44.dp).padding(horizontal = 14.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Pebble(PebbleStyle.Other, 14.dp)
+                            Text(earlier, style = MaterialTheme.typography.labelLarge)
+                        }
+                    }
+                }
             }
         }
     }

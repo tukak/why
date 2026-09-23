@@ -28,7 +28,7 @@ class AppContainer(context: Context) {
             .setDriver(AndroidSQLiteDriver())
             .build()
 
-    val unlocks = UnlockRepository(database.reasonDao(), database.unlockDao())
+    val unlocks = UnlockRepository(database.reasonDao(), database.unlockDao(), database.offerDao())
 
     val settings = SettingsRepository(
         PreferenceDataStoreFactory.create { appContext.preferencesDataStoreFile("settings") },

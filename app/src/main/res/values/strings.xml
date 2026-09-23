@@ -3,7 +3,7 @@
     <string name="app_name">Why?</string>
     <string name="back">Back</string>
 
-    <string name="reason_message">Reply to message</string>
+    <string name="reason_message">Message or call</string>
     <string name="reason_look_up">Look something up</string>
     <string name="reason_calendar">Check calendar</string>
     <string name="reason_music">Music or podcast</string>
@@ -70,18 +70,15 @@
     <string name="week_time">Where the time went</string>
 
     <string name="reasons_title">Reasons</string>
-    <string name="reasons_subtitle">Shown each time you unlock. Tap a reason to edit it.</string>
+    <string name="reasons_subtitle">Most used first. When you unlock, they are sorted for the time of day.</string>
     <string name="reasons_count">%d×</string>
     <string name="reasons_edit">Edit %1$s</string>
     <string name="reasons_edit_title">Edit reason</string>
     <string name="reasons_always_shown">Always shown</string>
     <string name="reasons_suggested">SUGGESTED</string>
-    <string name="reasons_suggested_hint">You typed it 3 or more times this week</string>
     <string name="reasons_add">Add</string>
     <string name="reasons_new">New reason</string>
     <string name="reasons_label">Name</string>
-    <string name="reasons_move_up">Move up</string>
-    <string name="reasons_move_down">Move down</string>
     <string name="reasons_archive">Archive</string>
     <string name="reasons_restore">Restore</string>
     <string name="reasons_save">Save</string>
@@ -128,6 +125,14 @@
     <string name="onboarding_permission_lost">Android turned off “Ask over other apps”. Allow it again, so Why? can keep asking.</string>
     <string name="onboarding_start">Let’s begin</string>
     <string name="onboarding_needs_overlay">Allow “Ask over other apps” to begin.</string>
+
+    <plurals name="offer_text">
+        <item quantity="one">You typed this %d time. Add it to your reasons, so next time it is one tap?</item>
+        <item quantity="other">You typed this %d times. Add it to your reasons, so next time it is one tap?</item>
+    </plurals>
+    <string name="offer_add">Add to reasons</string>
+    <string name="offer_not_now">Not now</string>
+    <string name="offer_never">Don’t ask again for this one</string>
 
     <string name="service_channel">Unlock watcher</string>
     <string name="service_title">Why? is on</string>

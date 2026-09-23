@@ -2,6 +2,7 @@ package cz.kutner.why.data.db
 
 import androidx.room3.Dao
 import androidx.room3.Insert
+import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
 import androidx.room3.Update
 import kotlinx.coroutines.flow.Flow
@@ -57,13 +58,27 @@ interface UnlockDao {
     @Query("SELECT * FROM unlock_event WHERE unlockedAt >= :from ORDER BY unlockedAt")
     fun observeSince(from: Long): Flow<List<UnlockEvent>>
 
-    @Query(
-        """
-        SELECT MIN(TRIM(customText)) AS text, COUNT(*) AS times FROM unlock_event
-        WHERE customText IS NOT NULL AND TRIM(customText) != '' AND unlockedAt >= :from
-        GROUP BY LOWER(TRIM(customText)) HAVING COUNT(*) >= :minTimes
-        ORDER BY times DESC
-        """,
-    )
-    fun observeTyped(from: Long, minTimes: Int): Flow<List<TypedCount>>
+    @Query("SELECT id, customText AS text, unlockedAt FROM unlock_event WHERE customText IS NOT NULL")
+    suspend fun customEntries(): List<CustomEntry>
+
+    @Query("SELECT id, customText AS text, unlockedAt FROM unlock_event WHERE customText IS NOT NULL")
+    fun observeCustomEntries(): Flow<List<CustomEntry>>
+
+    @Query("UPDATE unlock_event SET reasonId = :reasonId, customText = NULL WHERE id IN (:ids)")
+    suspend fun assignReason(ids: List<Long>, reasonId: Long)
+
+    @Query("SELECT reasonId, unlockedAt FROM unlock_event WHERE reasonId IS NOT NULL AND unlockedAt >= :from")
+    suspend fun reasonAnswers(from: Long): List<ReasonAnswer>
+}
+
+@Dao
+interface OfferDao {
+    @Query("SELECT * FROM typed_offer")
+    suspend fun all(): List<TypedOffer>
+
+    @Query("SELECT * FROM typed_offer")
+    fun observeAll(): Flow<List<TypedOffer>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun save(offer: TypedOffer)
 }

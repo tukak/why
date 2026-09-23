@@ -30,4 +30,14 @@ data class UnlockEvent(
     val customText: String? = null,
 )
 
-data class TypedCount(val text: String, val times: Int)
+/** What the user decided about adding a typed answer as a reason. [key] is the normalized text. */
+@Entity(tableName = "typed_offer")
+data class TypedOffer(
+    @PrimaryKey val key: String,
+    val lastOfferedCount: Int = 0,
+    val never: Boolean = false,
+)
+
+data class CustomEntry(val id: Long, val text: String, val unlockedAt: Long)
+
+data class ReasonAnswer(val reasonId: Long, val unlockedAt: Long)

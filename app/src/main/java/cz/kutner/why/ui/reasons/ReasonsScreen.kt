@@ -23,7 +23,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cz.kutner.why.R
+import cz.kutner.why.data.OfferDecision
 import cz.kutner.why.container
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.ui.components.Icons
@@ -85,7 +85,7 @@ fun ReasonsScreen() {
                 HabitRow()
             }
 
-            state.suggestion?.let { text -> SuggestionCard(text) { vm.add(text) } }
+            state.offer?.let { offer -> OfferCard(offer.label, offer.count) { vm.decide(offer, it) } }
 
             if (state.archived.isNotEmpty()) {
                 TextButton(onClick = { showArchived = !showArchived }) {
@@ -124,7 +124,6 @@ fun ReasonsScreen() {
                 if (existing == null) vm.add(label, shape, color) else vm.save(existing.copy(label = label, shape = shape.name, color = color.name))
                 editing = null
             },
-            onMove = { by -> target.reason?.let { vm.move(it, by) } },
             onArchive = {
                 target.reason?.let { vm.setArchived(it, true) }
                 editing = null
@@ -172,18 +171,20 @@ private fun ShapeBadge(style: PebbleStyle) {
 }
 
 @Composable
-private fun SuggestionCard(text: String, onAdd: () -> Unit) {
+private fun OfferCard(label: String, count: Int, onDecide: (OfferDecision) -> Unit) {
     val tones = ReasonColor.Violet.tones
-    Row(
-        Modifier.fillMaxWidth().background(tones.container, RoundedCornerShape(24.dp)).padding(start = 18.dp, end = 14.dp, top = 14.dp, bottom = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    Column(
+        Modifier.fillMaxWidth().background(tones.container, RoundedCornerShape(24.dp)).padding(18.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(stringResource(R.string.reasons_suggested), style = MaterialTheme.typography.labelSmall, color = tones.ink)
-            Text("“$text”", style = MaterialTheme.typography.titleMedium)
-            Text(stringResource(R.string.reasons_suggested_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.reasons_suggested), style = MaterialTheme.typography.labelSmall, color = tones.ink)
+        Text("“$label”", style = MaterialTheme.typography.titleMedium)
+        Text(pluralStringResource(R.plurals.offer_text, count, count), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            Button(onClick = { onDecide(OfferDecision.Add) }) { Text(stringResource(R.string.reasons_add)) }
+            FilledTonalButton(onClick = { onDecide(OfferDecision.NotNow) }) { Text(stringResource(R.string.offer_not_now)) }
         }
-        Button(onClick = onAdd) { Text(stringResource(R.string.reasons_add)) }
+        TextButton(onClick = { onDecide(OfferDecision.Never) }) { Text(stringResource(R.string.offer_never), color = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
 }
 
@@ -192,7 +193,6 @@ private fun ReasonEditor(
     reason: Reason?,
     onDismiss: () -> Unit,
     onSave: (String, PebbleShape, ReasonColor) -> Unit,
-    onMove: (Int) -> Unit,
     onArchive: () -> Unit,
 ) {
     var label by rememberSaveable { mutableStateOf(reason?.label.orEmpty()) }
@@ -217,12 +217,6 @@ private fun ReasonEditor(
             )
             Picker(PebbleShape.pickable, selected = shape, onPick = { shape = it }) { Pebble(PebbleStyle(it, color), 26.dp) }
             Picker(ReasonColor.pickable, selected = color, onPick = { color = it }) { Box(Modifier.size(26.dp).background(it.tones.ink, RoundedCornerShape(50))) }
-            if (reason != null) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedButton(onClick = { onMove(-1) }, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.reasons_move_up)) }
-                    OutlinedButton(onClick = { onMove(1) }, modifier = Modifier.weight(1f)) { Text(stringResource(R.string.reasons_move_down)) }
-                }
-            }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (reason != null) {
                     FilledTonalButton(onClick = onArchive, modifier = Modifier.weight(1f).height(52.dp)) { Text(stringResource(R.string.reasons_archive)) }
