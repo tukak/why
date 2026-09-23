@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Why?</string>
+    <string name="back">Back</string>
+
+    <string name="reason_message">Reply to message</string>
+    <string name="reason_look_up">Look something up</string>
+    <string name="reason_calendar">Check calendar</string>
+    <string name="reason_music">Music or podcast</string>
+    <string name="reason_navigate">Navigate</string>
+    <string name="reason_photo">Take a photo</string>
+
+    <string name="habit">Just habit</string>
+    <string name="habit_lower">just habit</string>
+    <string name="habit_subtitle">No reason. That’s okay too.</string>
+    <string name="answer_other">Something else</string>
+    <string name="answer_none">Not answered</string>
+
+    <string name="prompt_header">%1$s · unlock %2$d today</string>
+    <string name="prompt_title">What brings you here?</string>
+    <string name="prompt_other_label">Something else</string>
+    <string name="prompt_other_placeholder">Type your reason</string>
+    <string name="prompt_save">Save reason</string>
+    <string name="prompt_pause">Pause questions for 1 hour</string>
+
+    <plurals name="nudge_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <string name="nudge_since">since you unlocked</string>
+    <string name="nudge_reason">You came to %1$s. All done?</string>
+    <string name="nudge_habit">You picked up the phone out of habit. Enough for now?</string>
+    <string name="nudge_done">Yes, all done</string>
+    <string name="nudge_more">5 more minutes</string>
+    <string name="nudge_switched">I switched to something else</string>
+
+    <string name="tab_today">Today</string>
+    <string name="tab_week">Week</string>
+    <string name="tab_reasons">Reasons</string>
+
+    <string name="today_title">Today’s jar</string>
+    <plurals name="today_unlocks">
+        <item quantity="one">unlock so far</item>
+        <item quantity="other">unlocks so far</item>
+    </plurals>
+    <plurals name="today_fewer">
+        <item quantity="one">%d fewer than usual</item>
+        <item quantity="other">%d fewer than usual</item>
+    </plurals>
+    <plurals name="today_more">
+        <item quantity="one">%d more than usual</item>
+        <item quantity="other">%d more than usual</item>
+    </plurals>
+    <string name="today_on_screen">on screen</string>
+    <string name="today_per_unlock">per unlock</string>
+
+    <string name="duration_minutes">%d min</string>
+    <string name="duration_seconds">%d s</string>
+    <string name="duration_under_minute">&lt;1 min</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="duration_decimal_minutes">%.1f min</string>
+
+    <string name="week_title">This week</string>
+    <string name="week_insight_longer">Habit unlocks last %.1f× longer than the ones with a reason.</string>
+    <string name="week_insight_shorter">Habit unlocks are shorter than the ones with a reason. Good sign.</string>
+    <string name="week_insight_balanced">Habit unlocks last about as long as the ones with a reason.</string>
+    <string name="week_insight_empty">Answer a few questions. Patterns show up here.</string>
+    <string name="week_with_reason">with a reason</string>
+    <string name="week_daily">Daily jars</string>
+    <string name="week_time">Where the time went</string>
+
+    <string name="reasons_title">Reasons</string>
+    <string name="reasons_subtitle">Shown each time you unlock. Tap a reason to edit it.</string>
+    <string name="reasons_count">%d×</string>
+    <string name="reasons_edit">Edit %1$s</string>
+    <string name="reasons_edit_title">Edit reason</string>
+    <string name="reasons_always_shown">Always shown</string>
+    <string name="reasons_suggested">SUGGESTED</string>
+    <string name="reasons_suggested_hint">You typed it 3 or more times this week</string>
+    <string name="reasons_add">Add</string>
+    <string name="reasons_new">New reason</string>
+    <string name="reasons_label">Name</string>
+    <string name="reasons_move_up">Move up</string>
+    <string name="reasons_move_down">Move down</string>
+    <string name="reasons_archive">Archive</string>
+    <string name="reasons_restore">Restore</string>
+    <string name="reasons_save">Save</string>
+    <plurals name="reasons_archived">
+        <item quantity="one">%d archived reason</item>
+        <item quantity="other">%d archived reasons</item>
+    </plurals>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_system_hint">Follows your phone’s dark mode.</string>
+    <string name="settings_theme_light_hint">Always light.</string>
+    <string name="settings_theme_dark_hint">Always dark. Easy on the eyes at night.</string>
+    <string name="settings_wallpaper">Match wallpaper colors</string>
+    <string name="settings_wallpaper_hint">Tint the app with your Android colors.</string>
+    <string name="settings_checkins">Check-ins</string>
+    <string name="settings_nudge_after">Nudge me after</string>
+    <string name="settings_off">Off</string>
+    <string name="settings_resume">Skip the question after a quick relock</string>
+    <string name="settings_resume_hint">For when the screen times out and you wake it right away.</string>
+    <string name="settings_background">Background</string>
+    <string name="settings_battery_ok">Battery usage is unrestricted.</string>
+    <string name="settings_free_title">Free. No ads. No tracking.</string>
+    <string name="settings_free_text">If it helps you, a coffee helps me.</string>
+    <string name="settings_coffee">Buy me a coffee</string>
+
+    <string name="onboarding_title">Ask why. Every unlock.</string>
+    <string name="onboarding_text">One tiny question each time you pick up your phone. See what pulls you in.</string>
+    <string name="onboarding_unlocks">Notice unlocks</string>
+    <string name="onboarding_unlocks_hint">Built in. No permission needed.</string>
+    <string name="onboarding_overlay">Ask over other apps</string>
+    <string name="onboarding_overlay_hint">Needs “Display over other apps”.</string>
+    <string name="onboarding_notification">Notifications</string>
+    <string name="onboarding_notification_hint">A quiet notification keeps it alive.</string>
+    <string name="onboarding_battery">Keep running</string>
+    <string name="onboarding_battery_hint">Set battery usage to “Unrestricted”.</string>
+    <string name="background_tips">More tips for %1$s phones</string>
+    <string name="onboarding_ready">Ready</string>
+    <string name="onboarding_allow">Allow</string>
+    <string name="onboarding_privacy">Stays on this phone. No internet access. Never reads which apps you use.</string>
+    <string name="onboarding_permission_lost">Android turned off “Ask over other apps”. Allow it again, so Why? can keep asking.</string>
+    <string name="onboarding_start">Let’s begin</string>
+    <string name="onboarding_needs_overlay">Allow “Ask over other apps” to begin.</string>
+
+    <string name="service_channel">Unlock watcher</string>
+    <string name="service_title">Why? is on</string>
+    <string name="service_text">Asking why at each unlock</string>
+    <string name="service_text_no_overlay">Can’t ask right now. Tap to allow “Ask over other apps”.</string>
+</resources>
