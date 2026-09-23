@@ -73,6 +73,9 @@
     <string name="week_with_reason">with a reason</string>
     <string name="week_daily">Daily jars</string>
     <string name="week_time">Where the time went</string>
+    <string name="week_habit_hours">Habit hours</string>
+    <string name="week_habit_hours_period">Just-habit unlocks, last 4 weeks</string>
+    <string name="week_habit_peak">Most often %1$s–%2$s</string>
 
     <string name="reasons_title">Reasons</string>
     <string name="reasons_subtitle">Most used first. When you unlock, they are sorted for the time of day.</string>

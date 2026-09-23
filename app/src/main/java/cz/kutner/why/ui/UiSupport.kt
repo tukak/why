@@ -37,8 +37,8 @@ fun minuteTicker(): Flow<Unit> = flow {
 }
 
 /** Clock time in the phone's 12/24-hour setting; plain locale formats ignore that setting. */
-fun timeFormatter(context: Context, locale: Locale = context.resources.configuration.locales[0]): DateTimeFormatter {
-    val skeleton = if (DateFormat.is24HourFormat(context)) "Hm" else "hm"
+fun timeFormatter(context: Context, locale: Locale = context.resources.configuration.locales[0], hourOnly: Boolean = false): DateTimeFormatter {
+    val skeleton = (if (DateFormat.is24HourFormat(context)) "H" else "h") + if (hourOnly) "" else "m"
     return DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale)
 }
 

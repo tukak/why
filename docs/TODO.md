@@ -11,7 +11,7 @@
 
 ## Afterwards
 - [x] Evening reflection: one quiet notification with the day's numbers, default on at 21:00. Settings: on/off and time (20–23 h).
-- [ ] Habit hot hours: heat map on the Week screen of when habit unlocks happen.
+- [x] Habit hours: weekday × hour heat map of habit unlocks on the Week screen, last 4 weeks, with the peak hour.
 
 ## Ideas, not decided
 - [ ] Smart nudge timing per reason (from its typical session length).
