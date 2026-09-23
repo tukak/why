@@ -40,12 +40,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -58,6 +57,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -172,9 +172,7 @@ private fun BoxWithConstraintsScope.FallingPile(pebbles: List<PebbleStyle>, layo
     val wakes = remember { MutableStateFlow(0) }
     val sizePx = with(density) { layout.size.toPx() }
     val world = remember {
-        with(density) {
-            PebbleWorld(constraints.maxWidth.toFloat(), constraints.maxHeight.toFloat(), JAR_CORNER.toPx(), 4.dp.toPx(), restSpeed = 30.dp.toPx())
-        }
+        with(density) { JarWorld(constraints.maxWidth.toFloat(), constraints.maxHeight.toFloat(), JAR_CORNER.toPx(), 4.dp.toPx()) }
     }
     LaunchedEffect(constraints.maxWidth, constraints.maxHeight) {
         world.resize(constraints.maxWidth.toFloat(), constraints.maxHeight.toFloat())
@@ -183,20 +181,21 @@ private fun BoxWithConstraintsScope.FallingPile(pebbles: List<PebbleStyle>, layo
     val tilt = rememberTiltSensor { wakes.value++ }
     val pxPerMeter = with(density) { PX_PER_METER.toPx() }
 
-    LaunchedEffect(pebbles.size, sizePx) {
+    LaunchedEffect(world, pebbles.size, sizePx) {
         val fillFromLayout = world.bodies.isEmpty()
-        world.bodies.forEach { it.radius = sizePx * BODY_RATIO }
-        while (world.bodies.size > pebbles.size) world.bodies.removeAt(world.bodies.lastIndex)
+        world.setSize(sizePx)
+        while (world.bodies.size > pebbles.size) world.removeLast()
         while (world.bodies.size < pebbles.size) {
             val i = world.bodies.size
-            world.bodies += if (fillFromLayout) {
+            val shape = pebbles[i].shape
+            if (fillFromLayout) {
                 val slot = layout.slot(i)
                 with(density) {
-                    PebbleWorld.Body(slot.x.toPx() + sizePx / 2, slot.y.toPx() + sizePx / 2, sizePx * BODY_RATIO, Math.toRadians(slot.rotation.toDouble()).toFloat())
+                    world.add(slot.x.toPx() + sizePx / 2, slot.y.toPx() + sizePx / 2, sizePx, Math.toRadians(slot.rotation.toDouble()).toFloat(), shape)
                 }
             } else {
                 val jitter = ((i * 37) % 21 - 10) / 10f * sizePx
-                PebbleWorld.Body(constraints.maxWidth / 2f + jitter, sizePx, sizePx * BODY_RATIO)
+                world.add(constraints.maxWidth / 2f + jitter, sizePx, sizePx, 0f, shape)
             }
         }
         world.wake()
@@ -212,6 +211,9 @@ private fun BoxWithConstraintsScope.FallingPile(pebbles: List<PebbleStyle>, layo
                 seenWake = wakes.first { it != seenWake }
                 world.wake()
                 last = 0L
+            } else if (wakes.value != seenWake) {
+                seenWake = wakes.value
+                world.wake()
             }
             withFrameNanos { now ->
                 val dt = if (last == 0L) 1 / 60f else ((now - last) / 1e9f).coerceAtMost(1 / 30f)
@@ -343,8 +345,6 @@ private val JAR_CORNER = 40.dp
 /** How far one m/s² moves a pebble; picked so a pebble falls through the jar in about 0.4 s. */
 private val PX_PER_METER = 420.dp
 
-/** Collision circles are a bit smaller than the drawn shape so pebbles nest into each other. */
-private const val BODY_RATIO = 0.46f
 
 /** Shrinks pebbles as the day fills up so the pile stays in the lower part of the jar. */
 private fun jarLayout(count: Int, width: Dp, height: Dp): JarLayout {

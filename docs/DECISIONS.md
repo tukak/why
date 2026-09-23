@@ -70,6 +70,17 @@ Alternative kotlinx-datetime 0.8.0: only useful for multiplatform. `java.time` i
 ### Charts — custom Compose Canvas
 Alternative Vico 3.3.1. The jar, pebbles and small daily bars are custom shapes; a chart library would fight the design and add size.
 
+### Jar physics — dyn4j **6.0.0**
+| Option | Pros | Cons |
+|---|---|---|
+| **dyn4j (chosen)** | Real shapes (pill, triangle, square, diamond), rotation, friction; natural feel; pure Java, no native code. | ~53 KB in the release APK; needs tuning for pixel-sized bodies. |
+| Own circle engine | Tiny, fully controlled. | Circles only; pile felt bumpy and restless. |
+| Box2D (via libGDX / JBox2D) | Well known. | Native libraries or an old, unmaintained port. |
+
+Tuning: at-rest thresholds raised, damping ramps up 1.5–3.5 s after the last tilt change, solid 300 px walls,
+max 25 px per step, restitution 0, friction 0.5. Full quality (120 Hz, 10/10 solver passes) at any pebble count:
+at 511 pebbles it costs 3.1 ms per frame against 3.7 ms with 60 Hz, 6/4 passes (JVM on the host), and the pile is calmer.
+
 ### Fonts — bundled variable fonts (Bricolage Grotesque, Figtree; OFL)
 | Option | Pros | Cons |
 |---|---|---|

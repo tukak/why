@@ -76,6 +76,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.dyn4j)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test.junit)
