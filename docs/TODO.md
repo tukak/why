@@ -10,7 +10,7 @@
 - [x] Measure prompt build time after the sorting change: 3.4 ms cold, ~1 ms warm (emulator). Check on the phone too.
 
 ## Afterwards
-- [ ] Evening reflection: one quiet notification with the day's summary. Settings: on/off and time.
+- [x] Evening reflection: one quiet notification with the day's numbers, default on at 21:00. Settings: on/off and time (20–23 h).
 - [ ] Habit hot hours: heat map on the Week screen of when habit unlocks happen.
 
 ## Ideas, not decided

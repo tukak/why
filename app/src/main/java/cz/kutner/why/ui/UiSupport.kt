@@ -1,6 +1,10 @@
 package cz.kutner.why.ui
 
+import android.content.Context
+import android.content.res.Resources
+import android.text.format.DateFormat
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import cz.kutner.why.R
 import cz.kutner.why.data.db.Reason
@@ -8,6 +12,8 @@ import cz.kutner.why.domain.Answer
 import cz.kutner.why.ui.theme.PebbleShape
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -30,13 +36,21 @@ fun minuteTicker(): Flow<Unit> = flow {
     }
 }
 
+/** Clock time in the phone's 12/24-hour setting; plain locale formats ignore that setting. */
+fun timeFormatter(context: Context, locale: Locale = context.resources.configuration.locales[0]): DateTimeFormatter {
+    val skeleton = if (DateFormat.is24HourFormat(context)) "Hm" else "hm"
+    return DateTimeFormatter.ofPattern(DateFormat.getBestDateTimePattern(locale, skeleton), locale)
+}
+
 @Composable
-fun formatDuration(millis: Long): String {
-    if (millis in 1 until 60_000) return stringResource(R.string.duration_under_minute)
+fun formatDuration(millis: Long): String = formatDuration(LocalResources.current, millis)
+
+fun formatDuration(res: Resources, millis: Long): String {
+    if (millis in 1 until 60_000) return res.getString(R.string.duration_under_minute)
     val totalMinutes = millis / 60_000
     val hours = totalMinutes / 60
     val minutes = totalMinutes % 60
-    return if (hours > 0) stringResource(R.string.duration_hours_minutes, hours, minutes) else stringResource(R.string.duration_minutes, minutes)
+    return if (hours > 0) res.getString(R.string.duration_hours_minutes, hours, minutes) else res.getString(R.string.duration_minutes, minutes)
 }
 
 @Composable

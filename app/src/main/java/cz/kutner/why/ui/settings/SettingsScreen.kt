@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -50,12 +51,14 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.data.settings.ThemeMode
+import cz.kutner.why.ui.timeFormatter
 import cz.kutner.why.ui.components.BackgroundHelp
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
+import java.time.LocalTime
 import kotlinx.coroutines.launch
 
 /** Replace with the real page before release. */
@@ -125,6 +128,19 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
             ChoiceChips(listOf(0, 3, 10, 30), selected = settings.resumeSeconds, onSelect = { scope.launch { repo.setResumeSeconds(it) } }) {
                 if (it == 0) stringResource(R.string.settings_off) else stringResource(R.string.duration_seconds, it)
+            }
+            SwitchRow(
+                title = stringResource(R.string.settings_reflection),
+                subtitle = stringResource(R.string.settings_reflection_hint),
+                checked = settings.reflectionEnabled,
+                onChange = { scope.launch { repo.setReflectionEnabled(it) } },
+            )
+            if (settings.reflectionEnabled) {
+                val locale = LocalLocale.current.platformLocale
+                val timeFormat = remember(locale) { timeFormatter(context, locale) }
+                ChoiceChips(listOf(20, 21, 22, 23).map { it * 60 }, selected = settings.reflectionMinute, onSelect = { scope.launch { repo.setReflectionMinute(it) } }) {
+                    LocalTime.of(it / 60, it % 60).format(timeFormat)
+                }
             }
         }
 

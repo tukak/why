@@ -107,6 +107,20 @@
     <string name="settings_off">Off</string>
     <string name="settings_resume">Skip the question after a quick relock</string>
     <string name="settings_resume_hint">For when the screen times out and you wake it right away.</string>
+    <string name="settings_reflection">Evening summary</string>
+    <string name="settings_reflection_hint">A quiet notification with the day’s numbers.</string>
+    <string name="reflection_channel">Evening summary</string>
+    <string name="reflection_title">Today’s jar</string>
+    <plurals name="reflection_unlocks">
+        <item quantity="one">%d unlock</item>
+        <item quantity="other">%d unlocks</item>
+    </plurals>
+    <plurals name="reflection_habit">
+        <item quantity="one">%d just habit</item>
+        <item quantity="other">%d just habit</item>
+    </plurals>
+    <string name="reflection_screen">%s on screen</string>
+    <string name="reflection_as_usual">As many as usual</string>
     <string name="settings_background">Background</string>
     <string name="settings_battery_ok">Battery usage is unrestricted.</string>
     <string name="settings_free_title">Free. No ads. No tracking.</string>

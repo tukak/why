@@ -30,6 +30,7 @@ import cz.kutner.why.domain.TimeOfDayOrder
 import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.domain.answer
 import cz.kutner.why.domain.startOfDay
+import cz.kutner.why.ui.timeFormatter
 import cz.kutner.why.ui.overlay.NudgeScreen
 import cz.kutner.why.ui.overlay.OfferScreen
 import cz.kutner.why.ui.overlay.PromptScreen
@@ -38,8 +39,6 @@ import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.theme.WhyTheme
 import java.time.Instant
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.Job
@@ -140,7 +139,7 @@ class UnlockService : LifecycleService() {
         val now = app.clock.millis()
         val choices = app.unlocks.promptChoices(TimeOfDayOrder(now, app.clock.zone), answersSince = now - ORDER_HISTORY_MS)
         val unlockNumber = app.unlocks.countSince(startOfDay(now, app.clock.zone))
-        val time = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(Instant.ofEpochMilli(now).atZone(app.clock.zone))
+        val time = timeFormatter(this).format(Instant.ofEpochMilli(now).atZone(app.clock.zone))
         overlays.show {
             WhyTheme(settings.themeMode, settings.dynamicColor) {
                 PromptScreen(

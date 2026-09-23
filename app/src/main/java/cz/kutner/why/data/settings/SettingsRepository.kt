@@ -22,6 +22,9 @@ data class AppSettings(
     val resumeSeconds: Int = 3,
     val pausedUntil: Long = 0,
     val onboardingDone: Boolean = false,
+    val reflectionEnabled: Boolean = true,
+    /** Local time of the evening summary, in minutes after midnight. */
+    val reflectionMinute: Int = 21 * 60,
 )
 
 class SettingsRepository(private val store: DataStore<Preferences>) {
@@ -34,6 +37,8 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
             resumeSeconds = p[RESUME_SECONDS] ?: 3,
             pausedUntil = p[PAUSED_UNTIL] ?: 0,
             onboardingDone = p[ONBOARDING_DONE] ?: false,
+            reflectionEnabled = p[REFLECTION_ENABLED] ?: true,
+            reflectionMinute = p[REFLECTION_MINUTE] ?: (21 * 60),
         )
     }
 
@@ -45,6 +50,8 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
     suspend fun setResumeSeconds(seconds: Int) = store.edit { it[RESUME_SECONDS] = seconds }
     suspend fun setPausedUntil(epochMillis: Long) = store.edit { it[PAUSED_UNTIL] = epochMillis }
     suspend fun setOnboardingDone() = store.edit { it[ONBOARDING_DONE] = true }
+    suspend fun setReflectionEnabled(enabled: Boolean) = store.edit { it[REFLECTION_ENABLED] = enabled }
+    suspend fun setReflectionMinute(minute: Int) = store.edit { it[REFLECTION_MINUTE] = minute }
 
     private companion object {
         val THEME = stringPreferencesKey("theme_mode")
@@ -53,5 +60,7 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
         val RESUME_SECONDS = intPreferencesKey("resume_seconds")
         val PAUSED_UNTIL = longPreferencesKey("paused_until")
         val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
+        val REFLECTION_ENABLED = booleanPreferencesKey("reflection_enabled")
+        val REFLECTION_MINUTE = intPreferencesKey("reflection_minute")
     }
 }
