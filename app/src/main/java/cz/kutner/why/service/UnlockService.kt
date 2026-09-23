@@ -70,6 +70,7 @@ class UnlockService : LifecycleService() {
         super.onCreate()
         overlays = OverlayController(this)
         startInForeground()
+        getSystemService(NotificationManager::class.java).cancel(STOPPED_NOTIFICATION_ID)
         // USER_PRESENT comes from System UI, not the system uid, so a non-exported receiver never gets it.
         // Both actions are protected broadcasts: other apps cannot send them.
         ContextCompat.registerReceiver(
@@ -263,15 +264,41 @@ class UnlockService : LifecycleService() {
         private const val TAG = "UnlockService"
         private const val CHANNEL_ID = "unlock_service"
         private const val NOTIFICATION_ID = 1
+        private const val STOPPED_CHANNEL_ID = "service_stopped"
+        private const val STOPPED_NOTIFICATION_ID = 3
         private const val SNOOZE_MINUTES = 5
         private val ORDER_HISTORY_MS = 30.days.inWholeMilliseconds
 
-        fun start(context: Context) {
-            try {
-                ContextCompat.startForegroundService(context, Intent(context, UnlockService::class.java))
-            } catch (e: ForegroundServiceStartNotAllowedException) {
-                Log.w(TAG, "Cannot start service now", e)
-            }
+        /** False when Android does not allow a start from the background right now. */
+        fun start(context: Context): Boolean = try {
+            ContextCompat.startForegroundService(context, Intent(context, UnlockService::class.java))
+            true
+        } catch (e: ForegroundServiceStartNotAllowedException) {
+            Log.w(TAG, "Cannot start service now", e)
+            false
+        }
+
+        /**
+         * For starts without the user, after the system stopped the app. When Android blocks the start,
+         * a tap on a notification is allowed to start it.
+         */
+        fun ensureRunning(context: Context) {
+            if (start(context)) return
+            val manager = context.getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(
+                NotificationChannel(STOPPED_CHANNEL_ID, context.getString(R.string.stopped_channel), NotificationManager.IMPORTANCE_LOW),
+            )
+            val restart = PendingIntent.getForegroundService(
+                context, 0, Intent(context, UnlockService::class.java), PendingIntent.FLAG_IMMUTABLE,
+            )
+            val notification = NotificationCompat.Builder(context, STOPPED_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(context.getString(R.string.stopped_title))
+                .setContentText(context.getString(R.string.stopped_text))
+                .setContentIntent(restart)
+                .setAutoCancel(true)
+                .build()
+            manager.notify(STOPPED_NOTIFICATION_ID, notification)
         }
     }
 }

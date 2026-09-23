@@ -19,7 +19,8 @@
 - [ ] Quiet hours / bedtime mode.
 - [ ] Kind daily goal with a forgiving streak.
 - [ ] Export my data (CSV through the system file picker).
-- [ ] Health check: hint when unlocks were missed because the service was stopped.
+- [x] Health check: after the system stops the app, restart the service on the next process start; if Android blocks it, a "Questions are off" notification restarts it with one tap.
+- [ ] One-tap battery exemption dialog (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS). Play allows it only when Doze breaks the core function; decide before a store release.
 - [ ] Jar fallback above ~390 pebbles a day.
 
 ## Before release

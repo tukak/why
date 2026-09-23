@@ -2,7 +2,9 @@ package cz.kutner.why
 
 import android.app.Application
 import android.content.Context
+import android.provider.Settings
 import cz.kutner.why.service.EveningReflection
+import cz.kutner.why.service.UnlockService
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.launch
 
@@ -18,6 +20,12 @@ class WhyApp : Application() {
         container.applicationScope.launch {
             container.settings.settings.distinctUntilChangedBy { it.reflectionEnabled to it.reflectionMinute }
                 .collect { EveningReflection.schedule(this@WhyApp, it) }
+        }
+        // The system can stop the app without restarting its service; it later starts the bare process, for example to preload it.
+        container.applicationScope.launch {
+            if (container.settings.current().onboardingDone && Settings.canDrawOverlays(this@WhyApp)) {
+                UnlockService.ensureRunning(this@WhyApp)
+            }
         }
     }
 }

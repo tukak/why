@@ -139,7 +139,7 @@
     <string name="onboarding_notification">Notifications</string>
     <string name="onboarding_notification_hint">A quiet notification keeps it alive.</string>
     <string name="onboarding_battery">Keep running</string>
-    <string name="onboarding_battery_hint">Set battery usage to “Unrestricted”.</string>
+    <string name="onboarding_battery_hint">Open “App battery usage” and choose “Unrestricted”. If you see a switch, tap the words “Allow background usage”, not the switch.</string>
     <string name="background_tips">More tips for %1$s phones</string>
     <string name="onboarding_ready">Ready</string>
     <string name="onboarding_allow">Allow</string>
@@ -159,5 +159,8 @@
     <string name="service_channel">Unlock watcher</string>
     <string name="service_title">Why? is on</string>
     <string name="service_text">Asking why at each unlock</string>
+    <string name="stopped_channel">Questions stopped</string>
+    <string name="stopped_title">Questions are off</string>
+    <string name="stopped_text">Android stopped the app. Tap to turn questions back on.</string>
     <string name="service_text_no_overlay">Can’t ask right now. Tap to allow “Ask over other apps”.</string>
 </resources>
