@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,7 +56,6 @@ import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import java.time.Clock
 import java.time.format.TextStyle
-import java.util.Locale
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -185,7 +185,7 @@ private fun DailyJars(days: List<DayBar>) {
                         Box(Modifier.fillMaxWidth().height(96.dp * (day.habit / max.toFloat())).background(ReasonColor.Ember.tones.ink))
                     }
                     Text("${day.total}", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold))
-                    Text(day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()), style = MaterialTheme.typography.labelSmall, color = colors.onSurfaceVariant)
+                    Text(day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, LocalLocale.current.platformLocale), style = MaterialTheme.typography.labelSmall, color = colors.onSurfaceVariant)
                 }
             }
         }

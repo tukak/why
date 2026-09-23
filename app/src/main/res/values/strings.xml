@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Why?</string>
     <string name="back">Back</string>
 
@@ -16,7 +16,7 @@
     <string name="answer_other">Something else</string>
     <string name="answer_none">Not answered</string>
 
-    <string name="prompt_header">%1$s · unlock %2$d today</string>
+    <string name="prompt_header" tools:ignore="PluralsCandidate">%1$s · unlock %2$d today</string>
     <string name="prompt_title">What brings you here?</string>
     <string name="prompt_other_label">Something else</string>
     <string name="prompt_other_placeholder">Type your reason</string>
@@ -51,7 +51,10 @@
         <item quantity="one">%d more than usual</item>
         <item quantity="other">%d more than usual</item>
     </plurals>
-    <string name="today_legend_more">+ %d more</string>
+    <plurals name="today_legend_more">
+        <item quantity="one">+ %d more</item>
+        <item quantity="other">+ %d more</item>
+    </plurals>
     <string name="today_legend_less">Show less</string>
     <string name="today_on_screen">on screen</string>
     <string name="today_per_unlock">per unlock</string>

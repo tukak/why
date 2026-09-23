@@ -75,3 +75,4 @@ Not checked in release: the saved answer in the database (`run-as` needs a debug
 | Physics per frame, 511 pebbles (host JVM) | 3.1 ms median, 3.4 ms p90 |
 | Pebbles out of the jar after hard shaking | 0 |
 | Jar at rest | 0 frames, 3.5 s after the phone stops moving |
+| Today cold start, same data (1,563 events in the last week) | data shown at 0.66 s after process start; earlier >4 s was with the old jar busy on the main thread (~110 ms per frame) |

@@ -312,7 +312,7 @@ private fun Legend(items: List<LegendItem>) {
         if (items.size > LEGEND_LIMIT) {
             TextButton(onClick = { expanded = !expanded }, modifier = Modifier.height(36.dp)) {
                 Text(
-                    if (expanded) stringResource(R.string.today_legend_less) else stringResource(R.string.today_legend_more, items.size - LEGEND_LIMIT),
+                    if (expanded) stringResource(R.string.today_legend_less) else (items.size - LEGEND_LIMIT).let { pluralStringResource(R.plurals.today_legend_more, it, it) },
                     style = MaterialTheme.typography.labelMedium,
                 )
             }

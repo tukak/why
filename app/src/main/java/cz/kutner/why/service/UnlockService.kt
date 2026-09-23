@@ -1,5 +1,6 @@
 package cz.kutner.why.service
 
+import android.annotation.SuppressLint
 import android.app.ForegroundServiceStartNotAllowedException
 import android.app.Notification
 import android.app.NotificationChannel
@@ -10,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ServiceInfo
+import android.os.Build
 import android.media.AudioManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -221,20 +223,24 @@ class UnlockService : LifecycleService() {
     }
 
     /** Phone and internet calls, including one that is ringing. Needs no permission. */
-    private fun inCall(): Boolean = getSystemService(AudioManager::class.java).mode in setOf(
-        AudioManager.MODE_IN_CALL,
-        AudioManager.MODE_IN_COMMUNICATION,
-        AudioManager.MODE_RINGTONE,
-        AudioManager.MODE_CALL_SCREENING,
-        AudioManager.MODE_CALL_REDIRECT,
-        AudioManager.MODE_COMMUNICATION_REDIRECT,
-    )
+    private fun inCall(): Boolean = getSystemService(AudioManager::class.java).mode in buildSet {
+        add(AudioManager.MODE_IN_CALL)
+        add(AudioManager.MODE_IN_COMMUNICATION)
+        add(AudioManager.MODE_RINGTONE)
+        add(AudioManager.MODE_CALL_SCREENING)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            add(AudioManager.MODE_CALL_REDIRECT)
+            add(AudioManager.MODE_COMMUNICATION_REDIRECT)
+        }
+    }
 
     private fun goHome() {
         val home = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         runCatching { startActivity(home) }.onFailure { Log.w(TAG, "Cannot open home screen", it) }
     }
 
+    // ServiceCompat drops foreground service types the running Android version does not know.
+    @SuppressLint("InlinedApi")
     private fun startInForeground() {
         getSystemService(NotificationManager::class.java).createNotificationChannel(
             NotificationChannel(CHANNEL_ID, getString(R.string.service_channel), NotificationManager.IMPORTANCE_MIN),
