@@ -63,7 +63,7 @@ import java.time.LocalTime
 import kotlinx.coroutines.launch
 
 /** Replace with the real page before release. */
-private const val BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/"
+private const val DONATE_URL = "https://ko-fi.com/tukak"
 
 @Composable
 fun SettingsScreen(onBack: () -> Unit) {
@@ -179,7 +179,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                 Text(stringResource(R.string.settings_free_text), style = MaterialTheme.typography.bodySmall, color = colors.onTertiaryContainer)
             }
             Button(
-                onClick = { BackgroundHelp.open(context, Intent(Intent.ACTION_VIEW, BUY_ME_A_COFFEE_URL.toUri())) },
+                onClick = { BackgroundHelp.open(context, Intent(Intent.ACTION_VIEW, DONATE_URL.toUri())) },
                 modifier = Modifier.widthIn(max = 180.dp),
             ) {
                 LineIcon(Icons.Coffee, colors.onPrimary, size = 18.dp)

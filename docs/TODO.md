@@ -24,6 +24,6 @@
 - [ ] Jar fallback above ~390 pebbles a day.
 
 ## Before release
-- [ ] Real "Buy me a coffee" URL (`SettingsScreen.kt`).
+- [x] Donation link: https://ko-fi.com/tukak (`SettingsScreen.kt`, README).
 - [ ] Release signing.
 - [ ] Translations (Czech first).
