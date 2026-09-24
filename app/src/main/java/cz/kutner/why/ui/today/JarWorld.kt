@@ -138,7 +138,7 @@ class JarWorld(
     private var appliedDamping = -1f
 
     private fun attach(body: Body, shape: PebbleShape) {
-        body.addFixture(convex(shape, size / pxPerUnit), 1.0, PEBBLE_FRICTION, 0.0)
+        body.addFixture(convex(shape, size / pxPerUnit), 1.0, PEBBLE_FRICTION, PEBBLE_BOUNCE)
         body.setMass(MassType.NORMAL)
     }
 
@@ -195,7 +195,7 @@ class JarWorld(
             (points[k].x - points[0].x) * (points[k + 1].y - points[0].y) - (points[k + 1].x - points[0].x) * (points[k].y - points[0].y)
         }
         if (kotlin.math.abs(area2) < 1e-9) return
-        walls.addFixture(Geometry.createPolygon(*(if (area2 > 0) points else points.reversedArray())), 1.0, PEBBLE_FRICTION, 0.1)
+        walls.addFixture(Geometry.createPolygon(*(if (area2 > 0) points else points.reversedArray())), 1.0, PEBBLE_FRICTION, WALL_BOUNCE)
     }
 
     private companion object {
@@ -204,6 +204,9 @@ class JarWorld(
         const val MAX_MOVE_PER_STEP = 25f
         const val BASE_DAMPING = 0.05f
         const val PEBBLE_FRICTION = 0.35
+        // Contacts slower than dyn4j's restitution velocity (1 m/s) do not bounce, so a resting pile stays calm.
+        const val PEBBLE_BOUNCE = 0.35
+        const val WALL_BOUNCE = 0.3
         const val SETTLE_DAMPING = 12f
         const val SETTLE_START = 1.5f
         const val SETTLE_END = 3.5f
