@@ -1,0 +1,23 @@
+Warum? stellt dir bei jedem Entsperren eine Frage: Was führt dich her?
+
+Tippe einen Grund an, tippe „Aus Gewohnheit“ oder schreib deinen eigenen. Mit der Zeit siehst du, was dich wirklich zum Handy zieht – und wann.
+
+<b>Was du bekommst</b>
+• Eine Frage nach jedem Entsperren, deine Gründe sortiert nach Tageszeit
+• Dein Glas heute: Bei jedem Entsperren fällt ein Kiesel hinein. Kipp das Handy und die Kiesel rollen.
+• Eine Wochenansicht: Gläser pro Tag, wohin die Zeit ging und zu welchen Zeiten du aus Gewohnheit entsperrst
+• Eine sanfte Nachfrage, wenn du länger bleibst als geplant
+• Eine Abendbilanz mit den Zahlen des Tages
+• Häufig eingegebene Antworten speicherst du mit einem Tippen als Grund
+
+<b>Privat von Grund auf</b>
+• Alles bleibt auf deinem Handy
+• Keine Internetberechtigung, keine Konten, keine Werbung, kein Tracking
+• Liest nie, welche Apps du nutzt: Die App bemerkt nur Entsperren und Bildschirm aus
+
+<b>Berechtigungen</b>
+• Über anderen Apps einblenden: um die Frage anzuzeigen
+• Benachrichtigungen: Android braucht eine kleine Benachrichtigung, damit die App weiterläuft
+• Akku auf „Uneingeschränkt“ (empfohlen), damit Android die App nicht beendet
+
+Kostenlos und Open Source.

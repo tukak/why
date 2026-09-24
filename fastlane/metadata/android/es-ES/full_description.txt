@@ -1,0 +1,23 @@
+¿Por qué? te hace una pregunta cada vez que desbloqueas el teléfono: ¿qué te trae por aquí?
+
+Toca un motivo, toca “Por costumbre” o escribe el tuyo. Con los días verás qué te lleva de verdad al teléfono, y cuándo.
+
+<b>Qué incluye</b>
+• Una pregunta después de cada desbloqueo, con tus motivos ordenados según la hora del día
+• El frasco de hoy: cada desbloqueo deja caer una piedrita. Inclina el teléfono y las piedritas ruedan.
+• Una vista semanal: frascos diarios, en qué se fue el tiempo y a qué horas desbloqueas por costumbre
+• Un aviso amable cuando te quedas más tiempo del que pensabas
+• Un resumen de la noche con las cifras del día
+• Las respuestas que escribes a menudo pueden convertirse en motivos con un toque
+
+<b>Privada por diseño</b>
+• Todo se queda en tu teléfono
+• Sin permiso de internet, sin cuentas, sin anuncios, sin rastreo
+• Nunca lee qué apps usas: solo detecta desbloqueos y cuándo se apaga la pantalla
+
+<b>Permisos</b>
+• Mostrar sobre otras apps: para mostrar la pregunta
+• Notificaciones: Android necesita una pequeña notificación para mantener la app activa
+• Batería en “Sin restricciones” (recomendado), para que Android no detenga la app
+
+Gratis y de código abierto.

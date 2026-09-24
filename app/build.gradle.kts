@@ -36,6 +36,10 @@ android {
         compose = true
     }
 
+    androidResources {
+        generateLocaleConfig = true
+    }
+
     testOptions {
         unitTests.isReturnDefaultValues = true
     }

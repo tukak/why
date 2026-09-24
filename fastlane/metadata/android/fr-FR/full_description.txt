@@ -1,0 +1,23 @@
+Pourquoi ? te pose une question chaque fois que tu déverrouilles ton téléphone : qu’est-ce qui t’amène ?
+
+Choisis une raison, touche « Par habitude » ou écris la tienne. Au fil des jours, tu vois ce qui t’attire vraiment vers ton téléphone, et à quel moment.
+
+<b>Ce que tu obtiens</b>
+• Une question après chaque déverrouillage, avec tes raisons triées selon l’heure
+• Le bocal du jour : chaque déverrouillage y fait tomber un galet. Penche le téléphone et les galets roulent.
+• Une vue de la semaine : bocaux du jour, où est passé le temps, et les heures où tu déverrouilles par habitude
+• Un petit point d’étape quand tu restes plus longtemps que prévu
+• Un bilan du soir avec les chiffres du jour
+• Les réponses que tu écris souvent deviennent des raisons en un appui
+
+<b>Privé par conception</b>
+• Tout reste sur ton téléphone
+• Pas d’autorisation Internet, pas de compte, pas de pub, pas de pistage
+• Ne lit jamais quelles applis tu utilises : elle repère seulement les déverrouillages et la mise en veille de l’écran
+
+<b>Autorisations</b>
+• Superposition sur d’autres applis : pour montrer la question
+• Notifications : Android a besoin d’une petite notification pour garder l’appli active
+• Batterie réglée sur « Sans restriction » (recommandé), pour qu’Android n’arrête pas l’appli
+
+Gratuit et open source.

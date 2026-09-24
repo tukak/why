@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -42,6 +43,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -176,9 +178,12 @@ fun SettingsScreen(onBack: () -> Unit) {
                 Text(stringResource(R.string.settings_free_title), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.settings_free_text), style = MaterialTheme.typography.bodySmall, color = colors.onTertiaryContainer)
             }
-            Button(onClick = { BackgroundHelp.open(context, Intent(Intent.ACTION_VIEW, BUY_ME_A_COFFEE_URL.toUri())) }) {
+            Button(
+                onClick = { BackgroundHelp.open(context, Intent(Intent.ACTION_VIEW, BUY_ME_A_COFFEE_URL.toUri())) },
+                modifier = Modifier.widthIn(max = 180.dp),
+            ) {
                 LineIcon(Icons.Coffee, colors.onPrimary, size = 18.dp)
-                Text(stringResource(R.string.settings_coffee), modifier = Modifier.padding(start = 6.dp))
+                Text(stringResource(R.string.settings_coffee), textAlign = TextAlign.Center, modifier = Modifier.padding(start = 6.dp))
             }
         }
     }

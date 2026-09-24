@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Proč?</string>
+    <string name="back">Zpět</string>
+
+    <string name="reason_message">Zpráva nebo hovor</string>
+    <string name="reason_look_up">Něco dohledat</string>
+    <string name="reason_calendar">Kalendář</string>
+    <string name="reason_music">Hudba nebo podcast</string>
+    <string name="reason_navigate">Navigace</string>
+    <string name="reason_photo">Něco vyfotit</string>
+
+    <string name="habit">Jen ze zvyku</string>
+    <string name="habit_lower">jen ze zvyku</string>
+    <string name="habit_subtitle">Bez důvodu. I to je v pořádku.</string>
+    <string name="answer_other">Něco jiného</string>
+    <string name="answer_none">Bez odpovědi</string>
+
+    <string name="prompt_header" tools:ignore="PluralsCandidate">%1$s · %2$d. odemknutí dnes</string>
+    <string name="prompt_title">Co tě sem přivádí?</string>
+    <string name="prompt_other_label">Něco jiného</string>
+    <string name="prompt_other_placeholder">Napiš svůj důvod</string>
+    <string name="prompt_save">Uložit důvod</string>
+    <string name="prompt_pause">Pozastavit otázky na 1 hodinu</string>
+
+    <plurals name="nudge_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="few">%d min</item>
+        <item quantity="many">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <string name="nudge_since">od odemknutí</string>
+    <string name="nudge_reason">Tvůj důvod: %1$s. Máš hotovo?</string>
+    <string name="nudge_habit">Začalo to ze zvyku. Chceš už skončit?</string>
+    <string name="nudge_done">Ano, hotovo</string>
+    <string name="nudge_more">Ještě 5 minut</string>
+    <string name="nudge_switched">Dělám už něco jiného</string>
+
+    <string name="tab_today">Dnes</string>
+    <string name="tab_week">Týden</string>
+    <string name="tab_reasons">Důvody</string>
+
+    <string name="today_title">Dnešní sklenice</string>
+    <plurals name="today_unlocks">
+        <item quantity="one">odemknutí zatím</item>
+        <item quantity="few">odemknutí zatím</item>
+        <item quantity="many">odemknutí zatím</item>
+        <item quantity="other">odemknutí zatím</item>
+    </plurals>
+    <plurals name="today_fewer">
+        <item quantity="one">%d méně než obvykle</item>
+        <item quantity="few">%d méně než obvykle</item>
+        <item quantity="many">%d méně než obvykle</item>
+        <item quantity="other">%d méně než obvykle</item>
+    </plurals>
+    <plurals name="today_more">
+        <item quantity="one">%d více než obvykle</item>
+        <item quantity="few">%d více než obvykle</item>
+        <item quantity="many">%d více než obvykle</item>
+        <item quantity="other">%d více než obvykle</item>
+    </plurals>
+    <plurals name="today_legend_more">
+        <item quantity="one">+ %d další</item>
+        <item quantity="few">+ %d další</item>
+        <item quantity="many">+ %d dalšího</item>
+        <item quantity="other">+ %d dalších</item>
+    </plurals>
+    <string name="today_legend_less">Zobrazit méně</string>
+    <string name="today_on_screen">na obrazovce</string>
+    <string name="today_per_unlock">na odemknutí</string>
+
+    <string name="duration_minutes">%d min</string>
+    <string name="duration_seconds">%d s</string>
+    <string name="duration_under_minute">&lt;1 min</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="duration_decimal_minutes">%.1f min</string>
+
+    <string name="week_title">Tento týden</string>
+    <string name="week_insight_longer">Odemknutí ze zvyku trvají %.1f× déle než ta s důvodem.</string>
+    <string name="week_insight_shorter">Odemknutí ze zvyku jsou kratší než ta s důvodem. Dobré znamení.</string>
+    <string name="week_insight_balanced">Odemknutí ze zvyku trvají zhruba stejně dlouho jako ta s důvodem.</string>
+    <string name="week_insight_empty">Odpověz na pár otázek. Tady pak uvidíš, jak telefon používáš.</string>
+    <string name="week_with_reason">s důvodem</string>
+    <string name="week_daily">Denní sklenice</string>
+    <string name="week_time">Kam šel čas</string>
+    <string name="week_habit_hours">Kdy odemykáš ze zvyku</string>
+    <string name="week_habit_hours_period">Odemknutí ze zvyku, poslední 4 týdny</string>
+    <string name="week_habit_peak">Nejčastěji %1$s–%2$s</string>
+
+    <string name="reasons_title">Důvody</string>
+    <string name="reasons_subtitle">Nejčastější nahoře. Při odemknutí je řadím podle denní doby.</string>
+    <string name="reasons_count">%d×</string>
+    <string name="reasons_edit">Upravit %1$s</string>
+    <string name="reasons_edit_title">Upravit důvod</string>
+    <string name="reasons_always_shown">Vždy zobrazeno</string>
+    <string name="reasons_suggested">Návrh</string>
+    <string name="reasons_add">Přidat</string>
+    <string name="reasons_new">Nový důvod</string>
+    <string name="reasons_label">Název</string>
+    <string name="reasons_archive">Archivovat</string>
+    <string name="reasons_restore">Obnovit</string>
+    <string name="reasons_save">Uložit</string>
+    <plurals name="reasons_archived">
+        <item quantity="one">%d archivovaný důvod</item>
+        <item quantity="few">%d archivované důvody</item>
+        <item quantity="many">%d archivovaného důvodu</item>
+        <item quantity="other">%d archivovaných důvodů</item>
+    </plurals>
+
+    <string name="reasons_nudge">Po chvíli se připomenout</string>
+    <string name="reasons_nudge_hint">Připomenu se po nastavené době u telefonu.</string>
+    <string name="settings_title">Nastavení</string>
+    <string name="settings_appearance">Vzhled</string>
+    <string name="settings_theme_system">Systém</string>
+    <string name="settings_theme_light">Světlý</string>
+    <string name="settings_theme_dark">Tmavý</string>
+    <string name="settings_theme_system_hint">Podle tmavého režimu telefonu.</string>
+    <string name="settings_theme_light_hint">Vždy světlý.</string>
+    <string name="settings_theme_dark_hint">Vždy tmavý. V noci šetří oči.</string>
+    <string name="settings_wallpaper">Barvy podle tapety</string>
+    <string name="settings_wallpaper_hint">Přizpůsobí barvy aplikace tapetě.</string>
+    <string name="settings_checkins">Připomínky</string>
+    <string name="settings_nudge_after">Připomenout po</string>
+    <string name="settings_off">Vypnuto</string>
+    <string name="settings_resume">Neptat se po rychlém zamknutí</string>
+    <string name="settings_resume_hint">Když obrazovka zhasne a ty ji hned probudíš.</string>
+    <string name="settings_reflection">Večerní shrnutí</string>
+    <string name="settings_reflection_hint">Tiché oznámení s čísly za den.</string>
+    <string name="reflection_channel">Večerní shrnutí</string>
+    <string name="reflection_title">Dnešní sklenice</string>
+    <plurals name="reflection_unlocks">
+        <item quantity="one">%d odemknutí</item>
+        <item quantity="few">%d odemknutí</item>
+        <item quantity="many">%d odemknutí</item>
+        <item quantity="other">%d odemknutí</item>
+    </plurals>
+    <plurals name="reflection_habit">
+        <item quantity="one">%d ze zvyku</item>
+        <item quantity="few">%d ze zvyku</item>
+        <item quantity="many">%d ze zvyku</item>
+        <item quantity="other">%d ze zvyku</item>
+    </plurals>
+    <string name="reflection_screen">%s na obrazovce</string>
+    <string name="reflection_as_usual">Stejně jako obvykle</string>
+    <string name="settings_background">Na pozadí</string>
+    <string name="settings_battery_ok">Baterie je bez omezení.</string>
+    <string name="settings_free_title">Zdarma. Bez reklam. Bez sledování.</string>
+    <string name="settings_free_text">Jestli ti aplikace pomáhá, mně pomůže káva.</string>
+    <string name="settings_coffee">Kup mi kávu</string>
+
+    <string name="onboarding_title">Ptej se proč. Při každém odemknutí.</string>
+    <string name="onboarding_text">Jedna malá otázka pokaždé, když vezmeš telefon do ruky. Uvidíš, co tě k němu táhne.</string>
+    <string name="onboarding_unlocks">Rozpoznat odemknutí</string>
+    <string name="onboarding_unlocks_hint">Vestavěné. Bez oprávnění.</string>
+    <string name="onboarding_overlay">Ptát se přes jiné aplikace</string>
+    <string name="onboarding_overlay_hint">Potřebuje „Zobrazení přes ostatní aplikace“.</string>
+    <string name="onboarding_notification">Oznámení</string>
+    <string name="onboarding_notification_hint">Tiché oznámení ji drží v chodu.</string>
+    <string name="onboarding_battery">Nechat běžet na pozadí</string>
+    <string name="onboarding_battery_hint">Otevři „Využití baterie aplikací“ a zvol „Neomezeno“. Když vidíš přepínač, klepni na slova „Povolit používání na pozadí“, ne na přepínač.</string>
+    <string name="background_tips">Další tipy pro telefony %1$s</string>
+    <string name="onboarding_ready">Hotovo</string>
+    <string name="onboarding_allow">Povolit</string>
+    <string name="onboarding_privacy">Tvoje data zůstávají v telefonu. Bez internetu. Nesleduje, jaké aplikace používáš.</string>
+    <string name="onboarding_permission_lost">Android vypnul „Ptát se přes jiné aplikace“. Povol to znovu, ať se Proč? může dál ptát.</string>
+    <string name="onboarding_start">Jdeme na to</string>
+    <string name="onboarding_needs_overlay">Pro začátek povol „Ptát se přes jiné aplikace“.</string>
+
+    <plurals name="offer_text">
+        <item quantity="one">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+        <item quantity="few">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+        <item quantity="many">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+        <item quantity="other">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+    </plurals>
+    <string name="offer_add">Přidat mezi důvody</string>
+    <string name="offer_not_now">Teď ne</string>
+    <string name="offer_never">U tohohle se už neptej</string>
+
+    <string name="service_channel">Hlídání odemknutí</string>
+    <string name="service_title">Proč? běží</string>
+    <string name="service_text">Ptá se při každém odemknutí</string>
+    <string name="stopped_channel">Otázky zastaveny</string>
+    <string name="stopped_title">Otázky jsou vypnuté</string>
+    <string name="stopped_text">Android aplikaci zastavil. Klepni a otázky se zase zapnou.</string>
+    <string name="service_text_no_overlay">Teď se nemůžu ptát. Klepni a povol „Ptát se přes jiné aplikace“.</string>
+</resources>

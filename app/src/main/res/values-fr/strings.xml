@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Pourquoi ?</string>
+    <string name="back">Retour</string>
+
+    <string name="reason_message">Message ou appel</string>
+    <string name="reason_look_up">Chercher quelque chose</string>
+    <string name="reason_calendar">Voir l’agenda</string>
+    <string name="reason_music">Musique ou podcast</string>
+    <string name="reason_navigate">Itinéraire</string>
+    <string name="reason_photo">Prendre une photo</string>
+
+    <string name="habit">Par habitude</string>
+    <string name="habit_lower">par habitude</string>
+    <string name="habit_subtitle">Sans raison. C’est bien aussi.</string>
+    <string name="answer_other">Autre chose</string>
+    <string name="answer_none">Sans réponse</string>
+
+    <string name="prompt_header" tools:ignore="PluralsCandidate">%1$s · déverrouillage n° %2$d aujourd’hui</string>
+    <string name="prompt_title">Qu’est-ce qui t’amène ici ?</string>
+    <string name="prompt_other_label">Autre chose</string>
+    <string name="prompt_other_placeholder">Écris ta raison</string>
+    <string name="prompt_save">Enregistrer</string>
+    <string name="prompt_pause">Pause d’une heure</string>
+
+    <plurals name="nudge_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="many">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <string name="nudge_since">depuis le déverrouillage</string>
+    <string name="nudge_reason">Ta raison : %1$s. C’est fait ?</string>
+    <string name="nudge_habit">Tu as pris ton téléphone par habitude. Ça suffit pour l’instant ?</string>
+    <string name="nudge_done">Oui, c’est fait</string>
+    <string name="nudge_more">Encore 5 minutes</string>
+    <string name="nudge_switched">Je fais autre chose</string>
+
+    <string name="tab_today">Aujourd’hui</string>
+    <string name="tab_week">Semaine</string>
+    <string name="tab_reasons">Raisons</string>
+
+    <string name="today_title">Le bocal du jour</string>
+    <plurals name="today_unlocks" tools:ignore="ImpliedQuantity">
+        <item quantity="one">déverrouillage pour l’instant</item>
+        <item quantity="many">déverrouillages pour l’instant</item>
+        <item quantity="other">déverrouillages pour l’instant</item>
+    </plurals>
+    <plurals name="today_fewer">
+        <item quantity="one">%d de moins que d’habitude</item>
+        <item quantity="many">%d de moins que d’habitude</item>
+        <item quantity="other">%d de moins que d’habitude</item>
+    </plurals>
+    <plurals name="today_more">
+        <item quantity="one">%d de plus que d’habitude</item>
+        <item quantity="many">%d de plus que d’habitude</item>
+        <item quantity="other">%d de plus que d’habitude</item>
+    </plurals>
+    <plurals name="today_legend_more">
+        <item quantity="one">+ %d autre</item>
+        <item quantity="many">+ %d autres</item>
+        <item quantity="other">+ %d autres</item>
+    </plurals>
+    <string name="today_legend_less">Afficher moins</string>
+    <string name="today_on_screen">à l’écran</string>
+    <string name="today_per_unlock">par déverrouillage</string>
+
+    <string name="duration_minutes">%d min</string>
+    <string name="duration_seconds">%d s</string>
+    <string name="duration_under_minute">&lt;1 min</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="duration_decimal_minutes">%.1f min</string>
+
+    <string name="week_title">Cette semaine</string>
+    <string name="week_insight_longer">Les déverrouillages par habitude durent %.1f fois plus longtemps que les autres.</string>
+    <string name="week_insight_shorter">Les déverrouillages par habitude sont plus courts que ceux avec une raison. Bon signe.</string>
+    <string name="week_insight_balanced">Les déverrouillages par habitude durent à peu près autant que ceux avec une raison.</string>
+    <string name="week_insight_empty">Réponds à quelques questions. Les tendances apparaîtront ici.</string>
+    <string name="week_with_reason">avec une raison</string>
+    <string name="week_daily">Bocaux du jour</string>
+    <string name="week_time">Où est passé le temps</string>
+    <string name="week_habit_hours">Quand tu déverrouilles par habitude</string>
+    <string name="week_habit_hours_period">Déverrouillages par habitude, 4 dernières semaines</string>
+    <string name="week_habit_peak">Surtout de %1$s à %2$s</string>
+
+    <string name="reasons_title">Raisons</string>
+    <string name="reasons_subtitle">Tes raisons les plus fréquentes d’abord. Au déverrouillage, l’ordre s’adapte à l’heure.</string>
+    <string name="reasons_count">%d×</string>
+    <string name="reasons_edit">Modifier %1$s</string>
+    <string name="reasons_edit_title">Modifier la raison</string>
+    <string name="reasons_always_shown">Toujours affichée</string>
+    <string name="reasons_suggested">Suggestions</string>
+    <string name="reasons_add">Ajouter</string>
+    <string name="reasons_new">Nouvelle raison</string>
+    <string name="reasons_label">Nom</string>
+    <string name="reasons_archive">Archiver</string>
+    <string name="reasons_restore">Restaurer</string>
+    <string name="reasons_save">Enregistrer</string>
+    <plurals name="reasons_archived">
+        <item quantity="one">%d raison archivée</item>
+        <item quantity="many">%d raisons archivées</item>
+        <item quantity="other">%d raisons archivées</item>
+    </plurals>
+
+    <string name="reasons_nudge">Faire le point après un moment</string>
+    <string name="reasons_nudge_hint">Me faire signe si je dépasse la durée choisie.</string>
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_appearance">Apparence</string>
+    <string name="settings_theme_system">Système</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_theme_system_hint">Suit le mode sombre de ton téléphone.</string>
+    <string name="settings_theme_light_hint">Toujours clair.</string>
+    <string name="settings_theme_dark_hint">Toujours sombre. Plus doux pour les yeux le soir.</string>
+    <string name="settings_wallpaper">Couleurs du fond d’écran</string>
+    <string name="settings_wallpaper_hint">Teinte l’appli avec tes couleurs Android.</string>
+    <string name="settings_checkins">Rappels</string>
+    <string name="settings_nudge_after">Me faire signe après</string>
+    <string name="settings_off">Désactivé</string>
+    <string name="settings_resume">Pas de question après un court verrouillage</string>
+    <string name="settings_resume_hint">Quand l’écran s’éteint tout seul et que tu le rallumes aussitôt.</string>
+    <string name="settings_reflection">Bilan du soir</string>
+    <string name="settings_reflection_hint">Une notification discrète avec les chiffres du jour.</string>
+    <string name="reflection_channel">Bilan du soir</string>
+    <string name="reflection_title">Le bocal du jour</string>
+    <plurals name="reflection_unlocks">
+        <item quantity="one">%d déverrouillage</item>
+        <item quantity="many">%d déverrouillages</item>
+        <item quantity="other">%d déverrouillages</item>
+    </plurals>
+    <plurals name="reflection_habit">
+        <item quantity="one">%d par habitude</item>
+        <item quantity="many">%d par habitude</item>
+        <item quantity="other">%d par habitude</item>
+    </plurals>
+    <string name="reflection_screen">%s à l’écran</string>
+    <string name="reflection_as_usual">Autant que d’habitude</string>
+    <string name="settings_background">Arrière-plan</string>
+    <string name="settings_battery_ok">L’utilisation de la batterie est sans restriction.</string>
+    <string name="settings_free_title">Gratuit. Sans pub. Sans pistage.</string>
+    <string name="settings_free_text">Si ça t’aide, un café m’aidera aussi.</string>
+    <string name="settings_coffee">Offre-moi un café</string>
+
+    <string name="onboarding_title">Pourquoi ? À chaque déverrouillage.</string>
+    <string name="onboarding_text">Une petite question chaque fois que tu prends ton téléphone. Découvre ce qui t’attire.</string>
+    <string name="onboarding_unlocks">Repérer les déverrouillages</string>
+    <string name="onboarding_unlocks_hint">Automatique. Aucune autorisation nécessaire.</string>
+    <string name="onboarding_overlay">Afficher la question sur les autres applis</string>
+    <string name="onboarding_overlay_hint">Nécessite « Superposition sur d’autres applis ».</string>
+    <string name="onboarding_notification">Notifications</string>
+    <string name="onboarding_notification_hint">Une notification discrète la garde active.</string>
+    <string name="onboarding_battery">Rester active</string>
+    <string name="onboarding_battery_hint">Ouvre « Utilisation de la batterie par l’appli » et choisis « Sans restriction ». Si tu vois un bouton, appuie sur le texte « Autoriser l’utilisation en arrière-plan », pas sur le bouton.</string>
+    <string name="background_tips">Plus d’astuces pour les téléphones %1$s</string>
+    <string name="onboarding_ready">Activé</string>
+    <string name="onboarding_allow">Autoriser</string>
+    <string name="onboarding_privacy">Tout reste sur ce téléphone. Aucun accès à Internet. Ne lit jamais quelles applis tu utilises.</string>
+    <string name="onboarding_permission_lost">Android a désactivé « Afficher la question sur les autres applis ». Autorise-le à nouveau pour que Pourquoi ? continue à demander.</string>
+    <string name="onboarding_start">C’est parti</string>
+    <string name="onboarding_needs_overlay">Autorise « Afficher la question sur les autres applis » pour commencer.</string>
+
+    <plurals name="offer_text">
+        <item quantity="one">Tu as écrit ça %d fois. L’ajouter à tes raisons pour qu’un seul appui suffise la prochaine fois ?</item>
+        <item quantity="many">Tu as écrit ça %d fois. L’ajouter à tes raisons pour qu’un seul appui suffise la prochaine fois ?</item>
+        <item quantity="other">Tu as écrit ça %d fois. L’ajouter à tes raisons pour qu’un seul appui suffise la prochaine fois ?</item>
+    </plurals>
+    <string name="offer_add">Ajouter aux raisons</string>
+    <string name="offer_not_now">Pas maintenant</string>
+    <string name="offer_never">Ne plus demander pour celle-ci</string>
+
+    <string name="service_channel">Détection des déverrouillages</string>
+    <string name="service_title">Pourquoi ? est actif</string>
+    <string name="service_text">Demande pourquoi à chaque déverrouillage</string>
+    <string name="stopped_channel">Questions arrêtées</string>
+    <string name="stopped_title">Les questions sont désactivées</string>
+    <string name="stopped_text">Android a arrêté l’appli. Appuie pour réactiver les questions.</string>
+    <string name="service_text_no_overlay">Impossible de demander pour l’instant. Appuie pour autoriser « Afficher la question sur les autres applis ».</string>
+</resources>

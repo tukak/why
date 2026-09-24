@@ -1,0 +1,23 @@
+Dlaczego? zadaje jedno pytanie za każdym razem, gdy odblokowujesz telefon: co cię tu sprowadza?
+
+Kliknij powód, wybierz „Z nawyku” albo wpisz własny. Z dnia na dzień widzisz, co naprawdę ciągnie cię do telefonu i kiedy.
+
+<b>Co dostajesz</b>
+• Pytanie po każdym odblokowaniu, z powodami ułożonymi według pory dnia
+• Dzisiejszy słoik: każde odblokowanie wrzuca kamyk. Przechyl telefon, a kamyki się poturlają.
+• Widok tygodnia: słoiki dzień po dniu, na co poszedł czas i pory dnia, w których najczęściej odblokowujesz telefon z nawyku
+• Delikatne przypomnienie, gdy spędzasz przy telefonie więcej czasu, niż planujesz
+• Wieczorne podsumowanie z liczbami z całego dnia
+• Często wpisywane odpowiedzi jednym kliknięciem zamienisz w powody
+
+<b>Prywatność w standardzie</b>
+• Wszystko zostaje w twoim telefonie
+• Bez uprawnień do internetu, bez kont, bez reklam, bez śledzenia
+• Nigdy nie sprawdza, jakich aplikacji używasz: wykrywa tylko odblokowania i wygaszenie ekranu
+
+<b>Uprawnienia</b>
+• Wyświetlanie nad innymi aplikacjami: żeby pokazać pytanie
+• Powiadomienia: Aplikacja wyświetla ciche powiadomienie, żeby działać w tle
+• Bateria ustawiona na „Bez ograniczeń” (zalecane), żeby Android nie zatrzymywał aplikacji
+
+Za darmo i open source.

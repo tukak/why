@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Warum?</string>
+    <string name="back">Zurück</string>
+
+    <string name="reason_message">Nachricht oder Anruf</string>
+    <string name="reason_look_up">Etwas nachschauen</string>
+    <string name="reason_calendar">Kalender checken</string>
+    <string name="reason_music">Musik oder Podcast</string>
+    <string name="reason_navigate">Navigation</string>
+    <string name="reason_photo">Foto machen</string>
+
+    <string name="habit">Aus Gewohnheit</string>
+    <string name="habit_lower">aus Gewohnheit</string>
+    <string name="habit_subtitle">Kein Grund. Auch okay.</string>
+    <string name="answer_other">Etwas anderes</string>
+    <string name="answer_none">Nicht beantwortet</string>
+
+    <string name="prompt_header" tools:ignore="PluralsCandidate">%1$s · heute zum %2$d. Mal</string>
+    <string name="prompt_title">Was führt dich her?</string>
+    <string name="prompt_other_label">Etwas anderes</string>
+    <string name="prompt_other_placeholder">Dein Grund</string>
+    <string name="prompt_save">Grund speichern</string>
+    <string name="prompt_pause">1 Stunde Pause</string>
+
+    <plurals name="nudge_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <string name="nudge_since" tools:ignore="Typos">seit dem Entsperren</string>
+    <string name="nudge_reason">Dein Grund: %1$s. Erledigt?</string>
+    <string name="nudge_habit">Du hast das Handy aus Gewohnheit genommen. Reicht’s für jetzt?</string>
+    <string name="nudge_done">Ja, erledigt</string>
+    <string name="nudge_more">Noch 5 Minuten</string>
+    <string name="nudge_switched">Ich mache jetzt was anderes</string>
+
+    <string name="tab_today">Heute</string>
+    <string name="tab_week">Woche</string>
+    <string name="tab_reasons">Gründe</string>
+
+    <string name="today_title">Dein Glas heute</string>
+    <plurals name="today_unlocks">
+        <item quantity="one">Mal entsperrt</item>
+        <item quantity="other">Mal entsperrt</item>
+    </plurals>
+    <plurals name="today_fewer">
+        <item quantity="one">%d weniger als sonst</item>
+        <item quantity="other">%d weniger als sonst</item>
+    </plurals>
+    <plurals name="today_more">
+        <item quantity="one">%d mehr als sonst</item>
+        <item quantity="other">%d mehr als sonst</item>
+    </plurals>
+    <plurals name="today_legend_more">
+        <item quantity="one">+ %d weitere</item>
+        <item quantity="other">+ %d weitere</item>
+    </plurals>
+    <string name="today_legend_less">Weniger zeigen</string>
+    <string name="today_on_screen">am Bildschirm</string>
+    <string name="today_per_unlock">pro Entsperren</string>
+
+    <string name="duration_minutes">%d min</string>
+    <string name="duration_seconds">%d s</string>
+    <string name="duration_under_minute">&lt;1 min</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="duration_decimal_minutes">%.1f min</string>
+
+    <string name="week_title">Diese Woche</string>
+    <string name="week_insight_longer">Aus Gewohnheit bleibst du %.1f× länger als mit Grund.</string>
+    <string name="week_insight_shorter">Aus Gewohnheit bleibst du kürzer als mit Grund. Gutes Zeichen.</string>
+    <string name="week_insight_balanced">Aus Gewohnheit bleibst du etwa so lange wie mit Grund.</string>
+    <string name="week_insight_empty">Beantworte ein paar Fragen. Hier zeigen sich dann Muster.</string>
+    <string name="week_with_reason">mit Grund</string>
+    <string name="week_daily">Gläser pro Tag</string>
+    <string name="week_time">Wohin die Zeit ging</string>
+    <string name="week_habit_hours">Wann du aus Gewohnheit entsperrst</string>
+    <string name="week_habit_hours_period">Aus Gewohnheit entsperrt, letzte 4 Wochen</string>
+    <string name="week_habit_peak">Am häufigsten %1$s–%2$s</string>
+
+    <string name="reasons_title">Gründe</string>
+    <string name="reasons_subtitle">Hier stehen die häufigsten Gründe oben. Beim Entsperren richtet sich die Reihenfolge nach der Tageszeit.</string>
+    <string name="reasons_count">%d×</string>
+    <string name="reasons_edit">%1$s bearbeiten</string>
+    <string name="reasons_edit_title">Grund bearbeiten</string>
+    <string name="reasons_always_shown">Immer sichtbar</string>
+    <string name="reasons_suggested">Vorschläge</string>
+    <string name="reasons_add">Hinzufügen</string>
+    <string name="reasons_new">Neuer Grund</string>
+    <string name="reasons_label">Name</string>
+    <string name="reasons_archive">Archivieren</string>
+    <string name="reasons_restore">Wiederherstellen</string>
+    <string name="reasons_save">Speichern</string>
+    <plurals name="reasons_archived">
+        <item quantity="one">%d archivierter Grund</item>
+        <item quantity="other">%d archivierte Gründe</item>
+    </plurals>
+
+    <string name="reasons_nudge">Nach einer Weile nachfragen</string>
+    <string name="reasons_nudge_hint">Frag nach, wenn ich länger am Handy bin als eingestellt.</string>
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_appearance">Darstellung</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Hell</string>
+    <string name="settings_theme_dark">Dunkel</string>
+    <string name="settings_theme_system_hint">Folgt dem dunklen Modus deines Handys.</string>
+    <string name="settings_theme_light_hint">Immer hell.</string>
+    <string name="settings_theme_dark_hint">Immer dunkel. Schont nachts die Augen.</string>
+    <string name="settings_wallpaper">Farben vom Hintergrundbild</string>
+    <string name="settings_wallpaper_hint">Übernimmt die Farben deines Hintergrundbilds.</string>
+    <string name="settings_checkins">Nachfragen</string>
+    <string name="settings_nudge_after">Erinnern nach</string>
+    <string name="settings_off">Aus</string>
+    <string name="settings_resume">Nach kurzem Sperren nicht fragen</string>
+    <string name="settings_resume_hint">Falls der Bildschirm ausgeht und du ihn gleich wieder weckst.</string>
+    <string name="settings_reflection">Abendbilanz</string>
+    <string name="settings_reflection_hint">Eine stille Benachrichtigung mit den Zahlen des Tages.</string>
+    <string name="reflection_channel">Abendbilanz</string>
+    <string name="reflection_title">Dein Glas heute</string>
+    <plurals name="reflection_unlocks">
+        <item quantity="one">%d-mal entsperrt</item>
+        <item quantity="other">%d-mal entsperrt</item>
+    </plurals>
+    <plurals name="reflection_habit">
+        <item quantity="one">%d aus Gewohnheit</item>
+        <item quantity="other">%d aus Gewohnheit</item>
+    </plurals>
+    <string name="reflection_screen">%s am Bildschirm</string>
+    <string name="reflection_as_usual">So oft wie sonst</string>
+    <string name="settings_background">Hintergrund</string>
+    <string name="settings_battery_ok">Akkunutzung ist uneingeschränkt.</string>
+    <string name="settings_free_title">Kostenlos. Keine Werbung. Kein Tracking.</string>
+    <string name="settings_free_text">Wenn sie dir hilft, hilft mir ein Kaffee.</string>
+    <string name="settings_coffee">Kaffee spendieren</string>
+
+    <string name="onboarding_title">Frag nach dem Warum. Bei jedem Entsperren.</string>
+    <string name="onboarding_text">Eine kleine Frage, jedes Mal wenn du dein Handy nimmst. Sieh, was dich reinzieht.</string>
+    <string name="onboarding_unlocks">Entsperren erkennen</string>
+    <string name="onboarding_unlocks_hint">Eingebaut. Keine Berechtigung nötig.</string>
+    <string name="onboarding_overlay">Über anderen Apps fragen</string>
+    <string name="onboarding_overlay_hint">Braucht „Über anderen Apps einblenden“.</string>
+    <string name="onboarding_notification">Benachrichtigungen</string>
+    <string name="onboarding_notification_hint">Eine stille Benachrichtigung hält die App am Laufen.</string>
+    <string name="onboarding_battery">Weiterlaufen lassen</string>
+    <string name="onboarding_battery_hint">Öffne „Akkunutzung der App“ und wähle „Uneingeschränkt“. Siehst du einen Schalter, tippe auf den Text „Hintergrundnutzung zulassen“, nicht auf den Schalter.</string>
+    <string name="background_tips">Mehr Tipps für %1$s-Handys</string>
+    <string name="onboarding_ready">Bereit</string>
+    <string name="onboarding_allow">Zulassen</string>
+    <string name="onboarding_privacy">Bleibt auf diesem Handy. Kein Internetzugriff. Liest nie, welche Apps du nutzt.</string>
+    <string name="onboarding_permission_lost">Android hat „Über anderen Apps fragen“ ausgeschaltet. Erlaube es wieder, damit Warum? weiter fragen kann.</string>
+    <string name="onboarding_start">Los geht’s</string>
+    <string name="onboarding_needs_overlay">Erlaube „Über anderen Apps fragen“, um zu starten.</string>
+
+    <plurals name="offer_text">
+        <item quantity="one">Du hast das %d-mal eingegeben. Als Grund speichern? Dann reicht nächstes Mal ein Tippen.</item>
+        <item quantity="other">Du hast das %d-mal eingegeben. Als Grund speichern? Dann reicht nächstes Mal ein Tippen.</item>
+    </plurals>
+    <string name="offer_add">Zu Gründen hinzufügen</string>
+    <string name="offer_not_now">Nicht jetzt</string>
+    <string name="offer_never">Hierzu nicht mehr fragen</string>
+
+    <string name="service_channel">Fragen beim Entsperren</string>
+    <string name="service_title">Warum? ist aktiv</string>
+    <string name="service_text">Fragt bei jedem Entsperren nach dem Warum</string>
+    <string name="stopped_channel">Fragen gestoppt</string>
+    <string name="stopped_title">Fragen sind aus</string>
+    <string name="stopped_text">Android hat die App beendet. Tippe, um die Fragen wieder einzuschalten.</string>
+    <string name="service_text_no_overlay">Kann gerade nicht fragen. Tippe, um „Über anderen Apps fragen“ zu erlauben.</string>
+</resources>

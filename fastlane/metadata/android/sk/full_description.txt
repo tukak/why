@@ -1,0 +1,23 @@
+Prečo? sa pri každom odomknutí telefónu opýta jednu otázku: čo ťa sem privádza?
+
+Ťukni na dôvod, na „Len zo zvyku“ alebo napíš vlastný. Postupne uvidíš, čo ťa k telefónu naozaj ťahá a v ktorých chvíľach.
+
+<b>Čo dostaneš</b>
+• Otázku po každom odomknutí, s dôvodmi zoradenými podľa dennej doby
+• Dnešný pohár: za každé odomknutie pribudne kamienok. Nakloň telefón a kamienky sa kotúľajú.
+• Týždenný prehľad: poháre po dňoch, kam išiel čas a mapa hodín, keď odomykáš zo zvyku
+• Jemné pripomenutie, keď zostaneš dlhšie, než bolo v pláne
+• Večerné zhrnutie s číslami za deň
+• Často písané odpovede môžeš jedným ťuknutím zmeniť na dôvody
+
+<b>Súkromie na prvom mieste</b>
+• Všetko zostáva v tvojom telefóne
+• Bez povolenia na internet, bez účtov, bez reklám, bez sledovania
+• Nikdy nečíta, aké aplikácie používaš: zaznamená len odomknutie a vypnutie obrazovky
+
+<b>Povolenia</b>
+• Zobrazenie cez iné aplikácie: na zobrazenie otázky
+• Upozornenia: Android potrebuje malé upozornenie, aby aplikácia bežala
+• Batéria nastavená na „Bez obmedzení“ (odporúčané), aby Android aplikáciu nezastavil
+
+Zadarmo a s otvoreným zdrojovým kódom.

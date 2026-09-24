@@ -1,0 +1,23 @@
+Why? asks one question each time you unlock your phone: what brings you here?
+
+Tap a reason, tap "Just habit", or type your own. Over the days you see what really pulls you to your phone, and when.
+
+<b>What you get</b>
+• A question after each unlock, with your reasons sorted for the time of day
+• Today's jar: every unlock drops a pebble. Tilt the phone and the pebbles roll.
+• A week view: daily jars, where the time went, and your habit hours
+• A gentle check-in when you stay longer than you planned
+• An evening summary with the day's numbers
+• Typed answers you use often can become reasons with one tap
+
+<b>Private by design</b>
+• Everything stays on your phone
+• No internet permission, no accounts, no ads, no tracking
+• Never reads which apps you use: it only notices unlocks and screen off
+
+<b>Permissions</b>
+• Display over other apps: to show the question
+• Notifications: Android needs a small notification to keep the app running
+• Battery set to "Unrestricted" (recommended), so Android does not stop the app
+
+Free and open source.

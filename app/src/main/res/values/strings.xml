@@ -83,7 +83,7 @@
     <string name="reasons_edit">Edit %1$s</string>
     <string name="reasons_edit_title">Edit reason</string>
     <string name="reasons_always_shown">Always shown</string>
-    <string name="reasons_suggested">SUGGESTED</string>
+    <string name="reasons_suggested">Suggested</string>
     <string name="reasons_add">Add</string>
     <string name="reasons_new">New reason</string>
     <string name="reasons_label">Name</string>

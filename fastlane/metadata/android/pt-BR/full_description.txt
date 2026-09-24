@@ -1,0 +1,23 @@
+Por quê? faz uma pergunta cada vez que você desbloqueia o celular: o que te traz aqui?
+
+Toque em um motivo, em “Puro hábito” ou escreva o seu. Com os dias, você vê o que realmente te puxa para o celular, e quando.
+
+<b>O que você ganha</b>
+• Uma pergunta a cada desbloqueio, com seus motivos ordenados pela hora do dia
+• O pote de hoje: cada desbloqueio deixa cair uma pedrinha nele. Incline o celular e as pedrinhas rolam.
+• Uma visão da semana: potes do dia, para onde foi o tempo e os horários do seu hábito
+• Um lembrete discreto quando você passa mais tempo no celular
+• Um resumo da noite com os números do dia
+• Respostas que você digita várias vezes podem virar opções de um toque
+
+<b>Privado de verdade</b>
+• Tudo fica no seu celular
+• Sem permissão de internet, sem contas, sem anúncios, sem rastreamento
+• Nunca vê quais apps você usa: só percebe desbloqueios e tela apagada
+
+<b>Permissões</b>
+• Sobreposição a outros apps: para mostrar a pergunta
+• Notificações: o Android precisa de uma notificação pequena para manter o app funcionando
+• Bateria em “Sem restrições” (recomendado), para o Android não parar o app
+
+Grátis e de código aberto.

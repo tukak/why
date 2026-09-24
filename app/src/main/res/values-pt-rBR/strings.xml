@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Por quê?</string>
+    <string name="back">Voltar</string>
+
+    <string name="reason_message">Mensagem ou ligação</string>
+    <string name="reason_look_up">Pesquisar algo</string>
+    <string name="reason_calendar">Ver a agenda</string>
+    <string name="reason_music">Música ou podcast</string>
+    <string name="reason_navigate">Ver o caminho</string>
+    <string name="reason_photo">Tirar uma foto</string>
+
+    <string name="habit">Só por hábito</string>
+    <string name="habit_lower">só por hábito</string>
+    <string name="habit_subtitle">Sem motivo. Tudo bem também.</string>
+    <string name="answer_other">Outra coisa</string>
+    <string name="answer_none">Sem resposta</string>
+
+    <string name="prompt_header" tools:ignore="PluralsCandidate">%1$s · %2$dº desbloqueio hoje</string>
+    <string name="prompt_title">O que te traz aqui?</string>
+    <string name="prompt_other_label">Outra coisa</string>
+    <string name="prompt_other_placeholder">Escreva o motivo</string>
+    <string name="prompt_save">Salvar motivo</string>
+    <string name="prompt_pause">Pausar perguntas por 1 hora</string>
+
+    <plurals name="nudge_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="many">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <string name="nudge_since">desde o desbloqueio</string>
+    <string name="nudge_reason">Motivo: %1$s. Já terminou?</string>
+    <string name="nudge_habit">Você pegou o celular por puro hábito. Já deu por agora?</string>
+    <string name="nudge_done">Sim, terminei</string>
+    <string name="nudge_more">Mais 5 minutos</string>
+    <string name="nudge_switched">Mudei para outra coisa</string>
+
+    <string name="tab_today">Hoje</string>
+    <string name="tab_week">Semana</string>
+    <string name="tab_reasons">Motivos</string>
+
+    <string name="today_title">O pote de hoje</string>
+    <plurals name="today_unlocks" tools:ignore="ImpliedQuantity">
+        <item quantity="one">desbloqueio até agora</item>
+        <item quantity="many">desbloqueios até agora</item>
+        <item quantity="other">desbloqueios até agora</item>
+    </plurals>
+    <plurals name="today_fewer">
+        <item quantity="one">%d a menos que o normal</item>
+        <item quantity="many">%d a menos que o normal</item>
+        <item quantity="other">%d a menos que o normal</item>
+    </plurals>
+    <plurals name="today_more">
+        <item quantity="one">%d a mais que o normal</item>
+        <item quantity="many">%d a mais que o normal</item>
+        <item quantity="other">%d a mais que o normal</item>
+    </plurals>
+    <plurals name="today_legend_more">
+        <item quantity="one">+ %d outro</item>
+        <item quantity="many">+ %d outros</item>
+        <item quantity="other">+ %d outros</item>
+    </plurals>
+    <string name="today_legend_less">Mostrar menos</string>
+    <string name="today_on_screen">de tela</string>
+    <string name="today_per_unlock">por desbloqueio</string>
+
+    <string name="duration_minutes">%d min</string>
+    <string name="duration_seconds">%d s</string>
+    <string name="duration_under_minute">&lt;1 min</string>
+    <string name="duration_hours_minutes">%1$d h %2$d min</string>
+    <string name="duration_decimal_minutes">%.1f min</string>
+
+    <string name="week_title">Esta semana</string>
+    <string name="week_insight_longer">Desbloqueios por puro hábito duram %.1f× mais que os com motivo.</string>
+    <string name="week_insight_shorter">Desbloqueios por puro hábito são mais curtos que os com motivo. Bom sinal.</string>
+    <string name="week_insight_balanced">Desbloqueios por puro hábito duram mais ou menos o mesmo que os com motivo.</string>
+    <string name="week_insight_empty">Responda a algumas perguntas. Os padrões aparecem aqui.</string>
+    <string name="week_with_reason">com motivo</string>
+    <string name="week_daily">Potes por dia</string>
+    <string name="week_time">Para onde foi o tempo</string>
+    <string name="week_habit_hours">Quando você desbloqueia por hábito</string>
+    <string name="week_habit_hours_period">Desbloqueios por puro hábito, últimas 4 semanas</string>
+    <string name="week_habit_peak">Mais comum entre %1$s e %2$s</string>
+
+    <string name="reasons_title">Motivos</string>
+    <string name="reasons_subtitle">Os mais usados vêm primeiro. Ao desbloquear, a ordem muda conforme o horário.</string>
+    <string name="reasons_count">%d×</string>
+    <string name="reasons_edit">Editar %1$s</string>
+    <string name="reasons_edit_title">Editar motivo</string>
+    <string name="reasons_always_shown">Sempre visíveis</string>
+    <string name="reasons_suggested">Sugestões</string>
+    <string name="reasons_add">Adicionar</string>
+    <string name="reasons_new">Novo motivo</string>
+    <string name="reasons_label">Nome</string>
+    <string name="reasons_archive">Arquivar</string>
+    <string name="reasons_restore">Restaurar</string>
+    <string name="reasons_save">Salvar</string>
+    <plurals name="reasons_archived">
+        <item quantity="one">%d motivo arquivado</item>
+        <item quantity="many">%d motivos arquivados</item>
+        <item quantity="other">%d motivos arquivados</item>
+    </plurals>
+
+    <string name="reasons_nudge">Dar um toque depois de um tempo</string>
+    <string name="reasons_nudge_hint">Me avise quando eu ficar mais tempo que o definido nas Configurações.</string>
+    <string name="settings_title">Configurações</string>
+    <string name="settings_appearance">Aparência</string>
+    <string name="settings_theme_system">Sistema</string>
+    <string name="settings_theme_light">Claro</string>
+    <string name="settings_theme_dark">Escuro</string>
+    <string name="settings_theme_system_hint">Segue o modo escuro do celular.</string>
+    <string name="settings_theme_light_hint">Sempre claro.</string>
+    <string name="settings_theme_dark_hint">Sempre escuro. Mais confortável para os olhos à noite.</string>
+    <string name="settings_wallpaper">Usar as cores do plano de fundo</string>
+    <string name="settings_wallpaper_hint">Pinta o app com as cores do seu Android.</string>
+    <string name="settings_checkins">Lembretes</string>
+    <string name="settings_nudge_after">Me avise depois de</string>
+    <string name="settings_off">Desativado</string>
+    <string name="settings_resume">Pular a pergunta ao desbloquear de novo logo em seguida</string>
+    <string name="settings_resume_hint">Para quando a tela apaga sozinha e você acende de novo na hora.</string>
+    <string name="settings_reflection">Resumo da noite</string>
+    <string name="settings_reflection_hint">Uma notificação discreta com os números do dia.</string>
+    <string name="reflection_channel">Resumo da noite</string>
+    <string name="reflection_title">O pote de hoje</string>
+    <plurals name="reflection_unlocks">
+        <item quantity="one">%d desbloqueio</item>
+        <item quantity="many">%d desbloqueios</item>
+        <item quantity="other">%d desbloqueios</item>
+    </plurals>
+    <plurals name="reflection_habit">
+        <item quantity="one">%d por puro hábito</item>
+        <item quantity="many">%d por puro hábito</item>
+        <item quantity="other">%d por puro hábito</item>
+    </plurals>
+    <string name="reflection_screen">%s de tela</string>
+    <string name="reflection_as_usual">O mesmo tanto de sempre</string>
+    <string name="settings_background">Segundo plano</string>
+    <string name="settings_battery_ok">O uso da bateria está sem restrições.</string>
+    <string name="settings_free_title">Grátis. Sem anúncios. Sem rastreamento.</string>
+    <string name="settings_free_text">Se te ajuda, um café me ajuda.</string>
+    <string name="settings_coffee">Me pague um café</string>
+
+    <string name="onboarding_title">Pergunte por quê. A cada desbloqueio.</string>
+    <string name="onboarding_text">Uma perguntinha cada vez que você pega o celular. Veja o que te puxa para ele.</string>
+    <string name="onboarding_unlocks">Detectar desbloqueios</string>
+    <string name="onboarding_unlocks_hint">Já vem pronto. Nenhuma permissão necessária.</string>
+    <string name="onboarding_overlay">Mostrar a pergunta sobre outros apps</string>
+    <string name="onboarding_overlay_hint">Precisa de “Sobrepor a outros apps”.</string>
+    <string name="onboarding_notification">Notificações</string>
+    <string name="onboarding_notification_hint">Uma notificação discreta mantém o app funcionando.</string>
+    <string name="onboarding_battery">Manter funcionando</string>
+    <string name="onboarding_battery_hint">Abra “Uso da bateria pelo app” e escolha “Sem restrições”. Se aparecer um botão liga/desliga, toque no texto “Permitir o uso em segundo plano”, não no botão.</string>
+    <string name="background_tips">Mais dicas para celulares %1$s</string>
+    <string name="onboarding_ready">Pronto</string>
+    <string name="onboarding_allow">Permitir</string>
+    <string name="onboarding_privacy">Fica neste celular. Sem acesso à internet. Nunca vê quais apps você usa.</string>
+    <string name="onboarding_permission_lost">O Android desativou “Mostrar a pergunta sobre outros apps”. Permita de novo para o Por quê? continuar perguntando.</string>
+    <string name="onboarding_start">Vamos lá</string>
+    <string name="onboarding_needs_overlay">Permita “Mostrar a pergunta sobre outros apps” para começar.</string>
+
+    <plurals name="offer_text">
+        <item quantity="one">Você escreveu isso %d vez. Quer salvar como motivo para escolher com um toque da próxima vez?</item>
+        <item quantity="many">Você escreveu isso %d vezes. Quer salvar como motivo para escolher com um toque da próxima vez?</item>
+        <item quantity="other">Você escreveu isso %d vezes. Quer salvar como motivo para escolher com um toque da próxima vez?</item>
+    </plurals>
+    <string name="offer_add">Adicionar aos motivos</string>
+    <string name="offer_not_now">Agora não</string>
+    <string name="offer_never">Não perguntar mais sobre este</string>
+
+    <string name="service_channel">Monitor de desbloqueios</string>
+    <string name="service_title">Por quê? está ativo</string>
+    <string name="service_text">Perguntando o motivo a cada desbloqueio</string>
+    <string name="stopped_channel">Perguntas paradas</string>
+    <string name="stopped_title">Perguntas desativadas</string>
+    <string name="stopped_text">O Android parou o app. Toque para reativar as perguntas.</string>
+    <string name="service_text_no_overlay">Não dá para perguntar agora. Toque para permitir “Mostrar a pergunta sobre outros apps”.</string>
+</resources>
