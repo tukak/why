@@ -195,7 +195,7 @@ class JarWorld(
             (points[k].x - points[0].x) * (points[k + 1].y - points[0].y) - (points[k + 1].x - points[0].x) * (points[k].y - points[0].y)
         }
         if (kotlin.math.abs(area2) < 1e-9) return
-        walls.addFixture(Geometry.createPolygon(*(if (area2 > 0) points else points.reversedArray())), 1.0, 0.5, 0.1)
+        walls.addFixture(Geometry.createPolygon(*(if (area2 > 0) points else points.reversedArray())), 1.0, PEBBLE_FRICTION, 0.1)
     }
 
     private companion object {
@@ -203,7 +203,7 @@ class JarWorld(
         const val WALL_THICKNESS = 300f
         const val MAX_MOVE_PER_STEP = 25f
         const val BASE_DAMPING = 0.05f
-        const val PEBBLE_FRICTION = 0.5
+        const val PEBBLE_FRICTION = 0.35
         const val SETTLE_DAMPING = 12f
         const val SETTLE_START = 1.5f
         const val SETTLE_END = 3.5f

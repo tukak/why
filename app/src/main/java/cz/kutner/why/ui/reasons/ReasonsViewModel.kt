@@ -42,8 +42,8 @@ class ReasonsViewModel(private val unlocks: UnlockRepository, clock: Clock) : Vi
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ReasonsUiState())
 
-    fun add(label: String, shape: PebbleShape, color: ReasonColor) = viewModelScope.launch {
-        unlocks.addReason(label, shape, color)
+    fun add(label: String, shape: PebbleShape, color: ReasonColor, nudge: Boolean) = viewModelScope.launch {
+        unlocks.addReason(label, shape, color, nudge)
     }
 
     fun save(reason: Reason) = viewModelScope.launch { unlocks.updateReason(reason.copy(label = reason.label.trim())) }

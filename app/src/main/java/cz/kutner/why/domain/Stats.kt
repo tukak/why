@@ -37,6 +37,9 @@ fun daysBack(epochMillis: Long, zone: ZoneId, days: Int): Long =
 /** Earlier days that "usual" is averaged over. */
 const val USUAL_DAYS = 7
 
+/** One earlier day is an anecdote, not a habit. */
+const val MIN_USUAL_DAYS = 2
+
 data class DaySummary(
     val unlocks: Int,
     val habit: Int,
@@ -69,7 +72,7 @@ fun usualSoFar(history: List<UnlockEvent>, now: Long, zone: ZoneId, days: Int = 
         val ofDay = history.filter { it.unlockedAt in start until dayEnd }
         if (ofDay.isEmpty()) null else ofDay.count { it.unlockedAt < cutoff }
     }
-    return if (counts.isEmpty()) null else counts.average().roundToInt()
+    return if (counts.size < MIN_USUAL_DAYS) null else counts.average().roundToInt()
 }
 
 data class DayBar(val date: LocalDate, val total: Int, val habit: Int)

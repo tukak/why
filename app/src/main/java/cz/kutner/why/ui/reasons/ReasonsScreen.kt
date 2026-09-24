@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -121,9 +122,13 @@ fun ReasonsScreen() {
         ReasonEditor(
             reason = target.reason,
             onDismiss = { editing = null },
-            onSave = { label, shape, color ->
+            onSave = { label, shape, color, nudge ->
                 val existing = target.reason
-                if (existing == null) vm.add(label, shape, color) else vm.save(existing.copy(label = label, shape = shape.name, color = color.name))
+                if (existing == null) {
+                    vm.add(label, shape, color, nudge)
+                } else {
+                    vm.save(existing.copy(label = label, shape = shape.name, color = color.name, nudge = nudge))
+                }
                 editing = null
             },
             onArchive = {
@@ -194,12 +199,13 @@ private fun OfferCard(label: String, count: Int, onDecide: (OfferDecision) -> Un
 private fun ReasonEditor(
     reason: Reason?,
     onDismiss: () -> Unit,
-    onSave: (String, PebbleShape, ReasonColor) -> Unit,
+    onSave: (String, PebbleShape, ReasonColor, Boolean) -> Unit,
     onArchive: () -> Unit,
 ) {
     var label by rememberSaveable { mutableStateOf(reason?.label.orEmpty()) }
     var shape by remember { mutableStateOf(reason?.let { PebbleShape.of(it.shape) } ?: PebbleShape.pickable.first()) }
     var color by remember { mutableStateOf(reason?.let { ReasonColor.of(it.color) } ?: ReasonColor.pickable.first()) }
+    var nudge by remember { mutableStateOf(reason?.nudge ?: true) }
     ModalBottomSheet(onDismissRequest = onDismiss, containerColor = MaterialTheme.colorScheme.background) {
         Column(
             Modifier.navigationBarsPadding().padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
@@ -219,11 +225,19 @@ private fun ReasonEditor(
             )
             Picker(PebbleShape.pickable, selected = shape, onPick = { shape = it }) { Pebble(PebbleStyle(it, color), 26.dp) }
             Picker(ReasonColor.pickable, selected = color, onPick = { color = it }) { Box(Modifier.size(26.dp).background(it.tones.ink, RoundedCornerShape(50))) }
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                val title = stringResource(R.string.reasons_nudge)
+                Column(Modifier.weight(1f)) {
+                    Text(title, style = MaterialTheme.typography.labelLarge)
+                    Text(stringResource(R.string.reasons_nudge_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Switch(checked = nudge, onCheckedChange = { nudge = it }, modifier = Modifier.semantics { contentDescription = title })
+            }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (reason != null) {
                     FilledTonalButton(onClick = onArchive, modifier = Modifier.weight(1f).height(52.dp)) { Text(stringResource(R.string.reasons_archive)) }
                 }
-                Button(onClick = { onSave(label, shape, color) }, enabled = label.isNotBlank(), modifier = Modifier.weight(1f).height(52.dp)) {
+                Button(onClick = { onSave(label, shape, color, nudge) }, enabled = label.isNotBlank(), modifier = Modifier.weight(1f).height(52.dp)) {
                     Text(stringResource(R.string.reasons_save))
                 }
             }

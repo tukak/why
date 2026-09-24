@@ -27,9 +27,9 @@ class ReflectionTest {
     @Test
     fun `the summary counts habit unlocks and compares with earlier days by the same hour`() {
         val todays = listOf(event(at(today, 8), habit = true), event(at(today, 12)), event(at(today, 20), habit = true))
-        // Yesterday had 5 unlocks by 21:00; the one at 22:00 happened later in the day and must not count.
-        val yesterday = (8..12).map { event(at(today.minusDays(1), it)) } + event(at(today.minusDays(1), 22))
-        val reflection = reflectOnDay(todays, yesterday, at(today, 21), zone)!!
+        // Each earlier day had 5 unlocks by 21:00; the ones at 22:00 happened later in the day and must not count.
+        val history = (1L..2).flatMap { back -> (8..12).map { event(at(today.minusDays(back), it)) } + event(at(today.minusDays(back), 22)) }
+        val reflection = reflectOnDay(todays, history, at(today, 21), zone)!!
         assertEquals(3, reflection.unlocks)
         assertEquals(2, reflection.habit)
         assertEquals(6 * minute, reflection.screenMillis)

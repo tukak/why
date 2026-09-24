@@ -95,6 +95,8 @@
         <item quantity="other">%d archived reasons</item>
     </plurals>
 
+    <string name="reasons_nudge">Check in after a while</string>
+    <string name="reasons_nudge_hint">Nudge me when I stay longer than set in Settings.</string>
     <string name="settings_title">Settings</string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_theme_system">System</string>

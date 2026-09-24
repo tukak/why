@@ -1,5 +1,6 @@
 package cz.kutner.why.data.db
 
+import androidx.room3.ColumnInfo
 import androidx.room3.Entity
 import androidx.room3.Index
 import androidx.room3.PrimaryKey
@@ -13,6 +14,8 @@ data class Reason(
     /** Key of [cz.kutner.why.ui.theme.ReasonColor]. */
     val color: String,
     val archived: Boolean = false,
+    /** Whether a long session after this answer gets a check-in. */
+    @ColumnInfo(defaultValue = "1") val nudge: Boolean = true,
 )
 
 /**

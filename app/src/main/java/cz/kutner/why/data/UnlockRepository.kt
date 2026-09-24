@@ -63,12 +63,12 @@ class UnlockRepository(
     }
 
     /** Without a chosen style, picks the shape and color used least among active reasons. */
-    suspend fun addReason(label: String, shape: PebbleShape? = null, color: ReasonColor? = null): Long {
+    suspend fun addReason(label: String, shape: PebbleShape? = null, color: ReasonColor? = null, nudge: Boolean = true): Long {
         val active = reasonDao.active()
         val pickedShape = shape ?: PebbleShape.pickable.minBy { s -> active.count { it.shape == s.name } }
         val pickedColor = color ?: ReasonColor.pickable.minBy { c -> active.count { it.color == c.name } }
         return reasonDao.insert(
-            Reason(label = label.trim(), shape = pickedShape.name, color = pickedColor.name),
+            Reason(label = label.trim(), shape = pickedShape.name, color = pickedColor.name, nudge = nudge),
         )
     }
 

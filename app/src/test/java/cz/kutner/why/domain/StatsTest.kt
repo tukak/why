@@ -52,9 +52,18 @@ class StatsTest {
 
     @Test
     fun `days without any data do not pull the usual count down`() {
-        // Only one earlier day was recorded, for example the day after install.
-        val history = listOf(event(at(today.minusDays(3), 9)), event(at(today.minusDays(3), 10)))
+        // Two recorded days with gaps between them, for example right after install.
+        val history = listOf(
+            event(at(today.minusDays(3), 9)), event(at(today.minusDays(3), 10)),
+            event(at(today.minusDays(5), 9)), event(at(today.minusDays(5), 10)),
+        )
         assertEquals(2, usualSoFar(history, at(today, 12), zone))
+    }
+
+    @Test
+    fun `a single earlier day is not enough to call anything usual`() {
+        val history = listOf(event(at(today.minusDays(1), 9)), event(at(today.minusDays(1), 10)))
+        assertNull(usualSoFar(history, at(today, 12), zone))
     }
 
     @Test

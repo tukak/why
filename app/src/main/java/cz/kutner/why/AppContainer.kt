@@ -42,6 +42,7 @@ class AppContainer(context: Context) {
         R.string.reason_navigate to (PebbleShape.Triangle to ReasonColor.Teal),
         R.string.reason_photo to (PebbleShape.Circle to ReasonColor.Amber),
     ).map { (label, style) ->
-        Reason(label = appContext.getString(label), shape = style.first.name, color = style.second.name)
+        // Navigating needs the phone for the whole trip; a check-in would only interrupt it.
+        Reason(label = appContext.getString(label), shape = style.first.name, color = style.second.name, nudge = label != R.string.reason_navigate)
     }
 }

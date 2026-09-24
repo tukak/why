@@ -171,7 +171,7 @@ class UnlockService : LifecycleService() {
             val offer = text?.let { app.unlocks.dueOfferFor(it) }
             if (offer != null) showOffer(offer, settings) else overlays.dismiss()
             val style = reason?.style ?: if (habit) PebbleStyle.Habit else PebbleStyle.Other
-            scheduleNudge(id, settings, NudgeTarget(reason?.label ?: text, style), settings.nudgeMinutes)
+            scheduleNudge(id, settings, NudgeTarget(reason?.label ?: text, style), if (reason?.nudge == false) 0 else settings.nudgeMinutes)
         }
     }
 
