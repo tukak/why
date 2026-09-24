@@ -194,7 +194,7 @@ private fun OtherReasonField(typedBefore: List<String>, onSubmit: (String) -> Un
     val colors = MaterialTheme.colorScheme
     val submit = { if (text.isNotBlank()) onSubmit(text) }
     val saveLabel = stringResource(R.string.prompt_save)
-    val shown = typedBefore.filter { TypedReasons.matches(it, text) && TypedReasons.normalize(it) != TypedReasons.normalize(text) }
+    val shown = typedBefore.filter { TypedReasons.matches(it, text) && TypedReasons.normalize(it) != TypedReasons.normalize(text) }.take(SUGGESTIONS_SHOWN)
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.prompt_other_label), style = MaterialTheme.typography.labelMedium, color = colors.onSurfaceVariant, modifier = Modifier.padding(start = 4.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -248,3 +248,5 @@ private fun OtherReasonField(typedBefore: List<String>, onSubmit: (String) -> Un
         }
     }
 }
+
+private const val SUGGESTIONS_SHOWN = 6

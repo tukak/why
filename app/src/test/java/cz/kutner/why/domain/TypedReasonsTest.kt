@@ -64,4 +64,20 @@ class TypedReasonsTest {
         val order = TimeOfDayOrder(now = 10_000L, zone = ZoneId.of("UTC"))
         assertEquals(listOf("Parking", "Wordle", "Bus"), TypedReasons.suggestions(groups, emptyList(), order))
     }
+
+    @Test
+    fun `an answer typed a moment ago is offered at the next unlock, even among many older ones`() {
+        // Each used once: the newest must not lose the tie to older answers, or it would never show up.
+        val groups = TypedReasons.group(entries("Bus", "Tram", "Wordle", "Recipe", "Weather", "Crossword", "Parking"))
+        val order = TimeOfDayOrder(now = 10_000L, zone = ZoneId.of("UTC"))
+        assertEquals("Parking", TypedReasons.suggestions(groups, emptyList(), order).first())
+    }
+
+    @Test
+    fun `typing finds any earlier answer, not only the ones shown before typing`() {
+        val groups = TypedReasons.group(entries("Bus", "Bus", "Tram", "Tram", "Wordle", "Wordle", "Recipe", "Recipe", "Weather", "Weather", "Crossword", "Crossword", "Parking"))
+        val order = TimeOfDayOrder(now = 20_000L, zone = ZoneId.of("UTC"))
+        val all = TypedReasons.suggestions(groups, emptyList(), order)
+        assertEquals(listOf("Parking"), all.filter { TypedReasons.matches(it, "park") })
+    }
 }

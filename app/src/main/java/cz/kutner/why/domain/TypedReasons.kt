@@ -58,14 +58,20 @@ object TypedReasons {
         return groups.filter { it.key !in existing && isDue(it, byKey[it.key]) }.sortedByDescending { it.count }
     }
 
-    /** Earlier answers to offer under the text field, in the same time-of-day order as the reasons. */
-    fun suggestions(groups: List<Group>, reasons: List<Reason>, order: TimeOfDayOrder, limit: Int = 6): List<String> {
+    /**
+     * All earlier answers for the text field, in the same time-of-day order as the reasons; on a tie the latest first,
+     * so a new answer shows up at the next unlock.
+     */
+    fun suggestions(groups: List<Group>, reasons: List<Reason>, order: TimeOfDayOrder): List<String> {
         val existing = reasons.map { normalize(it.label) }.toSet()
         val candidates = groups.filter { it.key !in existing }
         val rank = order.rank(candidates.flatMap { g -> g.usedAt.map { g.key to it } })
         return candidates
-            .sortedWith(compareByDescending<Group> { rank.forNow[it.key] ?: 0 }.thenByDescending { rank.overall[it.key] ?: 0 })
-            .take(limit)
+            .sortedWith(
+                compareByDescending<Group> { rank.forNow[it.key] ?: 0 }
+                    .thenByDescending { rank.overall[it.key] ?: 0 }
+                    .thenByDescending { it.usedAt.max() },
+            )
             .map { it.label }
     }
 
