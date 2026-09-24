@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -174,13 +174,15 @@ fun SettingsScreen(onBack: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Column(Modifier.weight(1f)) {
+            Column(Modifier.weight(0.8f)) {
                 Text(stringResource(R.string.settings_free_title), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(R.string.settings_free_text), style = MaterialTheme.typography.bodySmall, color = colors.onTertiaryContainer)
             }
             Button(
                 onClick = { BackgroundHelp.open(context, Intent(Intent.ACTION_VIEW, DONATE_URL.toUri())) },
-                modifier = Modifier.widthIn(max = 180.dp),
+                // At most 55 % of the card, so a long label wraps in the button instead of squeezing the text.
+                modifier = Modifier.weight(1f, fill = false),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             ) {
                 LineIcon(Icons.Coffee, colors.onPrimary, size = 18.dp)
                 Text(stringResource(R.string.settings_coffee), textAlign = TextAlign.Center, modifier = Modifier.padding(start = 6.dp))
