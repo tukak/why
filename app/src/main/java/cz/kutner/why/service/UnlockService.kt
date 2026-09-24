@@ -57,6 +57,7 @@ class UnlockService : LifecycleService() {
 
     private var currentId: Long? = null
     private var lastLockAt: Long? = null
+    private var unlocked = false
     private var nudgeJob: Job? = null
     private var showingPermissionHint = false
 
@@ -123,6 +124,7 @@ class UnlockService : LifecycleService() {
             app.unlocks.startSession(now)
         }
         currentId = id
+        unlocked = true
         if (canShow == showingPermissionHint) {
             showingPermissionHint = !canShow
             getSystemService(NotificationManager::class.java).notify(NOTIFICATION_ID, notification())
@@ -135,7 +137,9 @@ class UnlockService : LifecycleService() {
         overlays.dismiss()
         val now = app.clock.millis()
         currentId?.let { app.unlocks.closeSession(it, now) }
-        lastLockAt = now
+        // Only the end of a real session counts as a lock; a screen that showed just the lock screen ended nothing.
+        if (unlocked) lastLockAt = now
+        unlocked = false
     }
 
     private suspend fun showPrompt(id: Long, settings: AppSettings) {
