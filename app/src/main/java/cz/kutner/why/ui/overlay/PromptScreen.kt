@@ -147,8 +147,8 @@ private fun ReasonChip(reason: Reason, index: Int, onClick: () -> Unit, modifier
     val style = reason.style
     val appear = remember { Animatable(0f) }
     LaunchedEffect(Unit) {
-        delay(index * 45L)
-        appear.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMediumLow))
+        delay(index * 15L)
+        appear.animateTo(1f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium))
     }
     Surface(
         onClick = onClick,
