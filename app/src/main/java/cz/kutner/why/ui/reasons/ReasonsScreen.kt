@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FloatingActionButton
@@ -28,9 +29,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -67,6 +70,8 @@ fun ReasonsScreen() {
     val vm = viewModel { ReasonsViewModel(app.unlocks, app.clock) }
     val state by vm.state.collectAsStateWithLifecycle()
     var editing by remember { mutableStateOf<Editing?>(null) }
+    var merging by remember { mutableStateOf<Reason?>(null) }
+    var mergeInto by remember { mutableStateOf<Reason?>(null) }
     var showArchived by rememberSaveable { mutableStateOf(false) }
     val colors = MaterialTheme.colorScheme
 
@@ -135,7 +140,71 @@ fun ReasonsScreen() {
                 target.reason?.let { vm.setArchived(it, true) }
                 editing = null
             },
+            onMerge = target.reason?.takeIf { state.active.size > 1 }?.let { source ->
+                {
+                    merging = source
+                    editing = null
+                }
+            },
         )
+    }
+
+    merging?.let { source ->
+        val into = mergeInto
+        if (into == null) {
+            MergeSheet(
+                source = source,
+                targets = state.active.map { it.reason }.filter { it.id != source.id },
+                onPick = { mergeInto = it },
+                onDismiss = { merging = null },
+            )
+        } else {
+            val count by produceState<Int?>(null, source) { value = vm.unlockCount(source) }
+            AlertDialog(
+                onDismissRequest = { mergeInto = null },
+                title = { Text(stringResource(R.string.reasons_merge_title)) },
+                text = {
+                    count?.let { Text(pluralStringResource(R.plurals.reasons_merge_confirm, it, it, source.label, into.label)) }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        vm.merge(source, into)
+                        mergeInto = null
+                        merging = null
+                    }, enabled = count != null) { Text(stringResource(R.string.reasons_merge_do)) }
+                },
+                dismissButton = { TextButton(onClick = { mergeInto = null }) { Text(stringResource(R.string.reasons_cancel)) } },
+            )
+        }
+    }
+}
+
+@Composable
+private fun MergeSheet(source: Reason, targets: List<Reason>, onPick: (Reason) -> Unit, onDismiss: () -> Unit) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        containerColor = MaterialTheme.colorScheme.background,
+    ) {
+        Column(Modifier.navigationBarsPadding().padding(bottom = 16.dp)) {
+            Text(
+                stringResource(R.string.reasons_merge_pick, source.label),
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, bottom = 12.dp),
+            )
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                targets.forEach { target ->
+                    Row(
+                        Modifier.fillMaxWidth().clickable { onPick(target) }.padding(horizontal = 24.dp, vertical = 14.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    ) {
+                        Pebble(target.style, 22.dp)
+                        Text(target.label, style = MaterialTheme.typography.labelLarge)
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -201,14 +270,19 @@ private fun ReasonEditor(
     onDismiss: () -> Unit,
     onSave: (String, PebbleShape, ReasonColor, Boolean) -> Unit,
     onArchive: () -> Unit,
+    onMerge: (() -> Unit)?,
 ) {
     var label by rememberSaveable { mutableStateOf(reason?.label.orEmpty()) }
     var shape by remember { mutableStateOf(reason?.let { PebbleShape.of(it.shape) } ?: PebbleShape.pickable.first()) }
     var color by remember { mutableStateOf(reason?.let { ReasonColor.of(it.color) } ?: ReasonColor.pickable.first()) }
     var nudge by remember { mutableStateOf(reason?.nudge ?: true) }
-    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = MaterialTheme.colorScheme.background) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        containerColor = MaterialTheme.colorScheme.background,
+    ) {
         Column(
-            Modifier.navigationBarsPadding().padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            Modifier.navigationBarsPadding().verticalScroll(rememberScrollState()).padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             Text(
@@ -240,6 +314,9 @@ private fun ReasonEditor(
                 Button(onClick = { onSave(label, shape, color, nudge) }, enabled = label.isNotBlank(), modifier = Modifier.weight(1f).height(52.dp)) {
                     Text(stringResource(R.string.reasons_save))
                 }
+            }
+            if (onMerge != null) {
+                TextButton(onClick = onMerge, modifier = Modifier.align(Alignment.CenterHorizontally)) { Text(stringResource(R.string.reasons_merge)) }
             }
         }
     }

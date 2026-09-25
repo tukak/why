@@ -165,4 +165,15 @@
     <string name="stopped_title">Fragen sind aus</string>
     <string name="stopped_text">Android hat die App beendet. Tippe, um die Fragen wieder einzuschalten.</string>
     <string name="service_text_no_overlay">Kann gerade nicht fragen. Tippe, um „Über anderen Apps fragen“ zu erlauben.</string>
+    <string name="answer_app_check">Warum? checken</string>
+    <string name="prompt_open_app">Warum? öffnen</string>
+    <string name="reasons_merge">Mit anderem Grund zusammenführen</string>
+    <string name="reasons_merge_pick">„%1$s“ zusammenführen mit</string>
+    <string name="reasons_merge_title">Gründe zusammenführen?</string>
+    <plurals name="reasons_merge_confirm">
+        <item quantity="one">%1$d Entsperren wandert von „%2$s“ zu „%3$s“. „%2$s“ wird entfernt. Das lässt sich nicht rückgängig machen.</item>
+        <item quantity="other">%1$d Entsperrungen wandern von „%2$s“ zu „%3$s“. „%2$s“ wird entfernt. Das lässt sich nicht rückgängig machen.</item>
+    </plurals>
+    <string name="reasons_merge_do">Zusammenführen</string>
+    <string name="reasons_cancel">Abbrechen</string>
 </resources>

@@ -52,5 +52,9 @@ class ReasonsViewModel(private val unlocks: UnlockRepository, clock: Clock) : Vi
         unlocks.updateReason(reason.copy(archived = archived))
     }
 
+    suspend fun unlockCount(reason: Reason): Int = unlocks.unlockCount(reason)
+
+    fun merge(from: Reason, into: Reason) = viewModelScope.launch { unlocks.mergeReason(from, into) }
+
     fun decide(offer: TypedReasons.Group, decision: OfferDecision) = viewModelScope.launch { unlocks.decide(offer, decision) }
 }

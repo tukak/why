@@ -89,4 +89,13 @@ class StatsTest {
         assertEquals(5, week.days.last().total)
         assertEquals(2, week.days.last().habit)
     }
+
+    @Test
+    fun `opening the app from the question is its own answer, not a habit, and counts as a reason`() {
+        val check = UnlockEvent(unlockedAt = at(today, 9), lockedAt = at(today, 9) + 2 * minute, isAppCheck = true)
+        assertEquals(Answer.AppCheck, check.answer)
+        val week = summarizeWeek(listOf(check), at(today, 12), zone)
+        assertNull(week.habitAvgMillis)
+        assertEquals(2 * minute, week.reasonAvgMillis)
+    }
 }

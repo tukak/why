@@ -174,4 +174,16 @@
     <string name="stopped_title">Perguntas desativadas</string>
     <string name="stopped_text">O Android parou o app. Toque para reativar as perguntas.</string>
     <string name="service_text_no_overlay">Não dá para perguntar agora. Toque para permitir “Mostrar a pergunta sobre outros apps”.</string>
+    <string name="answer_app_check">Conferir o Por quê?</string>
+    <string name="prompt_open_app">Abrir o Por quê?</string>
+    <string name="reasons_merge">Juntar com outro motivo</string>
+    <string name="reasons_merge_pick">Juntar “%1$s” com</string>
+    <string name="reasons_merge_title">Juntar motivos?</string>
+    <plurals name="reasons_merge_confirm">
+        <item quantity="one">%1$d desbloqueio passa de “%2$s” para “%3$s”. “%2$s” será removido. Não dá para desfazer.</item>
+        <item quantity="many">%1$d desbloqueios passam de “%2$s” para “%3$s”. “%2$s” será removido. Não dá para desfazer.</item>
+        <item quantity="other">%1$d desbloqueios passam de “%2$s” para “%3$s”. “%2$s” será removido. Não dá para desfazer.</item>
+    </plurals>
+    <string name="reasons_merge_do">Juntar</string>
+    <string name="reasons_cancel">Cancelar</string>
 </resources>

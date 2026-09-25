@@ -84,9 +84,17 @@ class UnlockRepository(
 
     suspend fun closeOrphanSessions() = unlockDao.closeOrphans()
 
-    suspend fun answer(id: Long, reasonId: Long? = null, isHabit: Boolean = false, customText: String? = null) {
+    suspend fun answer(id: Long, reasonId: Long? = null, isHabit: Boolean = false, customText: String? = null, isAppCheck: Boolean = false) {
         val text = customText?.trim()?.takeIf { it.isNotEmpty() }
-        unlockDao.answer(id, reasonId, isHabit, text, text?.let(TypedReasons::normalize)?.takeIf { it.isNotEmpty() })
+        unlockDao.answer(id, reasonId, isHabit, text, text?.let(TypedReasons::normalize)?.takeIf { it.isNotEmpty() }, isAppCheck)
+    }
+
+    suspend fun unlockCount(reason: Reason): Int = unlockDao.countForReason(reason.id)
+
+    /** Moves every unlock of [from] to [into], then removes [from]; its stats become part of [into]. */
+    suspend fun mergeReason(from: Reason, into: Reason) {
+        unlockDao.moveReason(from.id, into.id)
+        reasonDao.delete(from)
     }
 
     suspend fun countSince(from: Long): Int = unlockDao.countSince(from)

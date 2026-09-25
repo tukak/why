@@ -183,4 +183,17 @@
     <string name="stopped_title">Otázky jsou vypnuté</string>
     <string name="stopped_text">Android aplikaci zastavil. Klepni a otázky se zase zapnou.</string>
     <string name="service_text_no_overlay">Teď se nemůžu ptát. Klepni a povol „Ptát se přes jiné aplikace“.</string>
+    <string name="answer_app_check">Kouknout do Proč?</string>
+    <string name="prompt_open_app">Otevřít Proč?</string>
+    <string name="reasons_merge">Sloučit s jiným důvodem</string>
+    <string name="reasons_merge_pick">Kam sloučit „%1$s“?</string>
+    <string name="reasons_merge_title">Sloučit důvody?</string>
+    <plurals name="reasons_merge_confirm">
+        <item quantity="one">%1$d odemknutí se přesune z „%2$s“ do „%3$s“. „%2$s“ se smaže. Nejde to vrátit.</item>
+        <item quantity="few">%1$d odemknutí se přesunou z „%2$s“ do „%3$s“. „%2$s“ se smaže. Nejde to vrátit.</item>
+        <item quantity="many">%1$d odemknutí se přesune z „%2$s“ do „%3$s“. „%2$s“ se smaže. Nejde to vrátit.</item>
+        <item quantity="other">%1$d odemknutí se přesune z „%2$s“ do „%3$s“. „%2$s“ se smaže. Nejde to vrátit.</item>
+    </plurals>
+    <string name="reasons_merge_do">Sloučit</string>
+    <string name="reasons_cancel">Zrušit</string>
 </resources>

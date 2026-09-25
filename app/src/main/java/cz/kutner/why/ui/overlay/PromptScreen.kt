@@ -30,6 +30,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -76,6 +77,7 @@ fun PromptScreen(
     onReason: (Reason) -> Unit,
     onHabit: () -> Unit,
     onOther: (String) -> Unit,
+    onOpenApp: () -> Unit,
     onPause: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
@@ -88,14 +90,21 @@ fun PromptScreen(
             .padding(horizontal = 20.dp),
     ) {
         Column(Modifier.padding(top = 24.dp, bottom = 20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text(
-                stringResource(R.string.prompt_header, time, unlockNumber),
-                style = MaterialTheme.typography.labelMedium,
-                color = colors.onSurfaceVariant,
-                modifier = Modifier
-                    .background(colors.surfaceContainerHigh, RoundedCornerShape(50))
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(R.string.prompt_header, time, unlockNumber),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = colors.onSurfaceVariant,
+                    modifier = Modifier
+                        .background(colors.surfaceContainerHigh, RoundedCornerShape(50))
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                )
+                Spacer(Modifier.weight(1f))
+                val openLabel = stringResource(R.string.prompt_open_app)
+                FilledTonalIconButton(onClick = onOpenApp, modifier = Modifier.semantics { contentDescription = openLabel }) {
+                    LineIcon(Icons.Jar, colors.onSecondaryContainer)
+                }
+            }
             Text(stringResource(R.string.prompt_title), style = MaterialTheme.typography.displaySmall, color = colors.onSurface)
         }
 

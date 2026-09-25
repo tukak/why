@@ -20,7 +20,8 @@ data class Reason(
 
 /**
  * One screen session: from unlock to screen off.
- * Answer states: [reasonId] set, [isHabit] true, or [customText] set. All empty means unanswered.
+ * Answer states: [reasonId] set, [isHabit] true, [customText] set, or [isAppCheck] true (unlocked to open this app).
+ * All empty means unanswered.
  * [customKey] is [customText] normalized once on save, so grouping typed answers needs no text processing.
  */
 @Entity(tableName = "unlock_event", indices = [Index("unlockedAt"), Index("customKey")])
@@ -32,6 +33,7 @@ data class UnlockEvent(
     val isHabit: Boolean = false,
     val customText: String? = null,
     val customKey: String? = null,
+    @ColumnInfo(defaultValue = "0") val isAppCheck: Boolean = false,
 )
 
 /** What the user decided about adding a typed answer as a reason. [key] is the normalized text. */

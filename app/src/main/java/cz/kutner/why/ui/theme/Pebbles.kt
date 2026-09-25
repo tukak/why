@@ -83,5 +83,6 @@ data class PebbleStyle(val shape: PebbleShape, val color: ReasonColor) {
         val Habit = PebbleStyle(PebbleShape.Burst, ReasonColor.Ember)
         val Other = PebbleStyle(PebbleShape.Diamond, ReasonColor.Stone)
         val Unanswered = PebbleStyle(PebbleShape.Circle, ReasonColor.Stone)
+        val AppCheck = PebbleStyle(PebbleShape.Burst, ReasonColor.Stone)
     }
 }

@@ -174,4 +174,16 @@
     <string name="stopped_title">Les questions sont désactivées</string>
     <string name="stopped_text">Android a arrêté l’appli. Appuie pour réactiver les questions.</string>
     <string name="service_text_no_overlay">Impossible de demander pour l’instant. Appuie pour autoriser « Afficher la question sur les autres applis ».</string>
+    <string name="answer_app_check">Consulter Pourquoi ?</string>
+    <string name="prompt_open_app">Ouvrir Pourquoi ?</string>
+    <string name="reasons_merge">Fusionner avec une autre raison</string>
+    <string name="reasons_merge_pick">Fusionner « %1$s » avec</string>
+    <string name="reasons_merge_title">Fusionner les raisons ?</string>
+    <plurals name="reasons_merge_confirm">
+        <item quantity="one">%1$d déverrouillage passe de « %2$s » à « %3$s ». « %2$s » sera supprimée. C’est définitif.</item>
+        <item quantity="many">%1$d déverrouillages passent de « %2$s » à « %3$s ». « %2$s » sera supprimée. C’est définitif.</item>
+        <item quantity="other">%1$d déverrouillages passent de « %2$s » à « %3$s ». « %2$s » sera supprimée. C’est définitif.</item>
+    </plurals>
+    <string name="reasons_merge_do">Fusionner</string>
+    <string name="reasons_cancel">Annuler</string>
 </resources>

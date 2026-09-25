@@ -165,4 +165,15 @@
     <string name="stopped_title">Questions are off</string>
     <string name="stopped_text">Android stopped the app. Tap to turn questions back on.</string>
     <string name="service_text_no_overlay">Can’t ask right now. Tap to allow “Ask over other apps”.</string>
+    <string name="answer_app_check">Checking Why?</string>
+    <string name="prompt_open_app">Open Why?</string>
+    <string name="reasons_merge">Merge into another reason</string>
+    <string name="reasons_merge_pick">Merge “%1$s” into</string>
+    <string name="reasons_merge_title">Merge reasons?</string>
+    <plurals name="reasons_merge_confirm">
+        <item quantity="one">%1$d unlock moves from “%2$s” to “%3$s”. “%2$s” will be removed. This cannot be undone.</item>
+        <item quantity="other">%1$d unlocks move from “%2$s” to “%3$s”. “%2$s” will be removed. This cannot be undone.</item>
+    </plurals>
+    <string name="reasons_merge_do">Merge</string>
+    <string name="reasons_cancel">Cancel</string>
 </resources>

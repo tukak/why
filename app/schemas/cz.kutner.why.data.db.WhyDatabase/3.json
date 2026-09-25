@@ -1,0 +1,169 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "d4d4d095c7e2124ec52d2129197c40b5",
+    "entities": [
+      {
+        "tableName": "reason",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `label` TEXT NOT NULL, `shape` TEXT NOT NULL, `color` TEXT NOT NULL, `archived` INTEGER NOT NULL, `nudge` INTEGER NOT NULL DEFAULT 1)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "label",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shape",
+            "columnName": "shape",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "color",
+            "columnName": "color",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "archived",
+            "columnName": "archived",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nudge",
+            "columnName": "nudge",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "unlock_event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `unlockedAt` INTEGER NOT NULL, `lockedAt` INTEGER, `reasonId` INTEGER, `isHabit` INTEGER NOT NULL, `customText` TEXT, `customKey` TEXT, `isAppCheck` INTEGER NOT NULL DEFAULT 0)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unlockedAt",
+            "columnName": "unlockedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lockedAt",
+            "columnName": "lockedAt",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "reasonId",
+            "columnName": "reasonId",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "isHabit",
+            "columnName": "isHabit",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "customText",
+            "columnName": "customText",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "customKey",
+            "columnName": "customKey",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "isAppCheck",
+            "columnName": "isAppCheck",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_unlock_event_unlockedAt",
+            "unique": false,
+            "columnNames": [
+              "unlockedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_unlock_event_unlockedAt` ON `${TABLE_NAME}` (`unlockedAt`)"
+          },
+          {
+            "name": "index_unlock_event_customKey",
+            "unique": false,
+            "columnNames": [
+              "customKey"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_unlock_event_customKey` ON `${TABLE_NAME}` (`customKey`)"
+          }
+        ]
+      },
+      {
+        "tableName": "typed_offer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`key` TEXT NOT NULL, `lastOfferedCount` INTEGER NOT NULL, `never` INTEGER NOT NULL, PRIMARY KEY(`key`))",
+        "fields": [
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastOfferedCount",
+            "columnName": "lastOfferedCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "never",
+            "columnName": "never",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "key"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd4d4d095c7e2124ec52d2129197c40b5')"
+    ]
+  }
+}

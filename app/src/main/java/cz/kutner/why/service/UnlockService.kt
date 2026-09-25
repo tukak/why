@@ -156,6 +156,7 @@ class UnlockService : LifecycleService() {
                 onReason = { answer(id, settings, reason = it) },
                 onHabit = { answer(id, settings, habit = true) },
                 onOther = { answer(id, settings, text = it) },
+                onOpenApp = { openApp(id) },
                 onPause = {
                     lifecycleScope.launch {
                         app.settings.setPausedUntil(app.clock.millis() + 1.hours.inWholeMilliseconds)
@@ -230,6 +231,17 @@ class UnlockService : LifecycleService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             add(AudioManager.MODE_CALL_REDIRECT)
             add(AudioManager.MODE_COMMUNICATION_REDIRECT)
+        }
+    }
+
+    /** Opening this app is its own answer; the user is already looking at their phone use, so no check-in follows. */
+    private fun openApp(id: Long) {
+        nudgeJob?.cancel()
+        lifecycleScope.launch {
+            app.unlocks.answer(id, isAppCheck = true)
+            overlays.dismiss()
+            val open = Intent(this@UnlockService, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            runCatching { startActivity(open) }.onFailure { Log.w(TAG, "Cannot open the app", it) }
         }
     }
 

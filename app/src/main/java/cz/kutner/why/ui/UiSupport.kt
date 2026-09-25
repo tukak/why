@@ -25,6 +25,7 @@ val Reason.style: PebbleStyle get() = PebbleStyle(PebbleShape.of(shape), ReasonC
 fun styleOf(answer: Answer, byId: Map<Long, Reason>): PebbleStyle = when (answer) {
     Answer.Habit -> PebbleStyle.Habit
     Answer.Other -> PebbleStyle.Other
+    Answer.AppCheck -> PebbleStyle.AppCheck
     Answer.None -> PebbleStyle.Unanswered
     is Answer.Picked -> byId[answer.reasonId]?.style ?: PebbleStyle.Other
 }
@@ -32,6 +33,7 @@ fun styleOf(answer: Answer, byId: Map<Long, Reason>): PebbleStyle = when (answer
 fun labelOf(answer: Answer, byId: Map<Long, Reason>): UiText = when (answer) {
     Answer.Habit -> UiText.Res(R.string.habit)
     Answer.Other -> UiText.Res(R.string.answer_other)
+    Answer.AppCheck -> UiText.Res(R.string.answer_app_check)
     Answer.None -> UiText.Res(R.string.answer_none)
     is Answer.Picked -> byId[answer.reasonId]?.let { UiText.Raw(it.label) } ?: UiText.Res(R.string.answer_other)
 }

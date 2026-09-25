@@ -17,11 +17,13 @@ sealed interface Answer {
     data object Habit : Answer
     data class Picked(val reasonId: Long) : Answer
     data object Other : Answer
+    data object AppCheck : Answer
     data object None : Answer
 }
 
 val UnlockEvent.answer: Answer
     get() = when {
+        isAppCheck -> Answer.AppCheck
         isHabit -> Answer.Habit
         reasonId != null -> Answer.Picked(reasonId)
         !customText.isNullOrBlank() -> Answer.Other
@@ -93,7 +95,7 @@ fun summarizeWeek(events: List<UnlockEvent>, now: Long, zone: ZoneId): WeekSumma
         DayBar(date, ofDay.size, ofDay.count { it.isHabit })
     }
     val habit = events.filter { it.answer == Answer.Habit }
-    val withReason = events.filter { it.answer is Answer.Picked || it.answer == Answer.Other }
+    val withReason = events.filter { it.answer is Answer.Picked || it.answer == Answer.Other || it.answer == Answer.AppCheck }
     return WeekSummary(
         days = days,
         habitAvgMillis = habit.averageMillis(now),

@@ -1,6 +1,7 @@
 package cz.kutner.why.data.db
 
 import androidx.room3.Dao
+import androidx.room3.Delete
 import androidx.room3.Insert
 import androidx.room3.OnConflictStrategy
 import androidx.room3.Query
@@ -26,6 +27,9 @@ interface ReasonDao {
 
     @Update
     suspend fun update(reason: Reason)
+
+    @Delete
+    suspend fun delete(reason: Reason)
 }
 
 @Dao
@@ -46,8 +50,14 @@ interface UnlockDao {
     @Query("UPDATE unlock_event SET lockedAt = NULL WHERE id = :id")
     suspend fun reopen(id: Long)
 
-    @Query("UPDATE unlock_event SET reasonId = :reasonId, isHabit = :isHabit, customText = :customText, customKey = :customKey WHERE id = :id")
-    suspend fun answer(id: Long, reasonId: Long?, isHabit: Boolean, customText: String?, customKey: String?)
+    @Query("UPDATE unlock_event SET reasonId = :reasonId, isHabit = :isHabit, customText = :customText, customKey = :customKey, isAppCheck = :isAppCheck WHERE id = :id")
+    suspend fun answer(id: Long, reasonId: Long?, isHabit: Boolean, customText: String?, customKey: String?, isAppCheck: Boolean)
+
+    @Query("SELECT COUNT(*) FROM unlock_event WHERE reasonId = :reasonId")
+    suspend fun countForReason(reasonId: Long): Int
+
+    @Query("UPDATE unlock_event SET reasonId = :to WHERE reasonId = :from")
+    suspend fun moveReason(from: Long, to: Long)
 
     @Query("SELECT COUNT(*) FROM unlock_event WHERE unlockedAt >= :from")
     suspend fun countSince(from: Long): Int
