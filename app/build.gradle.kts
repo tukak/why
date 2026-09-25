@@ -19,8 +19,22 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // Kept outside the repository, in ~/.gradle/gradle.properties; without it the release build stays unsigned.
+    val keystore = providers.gradleProperty("why.keystore").orNull
+    signingConfigs {
+        if (keystore != null) {
+            create("release") {
+                storeFile = file(keystore)
+                storePassword = providers.gradleProperty("why.keystorePassword").get()
+                keyAlias = providers.gradleProperty("why.keyAlias").get()
+                keyPassword = providers.gradleProperty("why.keyPassword").get()
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
