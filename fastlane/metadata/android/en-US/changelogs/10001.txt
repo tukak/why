@@ -1,0 +1,1 @@
+Removes a build block that F-Droid does not allow; no changes in the app.

@@ -14,8 +14,8 @@ android {
         applicationId = "cz.kutner.why"
         minSdk = 31
         targetSdk = 37
-        versionCode = 10000
-        versionName = "1.0.0"
+        versionCode = 10001
+        versionName = "1.0.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
