@@ -1,0 +1,1 @@
+First release: asks why at every unlock, with the pebble jar, weekly stats and an evening summary.
