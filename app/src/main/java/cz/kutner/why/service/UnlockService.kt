@@ -2,6 +2,7 @@ package cz.kutner.why.service
 
 import android.annotation.SuppressLint
 import android.app.ForegroundServiceStartNotAllowedException
+import android.app.KeyguardManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -23,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import cz.kutner.why.MainActivity
 import cz.kutner.why.R
 import cz.kutner.why.container
+import cz.kutner.why.data.PromptChoices
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.domain.Answer
@@ -43,10 +45,12 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 /** Watches unlocks for the whole time the user has the feature on. */
 class UnlockService : LifecycleService() {
@@ -59,6 +63,8 @@ class UnlockService : LifecycleService() {
     private var lastLockAt: Long? = null
     private var unlocked = false
     private var nudgeJob: Job? = null
+    private var unlockWatch: Job? = null
+    private var prepared: Prepared? = null
     private var showingPermissionHint = false
 
     private val receiver = object : BroadcastReceiver() {
@@ -73,18 +79,26 @@ class UnlockService : LifecycleService() {
         startInForeground()
         getSystemService(NotificationManager::class.java).cancel(STOPPED_NOTIFICATION_ID)
         // USER_PRESENT comes from System UI, not the system uid, so a non-exported receiver never gets it.
-        // Both actions are protected broadcasts: other apps cannot send them.
+        // All three actions are protected broadcasts: other apps cannot send them.
         ContextCompat.registerReceiver(
             this,
             receiver,
-            IntentFilter(Intent.ACTION_USER_PRESENT).apply { addAction(Intent.ACTION_SCREEN_OFF) },
+            IntentFilter(Intent.ACTION_USER_PRESENT).apply {
+                addAction(Intent.ACTION_SCREEN_OFF)
+                addAction(Intent.ACTION_SCREEN_ON)
+            },
             ContextCompat.RECEIVER_EXPORTED,
         )
         lifecycleScope.launch {
             app.unlocks.closeOrphanSessions()
             for (action in screenEvents) {
                 when (action) {
-                    Intent.ACTION_USER_PRESENT -> onUnlock()
+                    Intent.ACTION_SCREEN_ON -> onScreenOn()
+                    Intent.ACTION_USER_PRESENT -> {
+                        unlockWatch?.cancel()
+                        onUnlock()
+                    }
+                    UNLOCKED_EARLY -> onUnlock()
                     Intent.ACTION_SCREEN_OFF -> onScreenOff()
                 }
             }
@@ -132,7 +146,30 @@ class UnlockService : LifecycleService() {
         if (decision.prompt) showPrompt(id, settings)
     }
 
+    /**
+     * Android announces the unlock only after its unlock animation, about half a second late. While the lock screen
+     * shows, the question's data is loaded and the lock state is checked directly; a late announcement then finds
+     * the session already open and asks nothing more.
+     */
+    private suspend fun onScreenOn() {
+        unlockWatch?.cancel()
+        val now = app.clock.millis()
+        prepared = Prepared(now, loadChoices(now))
+        val keyguard = getSystemService(KeyguardManager::class.java)
+        unlockWatch = lifecycleScope.launch {
+            withTimeoutOrNull(UNLOCK_WATCH_LIMIT) {
+                while (keyguard.isKeyguardLocked) delay(UNLOCK_WATCH_STEP)
+                screenEvents.trySend(UNLOCKED_EARLY)
+            }
+        }
+    }
+
+    private suspend fun loadChoices(now: Long): PromptChoices =
+        app.unlocks.promptChoices(TimeOfDayOrder(now, app.clock.zone), answersSince = now - ORDER_HISTORY_MS)
+
     private suspend fun onScreenOff() {
+        unlockWatch?.cancel()
+        prepared = null
         nudgeJob?.cancel()
         overlays.dismiss()
         val now = app.clock.millis()
@@ -144,7 +181,8 @@ class UnlockService : LifecycleService() {
 
     private suspend fun showPrompt(id: Long, settings: AppSettings) {
         val now = app.clock.millis()
-        val choices = app.unlocks.promptChoices(TimeOfDayOrder(now, app.clock.zone), answersSince = now - ORDER_HISTORY_MS)
+        val choices = prepared?.takeIf { now - it.at < UNLOCK_WATCH_LIMIT.inWholeMilliseconds }?.choices ?: loadChoices(now)
+        prepared = null
         val unlockNumber = app.unlocks.countSince(startOfDay(now, app.clock.zone))
         val time = timeFormatter(this).format(Instant.ofEpochMilli(now).atZone(app.clock.zone))
         showThemed(settings) {
@@ -276,6 +314,8 @@ class UnlockService : LifecycleService() {
 
     private data class NudgeTarget(val label: String?, val style: PebbleStyle)
 
+    private class Prepared(val at: Long, val choices: PromptChoices)
+
     companion object {
         private const val TAG = "UnlockService"
         private const val CHANNEL_ID = "unlock_service"
@@ -283,6 +323,9 @@ class UnlockService : LifecycleService() {
         private const val STOPPED_CHANNEL_ID = "service_stopped"
         private const val STOPPED_NOTIFICATION_ID = 3
         private const val SNOOZE_MINUTES = 5
+        private const val UNLOCKED_EARLY = "cz.kutner.why.UNLOCKED_EARLY"
+        private val UNLOCK_WATCH_STEP = 100.milliseconds
+        private val UNLOCK_WATCH_LIMIT = 60.seconds
         private val ORDER_HISTORY_MS = 30.days.inWholeMilliseconds
 
         /** False when Android does not allow a start from the background right now. */
