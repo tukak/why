@@ -50,6 +50,11 @@ android {
         compose = true
     }
 
+    // The signed APK would carry a dependency list encrypted for Google, which F-Droid rejects; Play reads it from the AAB.
+    dependenciesInfo {
+        includeInApk = false
+    }
+
     androidResources {
         generateLocaleConfig = true
     }
