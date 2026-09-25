@@ -48,9 +48,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.UnlockRepository
+import cz.kutner.why.data.db.Reason
+import cz.kutner.why.data.db.UnlockEvent
 import cz.kutner.why.domain.Answer
 import cz.kutner.why.domain.DayBar
 import cz.kutner.why.domain.HabitHeatMap
+import cz.kutner.why.domain.answer
 import cz.kutner.why.domain.daysBack
 import cz.kutner.why.domain.habitHeatMap
 import cz.kutner.why.domain.summarizeWeek
@@ -65,6 +68,8 @@ import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.timeFormatter
 import java.time.Clock
+import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
 import java.time.temporal.WeekFields
@@ -76,8 +81,11 @@ import kotlinx.coroutines.flow.stateIn
 
 data class TimeRow(val label: UiText, val style: PebbleStyle, val millis: Long, val fraction: Float)
 
+/** A day's jar as color layers, bottom first: habit, then reason colors by count, grey (no clear reason) on top. */
+data class DayJar(val date: LocalDate, val total: Int, val layers: List<Pair<ReasonColor, Int>>)
+
 data class WeekUiState(
-    val days: List<DayBar>,
+    val days: List<DayJar>,
     val habitAvgMillis: Long?,
     val reasonAvgMillis: Long?,
     val time: List<TimeRow>,
@@ -91,18 +99,34 @@ class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewM
         val now = clock.millis()
         val weekFrom = daysBack(now, clock.zone, 6)
         val heatMapFrom = daysBack(now, clock.zone, HEAT_MAP_DAYS - 1)
-        val summary = summarizeWeek(events.filter { it.unlockedAt >= weekFrom }, now, clock.zone)
+        val weekEvents = events.filter { it.unlockedAt >= weekFrom }
+        val summary = summarizeWeek(weekEvents, now, clock.zone)
+        val byDate = weekEvents.groupBy { Instant.ofEpochMilli(it.unlockedAt).atZone(clock.zone).toLocalDate() }
         val byId = reasons.associateBy { it.id }
         val rows = summary.timeByAnswer.filterKeys { it != Answer.None }.entries.sortedByDescending { it.value }.take(4)
         val max = rows.firstOrNull()?.value?.coerceAtLeast(1) ?: 1
         WeekUiState(
-            days = summary.days,
+            days = summary.days.map { day -> dayJar(day, byDate[day.date].orEmpty(), byId) },
             habitAvgMillis = summary.habitAvgMillis,
             reasonAvgMillis = summary.reasonAvgMillis,
             time = rows.map { (answer, millis) -> TimeRow(labelOf(answer, byId), styleOf(answer, byId), millis, millis / max.toFloat()) },
             heatMap = habitHeatMap(events.filter { it.unlockedAt >= heatMapFrom }, clock.zone),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    private fun dayJar(day: DayBar, events: List<UnlockEvent>, byId: Map<Long, Reason>): DayJar {
+        val counts = events.groupingBy { styleOf(it.answer, byId).color }.eachCount()
+        val layers = counts.entries.sortedWith(
+            compareBy<Map.Entry<ReasonColor, Int>> {
+                when (it.key) {
+                    ReasonColor.Ember -> 0
+                    ReasonColor.Stone -> 2
+                    else -> 1
+                }
+            }.thenByDescending { it.value },
+        ).map { it.key to it.value }
+        return DayJar(day.date, day.total, layers)
+    }
 
     private companion object {
         const val HEAT_MAP_DAYS = 28
@@ -246,7 +270,7 @@ private fun Stat(value: String, label: String, color: androidx.compose.ui.graphi
 }
 
 @Composable
-private fun DailyJars(days: List<DayBar>) {
+private fun DailyJars(days: List<DayJar>) {
     val colors = MaterialTheme.colorScheme
     val max = days.maxOf { it.total }.coerceAtLeast(1)
     val grow = remember { Animatable(0f) }
@@ -268,8 +292,9 @@ private fun DailyJars(days: List<DayBar>) {
                             },
                         verticalArrangement = Arrangement.Bottom,
                     ) {
-                        Box(Modifier.fillMaxWidth().height(96.dp * ((day.total - day.habit) / max.toFloat())).background(colors.outlineVariant))
-                        Box(Modifier.fillMaxWidth().height(96.dp * (day.habit / max.toFloat())).background(ReasonColor.Ember.tones.ink))
+                        day.layers.asReversed().forEach { (color, count) ->
+                            Box(Modifier.fillMaxWidth().height(96.dp * (count / max.toFloat())).background(color.tones.ink))
+                        }
                     }
                     Text("${day.total}", style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold))
                     Text(day.date.dayOfWeek.getDisplayName(TextStyle.SHORT, LocalLocale.current.platformLocale), style = MaterialTheme.typography.labelSmall, color = colors.onSurfaceVariant)
