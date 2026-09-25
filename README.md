@@ -39,6 +39,8 @@ Requirements: JDK 17 or newer (the one bundled with Android Studio works), Andro
 
 Minimum Android version: 12 (API 31).
 
+Release: `./release.sh 1.2.3 "What changed"` sets the version, writes the English changelog, runs tests and lint, then commits and tags `v1.2.3`.
+
 ## Languages
 
 English, Czech, Slovak, German, Spanish, Brazilian Portuguese, French and Polish. On Android 13 and newer you can pick the app language in system settings (Apps → Why? → Language).
