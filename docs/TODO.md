@@ -23,6 +23,9 @@
 - [ ] One-tap battery exemption dialog (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS). Play allows it only when Doze breaks the core function; decide before a store release.
 - [ ] Jar fallback above ~390 pebbles a day.
 
+- [ ] After a reboot the service starts only when Android delivers BOOT_COMPLETED (can take a minute on Motorola); unlocks before that are missed. Measure on the phone, then consider direct boot or an earlier signal.
+- [ ] Rare: an unlock stored without a visible question (seen ~3× in 40 automated unlocks, never reproduced directly).
+
 ## Before release
 - [x] Donation link: https://ko-fi.com/tukak (`SettingsScreen.kt`, README).
 - [ ] Release signing.
