@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Usage: ./release.sh 1.2.3 "What changed, one line for the store"
-# Sets versionName/versionCode, writes the English changelog, runs tests and lint, commits and tags v1.2.3.
+# Sets versionName/versionCode, writes the English changelog, runs tests and lint, commits and tags v1.2.3,
+# then builds the signed APK (for GitHub and F-Droid) and AAB (for Google Play) from that commit.
 set -euo pipefail
 
 version=${1:-}
@@ -32,4 +33,12 @@ printf '%s\n' "$notes" > $changelog
 git add $gradle $changelog
 git commit -q -m "Release $version"
 git tag -a "v$version" -m "Release $version"
-echo "Released $version (versionCode $code). Publish with: git push origin master v$version"
+
+# Built from the tagged commit and signed by Gradle, so it matches F-Droid's reproducible build.
+./gradlew -q :app:assembleRelease :app:bundleRelease
+apk=app/build/outputs/apk/release/why-$version.apk
+cp app/build/outputs/apk/release/app-release.apk "$apk"
+echo "Released $version (versionCode $code)."
+echo "Publish:  git push origin master v$version"
+echo "          gh release create v$version --title \"Why? $version\" --notes-file $changelog $apk"
+echo "Play:     app/build/outputs/bundle/release/app-release.aab"

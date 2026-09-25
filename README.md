@@ -39,7 +39,7 @@ Requirements: JDK 17 or newer (the one bundled with Android Studio works), Andro
 
 Minimum Android version: 12 (API 31).
 
-Release: `./release.sh 1.2.3 "What changed"` sets the version, writes the English changelog, runs tests and lint, then commits and tags `v1.2.3`.
+Release: `./release.sh 1.2.3 "What changed"` sets the version, writes the English changelog, runs tests and lint, commits and tags `v1.2.3`, then builds the signed APK and AAB. Builds are reproducible: F-Droid builds the same tag and ships it with the upstream signature. Run it from a normal clone (not a git worktree), because the APK records the commit.
 
 ## Languages
 
