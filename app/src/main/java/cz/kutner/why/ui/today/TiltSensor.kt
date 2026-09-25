@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import kotlin.math.abs
+import kotlin.math.hypot
 
 /**
  * The acceleration a loose object feels, in screen coordinates (x right, y down), m/s².
@@ -66,3 +67,12 @@ fun rememberTiltSensor(onChange: () -> Unit): TiltSensor {
     }
     return tilt
 }
+
+/**
+ * Lying flat, the sensor reports almost no pull along the screen and the pebbles would float. A slight pull toward
+ * the bottom of the screen fills in for it and fades out as the phone tilts, so tilting feels the same as before.
+ */
+internal fun flatPull(ax: Float, ay: Float): Float = (FLAT_PULL - hypot(ax, ay)).coerceAtLeast(0f)
+
+/** Metres per second squared when lying fully flat: a slow, gentle fall. */
+private const val FLAT_PULL = 4f

@@ -216,7 +216,7 @@ private fun BoxWithConstraintsScope.FallingPile(pebbles: List<PebbleStyle>, layo
             withFrameNanos { now ->
                 val dt = if (last == 0L) 1 / 60f else ((now - last) / 1e9f).coerceAtMost(1 / 30f)
                 last = now
-                world.step(dt, tilt.ax * pxPerMeter, tilt.ay * pxPerMeter)
+                world.step(dt, tilt.ax * pxPerMeter, (tilt.ay + flatPull(tilt.ax, tilt.ay)) * pxPerMeter)
                 frame = now
             }
         }
