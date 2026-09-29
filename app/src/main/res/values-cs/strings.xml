@@ -35,6 +35,7 @@
     <string name="nudge_done">Ano, hotovo</string>
     <string name="nudge_more">Ještě 5 minut</string>
     <string name="nudge_switched">Dělám už něco jiného</string>
+    <string name="nudge_quiet">Neptej se do zamknutí</string>
 
     <string name="tab_today">Dnes</string>
     <string name="tab_week">Týden</string>

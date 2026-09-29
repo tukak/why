@@ -33,6 +33,7 @@
     <string name="nudge_done">Ja, erledigt</string>
     <string name="nudge_more">Noch 5 Minuten</string>
     <string name="nudge_switched">Ich mache jetzt was anderes</string>
+    <string name="nudge_quiet">Bis zum Sperren nicht fragen</string>
 
     <string name="tab_today">Heute</string>
     <string name="tab_week">Woche</string>

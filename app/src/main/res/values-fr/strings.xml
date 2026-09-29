@@ -34,6 +34,7 @@
     <string name="nudge_done">Oui, c’est fait</string>
     <string name="nudge_more">Encore 5 minutes</string>
     <string name="nudge_switched">Je fais autre chose</string>
+    <string name="nudge_quiet">Ne plus demander avant le verrouillage</string>
 
     <string name="tab_today">Aujourd’hui</string>
     <string name="tab_week">Semaine</string>

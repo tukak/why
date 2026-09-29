@@ -33,6 +33,7 @@
     <string name="nudge_done">Yes, all done</string>
     <string name="nudge_more">5 more minutes</string>
     <string name="nudge_switched">I switched to something else</string>
+    <string name="nudge_quiet">Don’t ask until I lock</string>
 
     <string name="tab_today">Today</string>
     <string name="tab_week">Week</string>

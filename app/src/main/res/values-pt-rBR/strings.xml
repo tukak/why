@@ -34,6 +34,7 @@
     <string name="nudge_done">Sim, terminei</string>
     <string name="nudge_more">Mais 5 minutos</string>
     <string name="nudge_switched">Mudei para outra coisa</string>
+    <string name="nudge_quiet">Não perguntar até bloquear</string>
 
     <string name="tab_today">Hoje</string>
     <string name="tab_week">Semana</string>

@@ -255,6 +255,7 @@ class UnlockService : LifecycleService() {
                         scheduleNudge(id, settings, target, SNOOZE_MINUTES)
                     },
                     onSwitched = { lifecycleScope.launch { showPrompt(id, settings) } },
+                    onQuiet = { overlays.dismiss() },
                 )
             }
         }

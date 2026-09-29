@@ -36,6 +36,7 @@ fun NudgeScreen(
     onDone: () -> Unit,
     onMore: () -> Unit,
     onSwitched: () -> Unit,
+    onQuiet: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
     OverlaySheet(spacing = 22.dp) {
@@ -59,6 +60,9 @@ fun NudgeScreen(
         }
         TextButton(onClick = onSwitched, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text(stringResource(R.string.nudge_switched), color = colors.onSurfaceVariant)
+        }
+        TextButton(onClick = onQuiet, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text(stringResource(R.string.nudge_quiet), color = colors.onSurfaceVariant)
         }
     }
 }
