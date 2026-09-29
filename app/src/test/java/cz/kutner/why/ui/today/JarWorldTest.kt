@@ -93,4 +93,27 @@ class JarWorldTest {
         val after = world.bodies.map { it.x / (width * 1.5f) to it.y / (height * 0.8f) }
         before.zip(after).forEach { (b, a) -> assertTrue(abs(b.first - a.first) < 0.001f && abs(b.second - a.second) < 0.001f) }
     }
+
+    @Test
+    fun `a pebble weighs as much as it looks, so a big squircle outweighs a slim pill`() {
+        val world = JarWorld(width, height, cornerRadius = 110f, inset = 10f)
+        world.add(300f, 300f, 80f, 0f, PebbleShape.Squircle)
+        world.add(500f, 300f, 80f, 0f, PebbleShape.Pill)
+        val ratio = world.massOf(0) / world.massOf(1)
+        // Drawn areas on the 24-unit grid: squircle 358.3, pill 209.3.
+        assertTrue(abs(ratio - 358.3 / 209.3) < 0.01, "mass ratio $ratio")
+    }
+
+    @Test
+    fun `collision outlines match the drawings, so pebbles neither float apart nor sink in`() {
+        val world = JarWorld(width, height, cornerRadius = 110f, inset = 10f)
+        val size = 80f
+        val drawn = mapOf(PebbleShape.Circle to 314.4, PebbleShape.Squircle to 358.3, PebbleShape.Pill to 209.3, PebbleShape.Triangle to 211.7, PebbleShape.Diamond to 230.5)
+        drawn.keys.forEachIndexed { i, shape -> world.add(100f + i * 150f, 300f, size, 0f, shape) }
+        val unitsPerGrid = size / 100.0 / 24.0
+        drawn.values.forEachIndexed { i, area ->
+            val outline = world.outlineAreaOf(i) / (unitsPerGrid * unitsPerGrid)
+            assertTrue(abs(outline - area) / area < 0.03, "${drawn.keys.elementAt(i)}: outline $outline vs drawn $area")
+        }
+    }
 }

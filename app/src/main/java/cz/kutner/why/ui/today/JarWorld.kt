@@ -1,15 +1,18 @@
 package cz.kutner.why.ui.today
 
 import cz.kutner.why.ui.theme.PebbleShape
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
 import org.dyn4j.dynamics.Body
 import org.dyn4j.dynamics.ContinuousDetectionMode
 import org.dyn4j.geometry.Convex
 import org.dyn4j.geometry.Geometry
+import org.dyn4j.geometry.Mass
 import org.dyn4j.geometry.MassType
 import org.dyn4j.geometry.Vector2
 import org.dyn4j.world.World
-import kotlin.math.cos
-import kotlin.math.sin
 
 /**
  * The jar's physics, on dyn4j. Triangle, pill, rounded square and diamond collide with their real outline;
@@ -67,6 +70,10 @@ class JarWorld(
         pebbles += body to shape
         bodies += Pebble(x, y, angle)
     }
+
+    internal fun massOf(index: Int): Double = pebbles[index].first.mass.mass
+
+    internal fun outlineAreaOf(index: Int): Double = pebbles[index].first.fixtures.sumOf { it.shape.area }
 
     fun removeLast() {
         val (body, _) = pebbles.removeAt(pebbles.lastIndex)
@@ -137,22 +144,63 @@ class JarWorld(
 
     private var appliedDamping = -1f
 
+    /** Mass follows the drawn area, so a big squircle is heavier than a slim pill. */
     private fun attach(body: Body, shape: PebbleShape) {
-        body.addFixture(convex(shape, size / pxPerUnit), 1.0, PEBBLE_FRICTION, PEBBLE_BOUNCE)
+        val k = size / pxPerUnit / 24.0
+        body.addFixture(convex(shape, k), 1.0, PEBBLE_FRICTION, PEBBLE_BOUNCE)
         body.setMass(MassType.NORMAL)
+        val current = body.mass
+        val target = drawnArea(shape) * k * k
+        body.setMass(Mass(current.center, target, current.inertia * target / current.mass))
     }
 
-    /** Outlines from the 24-unit drawing grid, centred on the drawing's centre so rendering stays aligned. */
-    private fun convex(shape: PebbleShape, size: Float): Convex {
-        val k = size / 24.0
+    /**
+     * The drawing's convex outline on the 24-unit grid, centred on the drawing's centre so rendering stays aligned.
+     * Clover, flower and burst lose their small dents: one convex piece per pebble keeps a full jar fast.
+     */
+    private fun convex(shape: PebbleShape, k: Double): Convex {
         fun v(x: Double, y: Double) = Vector2((x - 12) * k, (y - 12) * k)
         return when (shape) {
+            PebbleShape.Circle -> Geometry.createCircle(10 * k)
+            PebbleShape.Flower -> Geometry.createCircle(10.8 * k)
             PebbleShape.Pill -> Geometry.createCapsule(20 * k, 12 * k)
-            PebbleShape.Triangle -> Geometry.createTriangle(v(12.0, 3.0), v(21.5, 19.5), v(2.5, 19.5))
-            PebbleShape.Squircle -> Geometry.createSquare(20 * k)
-            PebbleShape.Diamond -> Geometry.createPolygon(v(12.0, 2.0), v(22.0, 12.0), v(12.0, 22.0), v(2.0, 12.0))
-            else -> Geometry.createCircle(11.5 * k)
+            PebbleShape.Squircle -> rounded(listOf(v(9.0, 9.0), v(15.0, 9.0), v(15.0, 15.0), v(9.0, 15.0)), 7 * k)
+            PebbleShape.Clover -> rounded(listOf(v(8.0, 8.0), v(16.0, 8.0), v(16.0, 16.0), v(8.0, 16.0)), 5.6 * k)
+            PebbleShape.Triangle -> rounded(listOf(v(12.0, 5.0), v(19.8, 18.5), v(4.2, 18.5)), 2 * k)
+            PebbleShape.Diamond -> rounded(listOf(v(12.0, 4.02), v(19.98, 12.0), v(12.0, 19.98), v(4.02, 12.0)), 2 * k)
+            PebbleShape.Burst -> Geometry.createPolygon(*BURST_POINTS.map { (x, y) -> v(x, y) }.toTypedArray())
         }
+    }
+
+    /** A convex polygon with round corners: [corners] grown outward by [radius], each corner arc in a few straight steps. */
+    private fun rounded(corners: List<Vector2>, radius: Double): Convex {
+        val n = corners.size
+        val points = mutableListOf<Vector2>()
+        for (i in 0 until n) {
+            val prev = corners[(i + n - 1) % n]
+            val here = corners[i]
+            val next = corners[(i + 1) % n]
+            val from = atan2(-(here.x - prev.x), here.y - prev.y)
+            var to = atan2(-(next.x - here.x), next.y - here.y)
+            if (to < from) to += 2 * PI
+            for (step in 0..CORNER_STEPS) {
+                val a = from + (to - from) * step / CORNER_STEPS
+                points += Vector2(here.x + radius * cos(a), here.y + radius * sin(a))
+            }
+        }
+        return Geometry.createPolygon(*points.toTypedArray())
+    }
+
+    /** Drawn area on the 24-unit grid, measured by rasterizing each pebble path. */
+    private fun drawnArea(shape: PebbleShape): Double = when (shape) {
+        PebbleShape.Pill -> 209.3
+        PebbleShape.Triangle -> 211.7
+        PebbleShape.Diamond -> 230.5
+        PebbleShape.Burst -> 287.2
+        PebbleShape.Circle -> 314.4
+        PebbleShape.Flower -> 323.9
+        PebbleShape.Clover -> 325.3
+        PebbleShape.Squircle -> 358.3
     }
 
     /**
@@ -200,6 +248,13 @@ class JarWorld(
 
     private companion object {
         const val CORNER_SEGMENTS = 6
+        const val CORNER_STEPS = 3
+
+        /** Outer points of the burst drawing; their outline is the burst's convex hull. */
+        val BURST_POINTS = listOf(
+            12.0 to 1.0, 17.5 to 2.47, 21.53 to 6.5, 23.0 to 12.0, 21.53 to 17.5, 17.5 to 21.53,
+            12.0 to 23.0, 6.5 to 21.53, 2.47 to 17.5, 1.0 to 12.0, 2.47 to 6.5, 6.5 to 2.47,
+        )
         const val WALL_THICKNESS = 300f
         const val MAX_MOVE_PER_STEP = 25f
         const val BASE_DAMPING = 0.05f
