@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Usage: ./release.sh 1.2.3 "What changed, one line for the store"
 # Sets versionName/versionCode, writes the English changelog, runs tests and lint, commits and tags v1.2.3,
-# then builds the signed APK (for GitHub and F-Droid) and AAB (for Google Play) from that commit.
+# builds the signed APK (for GitHub and F-Droid) and AAB from that commit, then pushes, creates the GitHub release
+# and uploads the AAB to the Google Play production track.
 set -euo pipefail
 
 version=${1:-}
@@ -14,6 +15,8 @@ code=$(( BASH_REMATCH[1] * 10000 + 10#${BASH_REMATCH[2]} * 100 + 10#${BASH_REMAT
 
 cd "$(dirname "$0")"
 gradle=app/build.gradle.kts
+play_key=~/.android/keys/play-api.json
+[[ -f $play_key ]] || { echo "Missing Google Play API key $play_key." >&2; exit 1; }
 [[ $(git branch --show-current) == master ]] || { echo "Release from master." >&2; exit 1; }
 [[ -z $(git status --porcelain) ]] || { echo "Commit or stash your changes first." >&2; exit 1; }
 git fetch -q origin
@@ -38,8 +41,9 @@ git tag -a "v$version" -m "Release $version"
 ./gradlew -q :app:assembleRelease :app:bundleRelease
 apk=app/build/outputs/apk/release/why-$version.apk
 cp app/build/outputs/apk/release/app-release.apk "$apk"
-echo "Released $version (versionCode $code)."
-echo "Publish:  git push origin master v$version"
-echo "          gh release create v$version --title \"Why? $version\" --notes-file $changelog $apk"
-echo "          fastlane supply --package_name cz.kutner.why --json_key ~/.android/keys/play-api.json --track production \\"
-echo "              --aab app/build/outputs/bundle/release/app-release.aab --skip_upload_metadata --skip_upload_images --skip_upload_screenshots"
+
+git push -q origin master "v$version"
+gh release create "v$version" --title "Why? $version" --notes-file $changelog "$apk"
+fastlane supply --package_name cz.kutner.why --json_key $play_key --track production \
+    --aab app/build/outputs/bundle/release/app-release.aab --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
+echo "Released $version (versionCode $code) to GitHub and Google Play. F-Droid builds the tag."
