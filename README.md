@@ -19,6 +19,8 @@ Tap a reason, tap "Just habit", or type your own. Over the days you see what rea
 - No accounts, no ads, no analytics.
 - It does not read which apps you use. It only notices unlocks and screen off.
 
+Full text: [privacy policy](PRIVACY.md).
+
 ## Permissions
 
 | Permission | Why |
