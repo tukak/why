@@ -6,6 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +21,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -43,6 +48,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -52,6 +58,8 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.data.settings.ThemeMode
+import cz.kutner.why.domain.formatMinuteOfDay
+import cz.kutner.why.domain.parseMinuteOfDay
 import cz.kutner.why.ui.components.BackgroundHelp
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
@@ -65,6 +73,8 @@ import kotlinx.coroutines.launch
 /** Replace with the real page before release. */
 private const val DONATE_URL = "https://ko-fi.com/tukak"
 
+private enum class CustomSetting { Nudge, Resume, Reflection, DayStart, DayEnd }
+
 @Composable
 fun SettingsScreen(onBack: () -> Unit) {
     val context = LocalContext.current
@@ -72,6 +82,7 @@ fun SettingsScreen(onBack: () -> Unit) {
     val settings by repo.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
     val scope = rememberCoroutineScope()
     val colors = MaterialTheme.colorScheme
+    var editing by remember { mutableStateOf<CustomSetting?>(null) }
 
     Column(
         Modifier
@@ -120,14 +131,24 @@ fun SettingsScreen(onBack: () -> Unit) {
 
         Section(stringResource(R.string.settings_checkins)) {
             Text(stringResource(R.string.settings_nudge_after), style = MaterialTheme.typography.labelLarge)
-            ChoiceChips(listOf(5, 10, 15, 0), selected = settings.nudgeMinutes, onSelect = { scope.launch { repo.setNudgeMinutes(it) } }) {
+            ChoiceChips(
+                listOf(5, 10, 15, 0),
+                selected = settings.nudgeMinutes,
+                onSelect = { scope.launch { repo.setNudgeMinutes(it) } },
+                onCustom = { editing = CustomSetting.Nudge },
+            ) {
                 if (it == 0) stringResource(R.string.settings_off) else stringResource(R.string.duration_minutes, it.toLong())
             }
             Column {
                 Text(stringResource(R.string.settings_resume), style = MaterialTheme.typography.labelLarge)
                 Text(stringResource(R.string.settings_resume_hint), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
             }
-            ChoiceChips(listOf(0, 3, 10, 30), selected = settings.resumeSeconds, onSelect = { scope.launch { repo.setResumeSeconds(it) } }) {
+            ChoiceChips(
+                listOf(0, 3, 10, 30),
+                selected = settings.resumeSeconds,
+                onSelect = { scope.launch { repo.setResumeSeconds(it) } },
+                onCustom = { editing = CustomSetting.Resume },
+            ) {
                 if (it == 0) stringResource(R.string.settings_off) else stringResource(R.string.duration_seconds, it)
             }
             SwitchRow(
@@ -139,10 +160,29 @@ fun SettingsScreen(onBack: () -> Unit) {
             if (settings.reflectionEnabled) {
                 val locale = LocalLocale.current.platformLocale
                 val timeFormat = remember(locale) { timeFormatter(context, locale) }
-                ChoiceChips(listOf(20, 21, 22, 23).map { it * 60 }, selected = settings.reflectionMinute, onSelect = { scope.launch { repo.setReflectionMinute(it) } }) {
+                ChoiceChips(
+                    listOf(20, 21, 22, 23).map { it * 60 },
+                    selected = settings.reflectionMinute,
+                    onSelect = { scope.launch { repo.setReflectionMinute(it) } },
+                    onCustom = { editing = CustomSetting.Reflection },
+                ) {
                     LocalTime.of(it / 60, it % 60).format(timeFormat)
                 }
             }
+        }
+
+        Section(stringResource(R.string.settings_day)) {
+            Text(stringResource(R.string.settings_day_hint), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+            DayTimeRow(
+                title = stringResource(R.string.settings_day_start),
+                value = formatMinuteOfDay(settings.dayStartMinute),
+                onChange = { editing = CustomSetting.DayStart },
+            )
+            DayTimeRow(
+                title = stringResource(R.string.settings_day_end),
+                value = formatMinuteOfDay(settings.dayEndMinute),
+                onChange = { editing = CustomSetting.DayEnd },
+            )
         }
 
         var unrestricted by remember { mutableStateOf(BackgroundHelp.isUnrestricted(context)) }
@@ -189,30 +229,169 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
         }
     }
+
+    editing?.let { field ->
+        val clockTime = field == CustomSetting.Reflection || field == CustomSetting.DayStart || field == CustomSetting.DayEnd
+        CustomTimeDialog(
+            title = stringResource(
+                when (field) {
+                    CustomSetting.Nudge -> R.string.settings_custom_nudge_title
+                    CustomSetting.Resume -> R.string.settings_custom_resume_title
+                    CustomSetting.Reflection -> R.string.settings_custom_reflection_title
+                    CustomSetting.DayStart -> R.string.settings_custom_day_start_title
+                    CustomSetting.DayEnd -> R.string.settings_custom_day_end_title
+                },
+            ),
+            hint = stringResource(
+                when (field) {
+                    CustomSetting.Nudge -> R.string.settings_custom_nudge_hint
+                    CustomSetting.Resume -> R.string.settings_custom_resume_hint
+                    CustomSetting.Reflection -> R.string.settings_custom_time_hint
+                    CustomSetting.DayStart, CustomSetting.DayEnd -> R.string.settings_custom_time_hint
+                },
+            ),
+            error = stringResource(
+                when (field) {
+                    CustomSetting.Nudge -> R.string.settings_invalid_nudge
+                    CustomSetting.Resume -> R.string.settings_invalid_resume
+                    else -> R.string.settings_invalid_time
+                },
+            ),
+            initial = when (field) {
+                CustomSetting.Nudge -> settings.nudgeMinutes.toString()
+                CustomSetting.Resume -> settings.resumeSeconds.toString()
+                CustomSetting.Reflection -> formatMinuteOfDay(settings.reflectionMinute)
+                CustomSetting.DayStart -> formatMinuteOfDay(settings.dayStartMinute)
+                CustomSetting.DayEnd -> formatMinuteOfDay(settings.dayEndMinute)
+            },
+            clockTime = clockTime,
+            validate = { text ->
+                when (field) {
+                    CustomSetting.Nudge -> text.trim().toIntOrNull()?.takeIf { it in 1..1440 }
+                    CustomSetting.Resume -> text.trim().toIntOrNull()?.takeIf { it in 0..3600 }
+                    else -> parseMinuteOfDay(text)
+                }
+            },
+            onDismiss = { editing = null },
+            onConfirm = { value ->
+                scope.launch {
+                    when (field) {
+                        CustomSetting.Nudge -> repo.setNudgeMinutes(value)
+                        CustomSetting.Resume -> repo.setResumeSeconds(value)
+                        CustomSetting.Reflection -> repo.setReflectionMinute(value)
+                        CustomSetting.DayStart -> repo.setDayStartMinute(value)
+                        CustomSetting.DayEnd -> repo.setDayEndMinute(value)
+                    }
+                }
+                editing = null
+            },
+        )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun ChoiceChips(
+    options: List<Int>,
+    selected: Int,
+    onSelect: (Int) -> Unit,
+    onCustom: (() -> Unit)? = null,
+    label: @Composable (Int) -> String,
+) {
+    val customSelected = onCustom != null && selected !in options
+    FlowRow(
+        modifier = Modifier.fillMaxWidth().selectableGroup(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        options.forEach { option ->
+            ChoiceChip(
+                selected = option == selected,
+                text = label(option),
+                onClick = { onSelect(option) },
+            )
+        }
+        if (onCustom != null) {
+            ChoiceChip(
+                selected = customSelected,
+                text = if (customSelected) label(selected) else stringResource(R.string.settings_custom),
+                onClick = onCustom,
+            )
+        }
+    }
 }
 
 @Composable
-private fun ChoiceChips(options: List<Int>, selected: Int, onSelect: (Int) -> Unit, label: @Composable (Int) -> String) {
+private fun ChoiceChip(selected: Boolean, text: String, onClick: () -> Unit) {
     val colors = MaterialTheme.colorScheme
-    Row(Modifier.selectableGroup(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        options.forEach { option ->
-            val isSelected = option == selected
-            Box(
-                Modifier
-                    .weight(1f)
-                    .height(44.dp)
-                    .background(if (isSelected) colors.primary else colors.surfaceContainerHigh, RoundedCornerShape(22.dp))
-                    .selectable(isSelected, role = Role.RadioButton) { onSelect(option) },
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    label(option),
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = if (isSelected) colors.onPrimary else colors.onSurface,
-                )
-            }
-        }
+    Box(
+        Modifier
+            .height(44.dp)
+            .background(if (selected) colors.primary else colors.surfaceContainerHigh, RoundedCornerShape(22.dp))
+            .selectable(selected, role = Role.RadioButton, onClick = onClick)
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+            color = if (selected) colors.onPrimary else colors.onSurface,
+            maxLines = 1,
+            softWrap = false,
+        )
     }
+}
+
+@Composable
+private fun DayTimeRow(title: String, value: String, onChange: () -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(title, style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+        Text(value, style = MaterialTheme.typography.titleMedium)
+        TextButton(onClick = onChange) { Text(stringResource(R.string.settings_change)) }
+    }
+}
+
+@Composable
+private fun CustomTimeDialog(
+    title: String,
+    hint: String,
+    error: String,
+    initial: String,
+    clockTime: Boolean,
+    validate: (String) -> Int?,
+    onDismiss: () -> Unit,
+    onConfirm: (Int) -> Unit,
+) {
+    var text by remember { mutableStateOf(initial) }
+    var invalid by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            OutlinedTextField(
+                value = text,
+                onValueChange = {
+                    text = it
+                    invalid = false
+                },
+                singleLine = true,
+                isError = invalid,
+                keyboardOptions = KeyboardOptions(keyboardType = if (clockTime) KeyboardType.Ascii else KeyboardType.Number),
+                supportingText = { Text(if (invalid) error else hint) },
+            )
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val value = validate(text)
+                    if (value == null) invalid = true else onConfirm(value)
+                },
+            ) { Text(stringResource(R.string.settings_save)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.settings_cancel)) }
+        },
+    )
 }
 
 @Composable
@@ -277,4 +456,3 @@ private fun SwitchRow(title: String, subtitle: String, checked: Boolean, onChang
         Switch(checked = checked, onCheckedChange = onChange, modifier = Modifier.semantics { contentDescription = title })
     }
 }
-

@@ -18,12 +18,13 @@ class HabitHeatMap(
     fun count(day: DayOfWeek, hour: Int): Int = counts[day.value - 1][hour]
 }
 
-fun habitHeatMap(events: List<UnlockEvent>, zone: ZoneId): HabitHeatMap {
+fun habitHeatMap(events: List<UnlockEvent>, zone: ZoneId, dayStartMinute: Int = 0): HabitHeatMap {
     val counts = List(7) { IntArray(24) }
     for (event in events) {
         if (event.answer != Answer.Habit) continue
         val at = Instant.ofEpochMilli(event.unlockedAt).atZone(zone)
-        counts[at.dayOfWeek.value - 1][at.hour]++
+        val day = dayDate(event.unlockedAt, zone, dayStartMinute)
+        counts[day.dayOfWeek.value - 1][at.hour]++
     }
     return HabitHeatMap(counts)
 }

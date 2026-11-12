@@ -4,8 +4,11 @@ import android.content.Context
 import android.graphics.PixelFormat
 import android.provider.Settings
 import android.util.Log
+import android.view.KeyEvent
+import android.view.ViewGroup
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.Lifecycle
@@ -20,6 +23,12 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 
+/** A question is only left by choosing an answer; Back and Escape must not dismiss it by accident. */
+private class KeyBlockingFrame(context: Context) : FrameLayout(context) {
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean =
+        event.keyCode == KeyEvent.KEYCODE_BACK || event.keyCode == KeyEvent.KEYCODE_ESCAPE || super.dispatchKeyEvent(event)
+}
+
 /** A full-screen window above other apps that hosts Compose content. */
 private class OverlayWindow(
     private val context: Context,
@@ -29,7 +38,7 @@ private class OverlayWindow(
     private val windowManager = context.getSystemService(WindowManager::class.java)
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val savedStateController = SavedStateRegistryController.create(this)
-    private var view: ComposeView? = null
+    private var view: KeyBlockingFrame? = null
 
     override val lifecycle: Lifecycle get() = lifecycleRegistry
     override val viewModelStore = ViewModelStore()
@@ -45,9 +54,15 @@ private class OverlayWindow(
             setViewTreeSavedStateRegistryOwner(this@OverlayWindow)
             setContent(content)
         }
+        val container = KeyBlockingFrame(context).apply {
+            addView(
+                composeView,
+                FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT),
+            )
+        }
         return try {
-            windowManager.addView(composeView, layoutParams())
-            view = composeView
+            windowManager.addView(container, layoutParams())
+            view = container
             lifecycleRegistry.currentState = Lifecycle.State.RESUMED
             true
         } catch (e: RuntimeException) {

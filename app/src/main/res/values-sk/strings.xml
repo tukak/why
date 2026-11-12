@@ -21,7 +21,6 @@
     <string name="prompt_other_label">Niečo iné</string>
     <string name="prompt_other_placeholder">Napíš svoj dôvod</string>
     <string name="prompt_save">Uložiť dôvod</string>
-    <string name="prompt_pause">Na hodinu sa nepýtať</string>
 
     <plurals name="nudge_minutes">
         <item quantity="one">%d min</item>

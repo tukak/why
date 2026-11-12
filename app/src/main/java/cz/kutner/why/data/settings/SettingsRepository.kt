@@ -25,6 +25,10 @@ data class AppSettings(
     val reflectionEnabled: Boolean = true,
     /** Local time of the evening summary, in minutes after midnight. */
     val reflectionMinute: Int = 21 * 60,
+    /** Local time the day starts, in minutes after midnight. The jar resets at this time. */
+    val dayStartMinute: Int = 0,
+    /** Local time the day ends, in minutes after midnight. May be earlier than the start, for a day past midnight. */
+    val dayEndMinute: Int = 0,
 )
 
 class SettingsRepository(private val store: DataStore<Preferences>) {
@@ -40,6 +44,8 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
             onboardingDone = p[ONBOARDING_DONE] ?: d.onboardingDone,
             reflectionEnabled = p[REFLECTION_ENABLED] ?: d.reflectionEnabled,
             reflectionMinute = p[REFLECTION_MINUTE] ?: d.reflectionMinute,
+            dayStartMinute = p[DAY_START_MINUTE] ?: d.dayStartMinute,
+            dayEndMinute = p[DAY_END_MINUTE] ?: d.dayEndMinute,
         )
     }
 
@@ -53,6 +59,8 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
     suspend fun setOnboardingDone() = store.edit { it[ONBOARDING_DONE] = true }
     suspend fun setReflectionEnabled(enabled: Boolean) = store.edit { it[REFLECTION_ENABLED] = enabled }
     suspend fun setReflectionMinute(minute: Int) = store.edit { it[REFLECTION_MINUTE] = minute }
+    suspend fun setDayStartMinute(minute: Int) = store.edit { it[DAY_START_MINUTE] = minute }
+    suspend fun setDayEndMinute(minute: Int) = store.edit { it[DAY_END_MINUTE] = minute }
 
     private companion object {
         val THEME = stringPreferencesKey("theme_mode")
@@ -63,5 +71,7 @@ class SettingsRepository(private val store: DataStore<Preferences>) {
         val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         val REFLECTION_ENABLED = booleanPreferencesKey("reflection_enabled")
         val REFLECTION_MINUTE = intPreferencesKey("reflection_minute")
+        val DAY_START_MINUTE = intPreferencesKey("day_start_minute")
+        val DAY_END_MINUTE = intPreferencesKey("day_end_minute")
     }
 }

@@ -83,7 +83,7 @@ import kotlinx.coroutines.flow.first
 @Composable
 fun TodayScreen(onSettings: () -> Unit) {
     val app = LocalContext.current.container
-    val vm = viewModel { TodayViewModel(app.unlocks, app.clock) }
+    val vm = viewModel { TodayViewModel(app.unlocks, app.settings, app.clock) }
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = MaterialTheme.colorScheme
 

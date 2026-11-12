@@ -45,10 +45,11 @@ object EveningReflection {
 
     suspend fun post(context: Context) {
         val app = context.container
+        val settings = app.settings.current()
         val now = app.clock.millis()
-        val dayStart = startOfDay(now, app.clock.zone)
-        val (today, history) = app.unlocks.eventsSince(daysBack(now, app.clock.zone, USUAL_DAYS)).first().partition { it.unlockedAt >= dayStart }
-        val day = reflectOnDay(today, history, now, app.clock.zone) ?: return
+        val dayStart = startOfDay(now, app.clock.zone, settings.dayStartMinute)
+        val (today, history) = app.unlocks.eventsSince(daysBack(now, app.clock.zone, USUAL_DAYS, settings.dayStartMinute)).first().partition { it.unlockedAt >= dayStart }
+        val day = reflectOnDay(today, history, now, app.clock.zone, settings.dayStartMinute) ?: return
         val res = context.resources
         val numbers = listOf(
             res.getQuantityString(R.plurals.reflection_unlocks, day.unlocks, day.unlocks),

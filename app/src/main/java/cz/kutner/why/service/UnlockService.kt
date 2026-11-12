@@ -42,7 +42,6 @@ import cz.kutner.why.ui.theme.WhyTheme
 import cz.kutner.why.ui.timeFormatter
 import java.time.Instant
 import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -183,7 +182,7 @@ class UnlockService : LifecycleService() {
         val now = app.clock.millis()
         val choices = prepared?.takeIf { now - it.at < UNLOCK_WATCH_LIMIT.inWholeMilliseconds }?.choices ?: loadChoices(now)
         prepared = null
-        val unlockNumber = app.unlocks.countSince(startOfDay(now, app.clock.zone))
+        val unlockNumber = app.unlocks.countSince(startOfDay(now, app.clock.zone, settings.dayStartMinute))
         val time = timeFormatter(this).format(Instant.ofEpochMilli(now).atZone(app.clock.zone))
         showThemed(settings) {
             PromptScreen(
@@ -195,12 +194,6 @@ class UnlockService : LifecycleService() {
                 onHabit = { answer(id, settings, habit = true) },
                 onOther = { answer(id, settings, text = it) },
                 onOpenApp = { openApp(id) },
-                onPause = {
-                    lifecycleScope.launch {
-                        app.settings.setPausedUntil(app.clock.millis() + 1.hours.inWholeMilliseconds)
-                        overlays.dismiss()
-                    }
-                },
             )
         }
     }
