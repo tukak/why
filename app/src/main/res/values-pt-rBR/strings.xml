@@ -21,7 +21,6 @@
     <string name="prompt_other_label">Outra coisa</string>
     <string name="prompt_other_placeholder">Escreva o motivo</string>
     <string name="prompt_save">Salvar motivo</string>
-    <string name="prompt_pause">Pausar perguntas por 1 hora</string>
 
     <plurals name="nudge_minutes">
         <item quantity="one">%d min</item>

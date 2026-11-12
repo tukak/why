@@ -5,10 +5,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
@@ -39,30 +44,44 @@ fun NudgeScreen(
     onQuiet: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
-    OverlaySheet(spacing = 22.dp) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Box(Modifier.size(72.dp).background(style.color.tones.container, RoundedCornerShape(26.dp)), contentAlignment = Alignment.Center) {
-                Pebble(style, 40.dp)
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(colors.background)
+            .safeDrawingPadding()
+            .padding(horizontal = 24.dp, vertical = 20.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(22.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Box(Modifier.size(72.dp).background(style.color.tones.container, RoundedCornerShape(26.dp)), contentAlignment = Alignment.Center) {
+                    Pebble(style, 40.dp)
+                }
+                Column {
+                    Text(pluralStringResource(R.plurals.nudge_minutes, minutes, minutes), style = MaterialTheme.typography.headlineLarge)
+                    Text(stringResource(R.string.nudge_since), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+                }
             }
-            Column {
-                Text(pluralStringResource(R.plurals.nudge_minutes, minutes, minutes), style = MaterialTheme.typography.headlineLarge)
-                Text(stringResource(R.string.nudge_since), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+            Text(nudgeMessage(reasonLabel, style), style = MaterialTheme.typography.bodyLarge)
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Button(onClick = onDone, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+                    Text(stringResource(R.string.nudge_done), style = MaterialTheme.typography.labelLarge)
+                }
+                FilledTonalButton(onClick = onMore, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+                    Text(stringResource(R.string.nudge_more), style = MaterialTheme.typography.labelLarge)
+                }
             }
-        }
-        Text(nudgeMessage(reasonLabel, style), style = MaterialTheme.typography.bodyLarge)
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Button(onClick = onDone, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-                Text(stringResource(R.string.nudge_done), style = MaterialTheme.typography.labelLarge)
+            TextButton(onClick = onSwitched, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Text(stringResource(R.string.nudge_switched), color = colors.onSurfaceVariant)
             }
-            FilledTonalButton(onClick = onMore, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-                Text(stringResource(R.string.nudge_more), style = MaterialTheme.typography.labelLarge)
+            TextButton(onClick = onQuiet, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Text(stringResource(R.string.nudge_quiet), color = colors.onSurfaceVariant)
             }
-        }
-        TextButton(onClick = onSwitched, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(stringResource(R.string.nudge_switched), color = colors.onSurfaceVariant)
-        }
-        TextButton(onClick = onQuiet, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(stringResource(R.string.nudge_quiet), color = colors.onSurfaceVariant)
         }
     }
 }

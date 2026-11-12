@@ -50,10 +50,12 @@ import cz.kutner.why.container
 import cz.kutner.why.data.UnlockRepository
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.data.db.UnlockEvent
+import cz.kutner.why.data.settings.SettingsRepository
 import cz.kutner.why.domain.Answer
 import cz.kutner.why.domain.DayBar
 import cz.kutner.why.domain.HabitHeatMap
 import cz.kutner.why.domain.answer
+import cz.kutner.why.domain.dayDate
 import cz.kutner.why.domain.daysBack
 import cz.kutner.why.domain.habitHeatMap
 import cz.kutner.why.domain.summarizeWeek
@@ -68,7 +70,6 @@ import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.timeFormatter
 import java.time.Clock
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
@@ -92,16 +93,16 @@ data class WeekUiState(
     val heatMap: HabitHeatMap,
 )
 
-class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewModel() {
-    private val queryFrom = daysBack(clock.millis(), clock.zone, HEAT_MAP_DAYS - 1)
+class WeekViewModel(unlocks: UnlockRepository, settings: SettingsRepository, private val clock: Clock) : ViewModel() {
+    private val queryFrom = daysBack(clock.millis(), clock.zone, HEAT_MAP_DAYS)
 
-    val state: StateFlow<WeekUiState?> = combine(unlocks.reasons, unlocks.eventsSince(queryFrom), minuteTicker()) { reasons, events, _ ->
+    val state: StateFlow<WeekUiState?> = combine(unlocks.reasons, unlocks.eventsSince(queryFrom), settings.settings, minuteTicker()) { reasons, events, appSettings, _ ->
         val now = clock.millis()
-        val weekFrom = daysBack(now, clock.zone, 6)
-        val heatMapFrom = daysBack(now, clock.zone, HEAT_MAP_DAYS - 1)
+        val weekFrom = daysBack(now, clock.zone, 6, appSettings.dayStartMinute)
+        val heatMapFrom = daysBack(now, clock.zone, HEAT_MAP_DAYS - 1, appSettings.dayStartMinute)
         val weekEvents = events.filter { it.unlockedAt >= weekFrom }
-        val summary = summarizeWeek(weekEvents, now, clock.zone)
-        val byDate = weekEvents.groupBy { Instant.ofEpochMilli(it.unlockedAt).atZone(clock.zone).toLocalDate() }
+        val summary = summarizeWeek(weekEvents, now, clock.zone, appSettings.dayStartMinute)
+        val byDate = weekEvents.groupBy { dayDate(it.unlockedAt, clock.zone, appSettings.dayStartMinute) }
         val byId = reasons.associateBy { it.id }
         val rows = summary.timeByAnswer.filterKeys { it != Answer.None }.entries.sortedByDescending { it.value }.take(4)
         val max = rows.firstOrNull()?.value?.coerceAtLeast(1) ?: 1
@@ -110,7 +111,7 @@ class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewM
             habitAvgMillis = summary.habitAvgMillis,
             reasonAvgMillis = summary.reasonAvgMillis,
             time = rows.map { (answer, millis) -> TimeRow(labelOf(answer, byId), styleOf(answer, byId), millis, millis / max.toFloat()) },
-            heatMap = habitHeatMap(events.filter { it.unlockedAt >= heatMapFrom }, clock.zone),
+            heatMap = habitHeatMap(events.filter { it.unlockedAt >= heatMapFrom }, clock.zone, appSettings.dayStartMinute),
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
@@ -136,7 +137,7 @@ class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewM
 @Composable
 fun WeekScreen() {
     val app = LocalContext.current.container
-    val vm = viewModel { WeekViewModel(app.unlocks, app.clock) }
+    val vm = viewModel { WeekViewModel(app.unlocks, app.settings, app.clock) }
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = MaterialTheme.colorScheme
     Column(

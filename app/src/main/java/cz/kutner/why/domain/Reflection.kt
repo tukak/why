@@ -6,8 +6,8 @@ import java.time.LocalTime
 import java.time.ZoneId
 
 /** Null on a day without unlocks: there is nothing to reflect on. */
-fun reflectOnDay(today: List<UnlockEvent>, history: List<UnlockEvent>, now: Long, zone: ZoneId): DaySummary? =
-    if (today.isEmpty()) null else summarizeDay(today, history, now, zone)
+fun reflectOnDay(today: List<UnlockEvent>, history: List<UnlockEvent>, now: Long, zone: ZoneId, dayStartMinute: Int = 0): DaySummary? =
+    if (today.isEmpty()) null else summarizeDay(today, history, now, zone, dayStartMinute)
 
 /** The next moment at [minuteOfDay] local time, strictly after [now]. */
 fun nextTimeOfDay(now: Long, minuteOfDay: Int, zone: ZoneId): Long {

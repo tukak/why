@@ -35,7 +35,6 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -78,7 +77,6 @@ fun PromptScreen(
     onHabit: () -> Unit,
     onOther: (String) -> Unit,
     onOpenApp: () -> Unit,
-    onPause: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
     Column(
@@ -136,9 +134,6 @@ fun PromptScreen(
         HabitButton(onHabit)
         Spacer(Modifier.height(16.dp))
         OtherReasonField(typedBefore, onOther)
-        TextButton(onClick = onPause, modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 4.dp)) {
-            Text(stringResource(R.string.prompt_pause), color = colors.onSurfaceVariant)
-        }
     }
 }
 

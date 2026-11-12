@@ -21,7 +21,6 @@
     <string name="prompt_other_label">Etwas anderes</string>
     <string name="prompt_other_placeholder">Dein Grund</string>
     <string name="prompt_save">Grund speichern</string>
-    <string name="prompt_pause">1 Stunde Pause</string>
 
     <plurals name="nudge_minutes">
         <item quantity="one">%d min</item>

@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.kutner.why.data.UnlockRepository
 import cz.kutner.why.data.db.Reason
+import cz.kutner.why.data.settings.SettingsRepository
 import cz.kutner.why.domain.Answer
 import cz.kutner.why.domain.USUAL_DAYS
 import cz.kutner.why.domain.answer
+import cz.kutner.why.domain.dayDate
 import cz.kutner.why.domain.daysBack
 import cz.kutner.why.domain.startOfDay
 import cz.kutner.why.domain.summarizeDay
@@ -16,7 +18,6 @@ import cz.kutner.why.ui.minuteTicker
 import cz.kutner.why.ui.styleOf
 import cz.kutner.why.ui.theme.PebbleStyle
 import java.time.Clock
-import java.time.Instant
 import java.time.LocalDate
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -36,22 +37,23 @@ data class TodayUiState(
     val legend: List<LegendItem>,
 )
 
-class TodayViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewModel() {
+class TodayViewModel(unlocks: UnlockRepository, settings: SettingsRepository, private val clock: Clock) : ViewModel() {
 
-    private val historyStart = daysBack(clock.millis(), clock.zone, USUAL_DAYS)
+    private val historyStart = daysBack(clock.millis(), clock.zone, USUAL_DAYS + 1)
 
     val state: StateFlow<TodayUiState?> = combine(
         unlocks.reasons,
         unlocks.eventsSince(historyStart),
+        settings.settings,
         minuteTicker(),
-    ) { reasons, events, _ ->
+    ) { reasons, events, appSettings, _ ->
         val now = clock.millis()
-        val dayStart = startOfDay(now, clock.zone)
+        val dayStart = startOfDay(now, clock.zone, appSettings.dayStartMinute)
         val (today, history) = events.partition { it.unlockedAt >= dayStart }
-        val summary = summarizeDay(today, history, now, clock.zone)
+        val summary = summarizeDay(today, history, now, clock.zone, appSettings.dayStartMinute)
         val byId = reasons.associateBy { it.id }
         TodayUiState(
-            date = Instant.ofEpochMilli(now).atZone(clock.zone).toLocalDate(),
+            date = dayDate(now, clock.zone, appSettings.dayStartMinute),
             unlocks = summary.unlocks,
             vsUsual = summary.vsUsual,
             screenMillis = summary.screenMillis,
