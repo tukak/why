@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import cz.kutner.why.data.UnlockRepository
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.domain.Answer
+import cz.kutner.why.domain.DaySummary
 import cz.kutner.why.domain.USUAL_DAYS
 import cz.kutner.why.domain.answer
 import cz.kutner.why.domain.daysBack
@@ -27,11 +28,7 @@ data class LegendItem(val label: UiText, val style: PebbleStyle, val count: Int)
 
 data class TodayUiState(
     val date: LocalDate,
-    val unlocks: Int,
-    /** Unlocks minus the usual count by now; null without history. */
-    val vsUsual: Int?,
-    val screenMillis: Long,
-    val avgMillis: Long,
+    val summary: DaySummary,
     val pebbles: List<PebbleStyle>,
     val legend: List<LegendItem>,
 )
@@ -48,14 +45,10 @@ class TodayViewModel(unlocks: UnlockRepository, private val clock: Clock) : View
         val now = clock.millis()
         val dayStart = startOfDay(now, clock.zone)
         val (today, history) = events.partition { it.unlockedAt >= dayStart }
-        val summary = summarizeDay(today, history, now, clock.zone)
         val byId = reasons.associateBy { it.id }
         TodayUiState(
             date = Instant.ofEpochMilli(now).atZone(clock.zone).toLocalDate(),
-            unlocks = summary.unlocks,
-            vsUsual = summary.vsUsual,
-            screenMillis = summary.screenMillis,
-            avgMillis = summary.avgMillis,
+            summary = summarizeDay(today, history, now, clock.zone),
             pebbles = today.map { styleOf(it.answer, byId) },
             legend = legend(today.map { it.answer }, byId),
         )

@@ -1,14 +1,10 @@
 package cz.kutner.why.ui.overlay
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import cz.kutner.why.R
-import cz.kutner.why.ui.components.Pebble
+import cz.kutner.why.ui.components.ShapeBadge
 import cz.kutner.why.ui.theme.PebbleStyle
 
 @Composable
@@ -41,9 +37,7 @@ fun NudgeScreen(
     val colors = MaterialTheme.colorScheme
     OverlaySheet(spacing = 22.dp) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Box(Modifier.size(72.dp).background(style.color.tones.container, RoundedCornerShape(26.dp)), contentAlignment = Alignment.Center) {
-                Pebble(style, 40.dp)
-            }
+            ShapeBadge(style, 72.dp, 26.dp, 40.dp)
             Column {
                 Text(pluralStringResource(R.plurals.nudge_minutes, minutes, minutes), style = MaterialTheme.typography.headlineLarge)
                 Text(stringResource(R.string.nudge_since), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)

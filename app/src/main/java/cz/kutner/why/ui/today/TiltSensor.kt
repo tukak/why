@@ -30,17 +30,15 @@ class TiltSensor(private val onChange: () -> Unit) : SensorEventListener {
     override fun onSensorChanged(event: SensorEvent) {
         val x = event.values[0]
         val y = event.values[1]
-        val (sx, sy) = when (rotation) {
-            Surface.ROTATION_90 -> y to x
-            Surface.ROTATION_180 -> x to -y
-            Surface.ROTATION_270 -> -y to -x
-            else -> -x to y
+        when (rotation) {
+            Surface.ROTATION_90 -> { ax = y; ay = x }
+            Surface.ROTATION_180 -> { ax = x; ay = -y }
+            Surface.ROTATION_270 -> { ax = -y; ay = -x }
+            else -> { ax = -x; ay = y }
         }
-        ax = sx
-        ay = sy
-        if (abs(sx - reportedX) + abs(sy - reportedY) > WAKE_DELTA) {
-            reportedX = sx
-            reportedY = sy
+        if (abs(ax - reportedX) + abs(ay - reportedY) > WAKE_DELTA) {
+            reportedX = ax
+            reportedY = ay
             onChange()
         }
     }

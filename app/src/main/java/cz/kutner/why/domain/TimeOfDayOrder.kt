@@ -13,7 +13,6 @@ import kotlin.math.min
 class TimeOfDayOrder(
     private val now: Long,
     private val zone: ZoneId,
-    private val windowMinutes: Int = 90,
     private val minSample: Int = 10,
 ) {
     private val rules = zone.rules
@@ -32,7 +31,7 @@ class TimeOfDayOrder(
         for ((key, at) in uses) {
             overall.merge(key, 1, Int::plus)
             val local = localMillis(at)
-            if (circularDistance(minuteOfDay(local), nowMinute) > windowMinutes) continue
+            if (circularDistance(minuteOfDay(local), nowMinute) > WINDOW_MINUTES) continue
             inWindow.merge(key, 1, Int::plus)
             inWindowTotal++
             if (isWeekend(local) == nowWeekend) {
@@ -71,5 +70,6 @@ class TimeOfDayOrder(
 
     private companion object {
         const val MINUTES_PER_DAY = 24 * 60
+        const val WINDOW_MINUTES = 90
     }
 }

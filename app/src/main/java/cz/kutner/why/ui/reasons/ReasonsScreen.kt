@@ -27,7 +27,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SheetValue
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberBottomSheetState
@@ -57,6 +56,8 @@ import cz.kutner.why.data.db.Reason
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
+import cz.kutner.why.ui.components.ShapeBadge
+import cz.kutner.why.ui.components.SwitchRow
 import cz.kutner.why.ui.style
 import cz.kutner.why.ui.theme.PebbleShape
 import cz.kutner.why.ui.theme.PebbleStyle
@@ -244,13 +245,6 @@ private fun HabitRow() {
 }
 
 @Composable
-private fun ShapeBadge(style: PebbleStyle) {
-    Box(Modifier.size(36.dp).background(style.color.tones.container, RoundedCornerShape(13.dp)), contentAlignment = Alignment.Center) {
-        Pebble(style, 20.dp)
-    }
-}
-
-@Composable
 private fun OfferCard(label: String, count: Int, onDecide: (OfferDecision) -> Unit) {
     val tones = ReasonColor.Violet.tones
     Column(
@@ -306,14 +300,7 @@ private fun ReasonEditor(
             )
             Picker(PebbleShape.pickable, selected = shape, onPick = { shape = it }) { Pebble(PebbleStyle(it, color), 26.dp) }
             Picker(ReasonColor.pickable, selected = color, onPick = { color = it }) { Box(Modifier.size(26.dp).background(it.tones.ink, RoundedCornerShape(50))) }
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                val title = stringResource(R.string.reasons_nudge)
-                Column(Modifier.weight(1f)) {
-                    Text(title, style = MaterialTheme.typography.labelLarge)
-                    Text(stringResource(R.string.reasons_nudge_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                Switch(checked = nudge, onCheckedChange = { nudge = it }, modifier = Modifier.semantics { contentDescription = title })
-            }
+            SwitchRow(stringResource(R.string.reasons_nudge), stringResource(R.string.reasons_nudge_hint), nudge) { nudge = it }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 if (reason != null) {
                     FilledTonalButton(onClick = onArchive, modifier = Modifier.weight(1f).height(52.dp)) { Text(stringResource(R.string.reasons_archive)) }

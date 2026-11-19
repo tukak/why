@@ -24,7 +24,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -56,13 +55,15 @@ import cz.kutner.why.ui.components.BackgroundHelp
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
+import cz.kutner.why.ui.components.SwitchRow
+import cz.kutner.why.ui.theme.BloomDark
+import cz.kutner.why.ui.theme.BloomLight
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.timeFormatter
 import java.time.LocalTime
 import kotlinx.coroutines.launch
 
-/** Replace with the real page before release. */
 private const val DONATE_URL = "https://ko-fi.com/tukak"
 
 @Composable
@@ -228,8 +229,8 @@ private fun Section(title: String, content: @Composable () -> Unit) {
 
 @Composable
 private fun ThemeOption(mode: ThemeMode, selected: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    val light = Color(0xFFFBF6EE) to Color(0xFFF1E8DA)
-    val dark = Color(0xFF17130F) to Color(0xFF2C251F)
+    val light = BloomLight.background to BloomLight.surfaceContainerHigh
+    val dark = BloomDark.background to BloomDark.surfaceContainerHigh
     val (left, right) = when (mode) {
         ThemeMode.System -> light.first to dark.first
         ThemeMode.Light -> light
@@ -266,15 +267,3 @@ private fun ThemeOption(mode: ThemeMode, selected: Boolean, modifier: Modifier =
         )
     }
 }
-
-@Composable
-private fun SwitchRow(title: String, subtitle: String, checked: Boolean, onChange: (Boolean) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Column(Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.labelLarge)
-            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        }
-        Switch(checked = checked, onCheckedChange = onChange, modifier = Modifier.semantics { contentDescription = title })
-    }
-}
-

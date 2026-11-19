@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -49,7 +50,6 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.UnlockRepository
 import cz.kutner.why.data.db.Reason
-import cz.kutner.why.data.db.UnlockEvent
 import cz.kutner.why.domain.Answer
 import cz.kutner.why.domain.DayBar
 import cz.kutner.why.domain.HabitHeatMap
@@ -58,6 +58,7 @@ import cz.kutner.why.domain.daysBack
 import cz.kutner.why.domain.habitHeatMap
 import cz.kutner.why.domain.summarizeWeek
 import cz.kutner.why.ui.components.Pebble
+import cz.kutner.why.ui.components.ShapeBadge
 import cz.kutner.why.ui.components.UiText
 import cz.kutner.why.ui.formatAverage
 import cz.kutner.why.ui.formatDuration
@@ -68,7 +69,6 @@ import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.timeFormatter
 import java.time.Clock
-import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
@@ -101,12 +101,11 @@ class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewM
         val heatMapFrom = daysBack(now, clock.zone, HEAT_MAP_DAYS - 1)
         val weekEvents = events.filter { it.unlockedAt >= weekFrom }
         val summary = summarizeWeek(weekEvents, now, clock.zone)
-        val byDate = weekEvents.groupBy { Instant.ofEpochMilli(it.unlockedAt).atZone(clock.zone).toLocalDate() }
         val byId = reasons.associateBy { it.id }
         val rows = summary.timeByAnswer.filterKeys { it != Answer.None }.entries.sortedByDescending { it.value }.take(4)
         val max = rows.firstOrNull()?.value?.coerceAtLeast(1) ?: 1
         WeekUiState(
-            days = summary.days.map { day -> dayJar(day, byDate[day.date].orEmpty(), byId) },
+            days = summary.days.map { dayJar(it, byId) },
             habitAvgMillis = summary.habitAvgMillis,
             reasonAvgMillis = summary.reasonAvgMillis,
             time = rows.map { (answer, millis) -> TimeRow(labelOf(answer, byId), styleOf(answer, byId), millis, millis / max.toFloat()) },
@@ -114,8 +113,8 @@ class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewM
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    private fun dayJar(day: DayBar, events: List<UnlockEvent>, byId: Map<Long, Reason>): DayJar {
-        val counts = events.groupingBy { styleOf(it.answer, byId).color }.eachCount()
+    private fun dayJar(day: DayBar, byId: Map<Long, Reason>): DayJar {
+        val counts = day.events.groupingBy { styleOf(it.answer, byId).color }.eachCount()
         val layers = counts.entries.sortedWith(
             compareBy<Map.Entry<ReasonColor, Int>> {
                 when (it.key) {
@@ -125,7 +124,7 @@ class WeekViewModel(unlocks: UnlockRepository, private val clock: Clock) : ViewM
                 }
             }.thenByDescending { it.value },
         ).map { it.key to it.value }
-        return DayJar(day.date, day.total, layers)
+        return DayJar(day.date, day.events.size, layers)
     }
 
     private companion object {
@@ -262,7 +261,7 @@ private fun InsightCard(habitAvg: Long?, reasonAvg: Long?) {
 }
 
 @Composable
-private fun Stat(value: String, label: String, color: androidx.compose.ui.graphics.Color) {
+private fun Stat(value: String, label: String, color: Color) {
     Column {
         Text(value, style = MaterialTheme.typography.headlineSmall, color = color)
         Text(label, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold), color = MaterialTheme.colorScheme.onTertiaryContainer)
@@ -311,9 +310,7 @@ private fun TimeSection(rows: List<TimeRow>) {
         Text(stringResource(R.string.week_time), style = MaterialTheme.typography.titleSmall)
         rows.forEach { row ->
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Box(Modifier.size(32.dp).background(row.style.color.tones.container, RoundedCornerShape(11.dp)), contentAlignment = Alignment.Center) {
-                    Pebble(row.style, 18.dp)
-                }
+                ShapeBadge(row.style, 32.dp, 11.dp, 18.dp)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Row {
                         Text(row.label.resolve(), style = MaterialTheme.typography.labelMedium, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(end = 8.dp))

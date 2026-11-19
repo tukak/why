@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import cz.kutner.why.data.settings.ThemeMode
 
-private val BloomLight = lightColorScheme(
+internal val BloomLight = lightColorScheme(
     primary = Color(0xFF231A12),
     onPrimary = Color(0xFFFBF6EE),
     primaryContainer = Color(0xFFFFE1CF),
@@ -39,7 +39,7 @@ private val BloomLight = lightColorScheme(
     outlineVariant = Color(0xFFE6DCCD),
 )
 
-private val BloomDark = darkColorScheme(
+internal val BloomDark = darkColorScheme(
     primary = Color(0xFFF4EDE3),
     onPrimary = Color(0xFF17130F),
     primaryContainer = Color(0xFF4A2410),
@@ -69,8 +69,8 @@ val LocalIsDark = staticCompositionLocalOf { false }
 
 @Composable
 fun WhyTheme(
-    themeMode: ThemeMode = ThemeMode.System,
-    dynamicColor: Boolean = false,
+    themeMode: ThemeMode,
+    dynamicColor: Boolean,
     content: @Composable () -> Unit,
 ) {
     val dark = when (themeMode) {

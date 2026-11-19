@@ -86,8 +86,8 @@ class StatsTest {
         assertEquals(20 * minute, week.timeByAnswer[Answer.Habit])
         assertEquals(7, week.days.size)
         assertEquals(today, week.days.last().date)
-        assertEquals(5, week.days.last().total)
-        assertEquals(2, week.days.last().habit)
+        assertEquals(5, week.days.last().events.size)
+        assertEquals(2, week.days.last().events.count { it.answer == Answer.Habit })
     }
 
     @Test

@@ -116,11 +116,11 @@ fun TodayScreen(onSettings: () -> Unit) {
 
         Text(
             buildAnnotatedString {
-                withStyle(SpanStyle(color = colors.onSurface, fontWeight = FontWeight.Bold)) { append(formatDuration(current.screenMillis)) }
+                withStyle(SpanStyle(color = colors.onSurface, fontWeight = FontWeight.Bold)) { append(formatDuration(current.summary.screenMillis)) }
                 append(" ")
                 append(stringResource(R.string.today_on_screen))
                 append(" · ")
-                withStyle(SpanStyle(color = colors.onSurface, fontWeight = FontWeight.Bold)) { append(formatAverage(current.avgMillis)) }
+                withStyle(SpanStyle(color = colors.onSurface, fontWeight = FontWeight.Bold)) { append(formatAverage(current.summary.avgMillis)) }
                 append(" ")
                 append(stringResource(R.string.today_per_unlock))
             },
@@ -152,14 +152,14 @@ private fun PebbleJar(state: TodayUiState) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Column(Modifier.padding(end = 12.dp)) {
-                Text("${state.unlocks}", style = MaterialTheme.typography.displayLarge, maxLines = 1, softWrap = false)
+                Text("${state.summary.unlocks}", style = MaterialTheme.typography.displayLarge, maxLines = 1, softWrap = false)
                 Text(
-                    pluralStringResource(R.plurals.today_unlocks, state.unlocks),
+                    pluralStringResource(R.plurals.today_unlocks, state.summary.unlocks),
                     style = MaterialTheme.typography.labelMedium,
                     color = colors.onSurfaceVariant,
                 )
             }
-            state.vsUsual?.takeIf { it != 0 }?.let { UsualBadge(it) }
+            state.summary.vsUsual?.takeIf { it != 0 }?.let { UsualBadge(it) }
         }
     }
 }
@@ -259,7 +259,7 @@ private class PebbleStamps(val size: Int, private val inks: Map<ReasonColor, Col
 private fun StaticPile(pebbles: List<PebbleStyle>, layout: JarLayout) {
     pebbles.forEachIndexed { i, style ->
         val slot = layout.slot(i)
-        Pebble(style, slot.size, Modifier.offset(slot.x, slot.y).rotate(slot.rotation))
+        Pebble(style, layout.size, Modifier.offset(slot.x, slot.y).rotate(slot.rotation))
     }
 }
 
@@ -320,7 +320,7 @@ private fun Legend(items: List<LegendItem>) {
 
 private const val LEGEND_LIMIT = 6
 
-private data class Slot(val x: Dp, val y: Dp, val size: Dp, val rotation: Float)
+private data class Slot(val x: Dp, val y: Dp, val rotation: Float)
 
 private class JarLayout(val size: Dp, private val perRow: Int, private val width: Dp, private val height: Dp) {
     fun slot(i: Int): Slot {
@@ -332,7 +332,7 @@ private class JarLayout(val size: Dp, private val perRow: Int, private val width
         val jitterY = ((i * 11) % 5 - 2).dp
         val x = (12.dp + brick + step * col + jitterX).coerceAtMost(width - size - 6.dp)
         val y = height - 12.dp - size - size * 0.8f * row + jitterY
-        return Slot(x, y, size, rotation = ((i * 47) % 70 - 35).toFloat())
+        return Slot(x, y, rotation = ((i * 47) % 70 - 35).toFloat())
     }
 }
 

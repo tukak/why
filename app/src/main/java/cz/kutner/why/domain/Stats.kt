@@ -63,10 +63,10 @@ fun summarizeDay(today: List<UnlockEvent>, history: List<UnlockEvent>, now: Long
 }
 
 /** Counts only earlier days that have any data, so the days before install do not pull the average down. */
-fun usualSoFar(history: List<UnlockEvent>, now: Long, zone: ZoneId, days: Int = USUAL_DAYS): Int? {
+fun usualSoFar(history: List<UnlockEvent>, now: Long, zone: ZoneId): Int? {
     val nowZ = Instant.ofEpochMilli(now).atZone(zone)
     val sinceMidnight = Duration.between(nowZ.toLocalDate().atStartOfDay(zone), nowZ)
-    val counts = (1..days).mapNotNull { back ->
+    val counts = (1..USUAL_DAYS).mapNotNull { back ->
         val dayStart = nowZ.toLocalDate().minusDays(back.toLong()).atStartOfDay(zone)
         val dayEnd = dayStart.plusDays(1).toInstant().toEpochMilli()
         val start = dayStart.toInstant().toEpochMilli()
@@ -77,7 +77,7 @@ fun usualSoFar(history: List<UnlockEvent>, now: Long, zone: ZoneId, days: Int = 
     return if (counts.size < MIN_USUAL_DAYS) null else counts.average().roundToInt()
 }
 
-data class DayBar(val date: LocalDate, val total: Int, val habit: Int)
+data class DayBar(val date: LocalDate, val events: List<UnlockEvent>)
 
 data class WeekSummary(
     val days: List<DayBar>,
@@ -91,8 +91,7 @@ fun summarizeWeek(events: List<UnlockEvent>, now: Long, zone: ZoneId): WeekSumma
     val byDate = events.groupBy { Instant.ofEpochMilli(it.unlockedAt).atZone(zone).toLocalDate() }
     val days = (6 downTo 0).map { back ->
         val date = today.minusDays(back.toLong())
-        val ofDay = byDate[date].orEmpty()
-        DayBar(date, ofDay.size, ofDay.count { it.isHabit })
+        DayBar(date, byDate[date].orEmpty())
     }
     val habit = events.filter { it.answer == Answer.Habit }
     val withReason = events.filter { it.answer is Answer.Picked || it.answer == Answer.Other || it.answer == Answer.AppCheck }

@@ -2,11 +2,20 @@ package cz.kutner.why.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
@@ -14,6 +23,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cz.kutner.why.ui.theme.PebbleStyle
@@ -23,12 +34,31 @@ fun Pebble(style: PebbleStyle, size: Dp, modifier: Modifier = Modifier, color: C
     Box(modifier.size(size).background(color, style.shape.shape))
 }
 
+/** A pebble on a rounded square in the tint of its color. */
+@Composable
+fun ShapeBadge(style: PebbleStyle, size: Dp = 36.dp, corner: Dp = 13.dp, pebble: Dp = 20.dp) {
+    Box(Modifier.size(size).background(style.color.tones.container, RoundedCornerShape(corner)), contentAlignment = Alignment.Center) {
+        Pebble(style, pebble)
+    }
+}
+
+@Composable
+fun SwitchRow(title: String, subtitle: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.labelLarge)
+            Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        Switch(checked = checked, onCheckedChange = onChange, modifier = Modifier.semantics { contentDescription = title })
+    }
+}
+
 /** Line icon drawn from a 24×24 SVG path. */
 @Composable
 fun LineIcon(pathData: String, color: Color, modifier: Modifier = Modifier, size: Dp = 22.dp, strokeWidth: Float = 2f) {
     val path = remember(pathData) { PathParser().parsePathString(pathData).toPath() }
     Canvas(modifier.size(size)) {
-        scale(this.size.width / 24f, this.size.height / 24f, pivot = androidx.compose.ui.geometry.Offset.Zero) {
+        scale(this.size.width / 24f, this.size.height / 24f, pivot = Offset.Zero) {
             drawPath(path, color, style = Stroke(width = strokeWidth, cap = StrokeCap.Round, join = StrokeJoin.Round))
         }
     }

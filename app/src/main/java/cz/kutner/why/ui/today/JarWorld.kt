@@ -2,6 +2,7 @@ package cz.kutner.why.ui.today
 
 import cz.kutner.why.ui.theme.PebbleShape
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -23,8 +24,6 @@ class JarWorld(
     private var height: Float,
     private val cornerRadius: Float,
     private val inset: Float,
-    /** dyn4j is tuned for objects of about 0.1–10 units; this keeps pebbles near 0.15. */
-    private val pxPerUnit: Float = 100f,
 ) {
     class Pebble(var x: Float, var y: Float, var angle: Float)
 
@@ -36,7 +35,7 @@ class JarWorld(
         settings.minimumAtRestTime = 0.5
         // A pebble moves at most 25 px per step and walls are 300 px thick, so none can jump through.
         settings.continuousDetectionMode = ContinuousDetectionMode.NONE
-        settings.maximumTranslation = MAX_MOVE_PER_STEP / pxPerUnit.toDouble()
+        settings.maximumTranslation = MAX_MOVE_PER_STEP / PX_PER_UNIT.toDouble()
         // Fewer passes leave small overlaps, corrected every step: a restless pile, and no faster.
         settings.stepFrequency = 1.0 / 120.0
         settings.velocityConstraintSolverIterations = 10
@@ -63,7 +62,7 @@ class JarWorld(
         val body = Body()
         attach(body, shape)
         body.rotate(angle.toDouble())
-        body.translate((x / pxPerUnit).toDouble(), (y / pxPerUnit).toDouble())
+        body.translate((x / PX_PER_UNIT).toDouble(), (y / PX_PER_UNIT).toDouble())
         body.setLinearDamping(BASE_DAMPING.toDouble())
         body.setAngularDamping(BASE_DAMPING.toDouble() * 2)
         world.addBody(body)
@@ -111,7 +110,7 @@ class JarWorld(
     }
 
     fun step(dt: Float, ax: Float, ay: Float) {
-        world.setGravity((ax / pxPerUnit).toDouble(), (ay / pxPerUnit).toDouble())
+        world.setGravity((ax / PX_PER_UNIT).toDouble(), (ay / PX_PER_UNIT).toDouble())
         awakeSeconds += dt
         settle()
         world.update(dt.toDouble())
@@ -121,8 +120,8 @@ class JarWorld(
     private fun sync() {
         pebbles.forEachIndexed { i, (body, _) ->
             val t = body.transform
-            bodies[i].x = (t.translationX * pxPerUnit).toFloat()
-            bodies[i].y = (t.translationY * pxPerUnit).toFloat()
+            bodies[i].x = (t.translationX * PX_PER_UNIT).toFloat()
+            bodies[i].y = (t.translationY * PX_PER_UNIT).toFloat()
             bodies[i].angle = t.rotationAngle.toFloat()
         }
     }
@@ -146,7 +145,7 @@ class JarWorld(
 
     /** Mass follows the drawn area, so a big squircle is heavier than a slim pill. */
     private fun attach(body: Body, shape: PebbleShape) {
-        val k = size / pxPerUnit / 24.0
+        val k = size / PX_PER_UNIT / 24.0
         body.addFixture(convex(shape, k), 1.0, PEBBLE_FRICTION, PEBBLE_BOUNCE)
         body.setMass(MassType.NORMAL)
         val current = body.mass
@@ -210,25 +209,25 @@ class JarWorld(
     private fun buildWalls() {
         world.removeBody(walls)
         walls = Body()
-        val r = (cornerRadius - inset).toDouble() / pxPerUnit
-        val left = inset.toDouble() / pxPerUnit
-        val top = inset.toDouble() / pxPerUnit
-        val right = (width - inset).toDouble() / pxPerUnit
-        val bottom = (height - inset).toDouble() / pxPerUnit
-        val t = WALL_THICKNESS / pxPerUnit.toDouble()
+        val r = (cornerRadius - inset).toDouble() / PX_PER_UNIT
+        val left = inset.toDouble() / PX_PER_UNIT
+        val top = inset.toDouble() / PX_PER_UNIT
+        val right = (width - inset).toDouble() / PX_PER_UNIT
+        val bottom = (height - inset).toDouble() / PX_PER_UNIT
+        val t = WALL_THICKNESS / PX_PER_UNIT.toDouble()
         solid(Vector2(left - t, top - t), Vector2(left, top - t), Vector2(left, bottom + t), Vector2(left - t, bottom + t))
         solid(Vector2(right, top - t), Vector2(right + t, top - t), Vector2(right + t, bottom + t), Vector2(right, bottom + t))
         solid(Vector2(left, top - t), Vector2(right, top - t), Vector2(right, top), Vector2(left, top))
         solid(Vector2(left, bottom), Vector2(right, bottom), Vector2(right, bottom + t), Vector2(left, bottom + t))
         val corners = listOf(
             Triple(Vector2(right - r, bottom - r), Vector2(right, bottom), 0.0),
-            Triple(Vector2(left + r, bottom - r), Vector2(left, bottom), Math.PI / 2),
-            Triple(Vector2(left + r, top + r), Vector2(left, top), Math.PI),
-            Triple(Vector2(right - r, top + r), Vector2(right, top), 3 * Math.PI / 2),
+            Triple(Vector2(left + r, bottom - r), Vector2(left, bottom), PI / 2),
+            Triple(Vector2(left + r, top + r), Vector2(left, top), PI),
+            Triple(Vector2(right - r, top + r), Vector2(right, top), 3 * PI / 2),
         )
         for ((centre, boxCorner, start) in corners) {
             val arc = (0..CORNER_SEGMENTS).map { s ->
-                val a = start + s * (Math.PI / 2) / CORNER_SEGMENTS
+                val a = start + s * (PI / 2) / CORNER_SEGMENTS
                 Vector2(centre.x + r * cos(a), centre.y + r * sin(a))
             }
             for (i in 0 until arc.size - 1) solid(arc[i], arc[i + 1], boxCorner)
@@ -242,11 +241,13 @@ class JarWorld(
         val area2 = (1 until points.size - 1).sumOf { k ->
             (points[k].x - points[0].x) * (points[k + 1].y - points[0].y) - (points[k + 1].x - points[0].x) * (points[k].y - points[0].y)
         }
-        if (kotlin.math.abs(area2) < 1e-9) return
+        if (abs(area2) < 1e-9) return
         walls.addFixture(Geometry.createPolygon(*(if (area2 > 0) points else points.reversedArray())), 1.0, PEBBLE_FRICTION, WALL_BOUNCE)
     }
 
     private companion object {
+        /** dyn4j is tuned for objects of about 0.1–10 units; this keeps pebbles near 0.15. */
+        const val PX_PER_UNIT = 100f
         const val CORNER_SEGMENTS = 6
         const val CORNER_STEPS = 3
 
