@@ -18,8 +18,8 @@ android {
         applicationId = "cz.kutner.why"
         minSdk = 31
         targetSdk = 37
-        versionCode = 10002
-        versionName = "1.0.2"
+        versionCode = 10003
+        versionName = "1.0.3"
     }
 
     // Kept outside the repository, in ~/.gradle/gradle.properties; without it the release build stays unsigned.
