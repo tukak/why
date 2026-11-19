@@ -87,7 +87,7 @@ at 511 pebbles it costs 3.1 ms per frame against 3.7 ms with 60 Hz, 6/4 passes (
 ### Testing
 | Choice | Alternatives | Why |
 |---|---|---|
-| JUnit 4 + kotlin.test + coroutines-test | JUnit 5 (third-party Android plugin), Kotest | JUnit 4 is what AndroidX test tools support natively. Business rules (prompt policy, stats) are pure Kotlin, so plain unit tests cover them. |
+| JUnit 4 + kotlin.test | JUnit 5 (third-party Android plugin), Kotest | JUnit 4 is what AndroidX test tools support natively. Business rules (prompt policy, stats) are pure Kotlin, so plain unit tests cover them. |
 | (later) Compose UI tests, Robolectric 4.17 | Espresso | Add when screens settle. |
 
 ## System integration

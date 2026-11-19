@@ -20,7 +20,6 @@ android {
         targetSdk = 37
         versionCode = 10002
         versionName = "1.0.2"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     // Kept outside the repository, in ~/.gradle/gradle.properties; without it the release build stays unsigned.
@@ -93,8 +92,6 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
-    implementation(libs.compose.ui.tooling.preview)
-    debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.room3.runtime)
     implementation(libs.sqlite.framework)
@@ -107,5 +104,4 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlin.test.junit)
-    testImplementation(libs.kotlinx.coroutines.test)
 }
