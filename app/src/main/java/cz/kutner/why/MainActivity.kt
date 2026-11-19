@@ -53,6 +53,7 @@ class MainActivity : ComponentActivity() {
                         WhyNavigation()
                     } else {
                         OnboardingScreen(
+                            overlayGranted = overlayGranted,
                             permissionLost = current.onboardingDone,
                             onDone = {
                                 scope.launch {

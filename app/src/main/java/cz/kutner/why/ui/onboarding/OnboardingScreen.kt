@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.Animatable
@@ -57,13 +56,11 @@ import cz.kutner.why.ui.theme.ReasonColor
 import kotlinx.coroutines.delay
 
 @Composable
-fun OnboardingScreen(permissionLost: Boolean = false, onDone: () -> Unit) {
+fun OnboardingScreen(overlayGranted: Boolean, permissionLost: Boolean, onDone: () -> Unit) {
     val context = LocalContext.current
-    var overlayGranted by remember { mutableStateOf(Settings.canDrawOverlays(context)) }
     var notificationsGranted by remember { mutableStateOf(notificationsGranted(context)) }
     var unrestricted by remember { mutableStateOf(BackgroundHelp.isUnrestricted(context)) }
     LifecycleResumeEffect(Unit) {
-        overlayGranted = Settings.canDrawOverlays(context)
         notificationsGranted = notificationsGranted(context)
         unrestricted = BackgroundHelp.isUnrestricted(context)
         onPauseOrDispose { }
@@ -81,7 +78,7 @@ fun OnboardingScreen(permissionLost: Boolean = false, onDone: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             ShapePile()
-            if (permissionLost && !overlayGranted) {
+            if (permissionLost) {
                 val tones = ReasonColor.Ember.tones
                 Text(
                     stringResource(R.string.onboarding_permission_lost),
