@@ -8,7 +8,11 @@ plugins {
 
 android {
     namespace = "cz.kutner.why"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 2
+        }
+    }
 
     defaultConfig {
         applicationId = "cz.kutner.why"

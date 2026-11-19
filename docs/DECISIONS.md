@@ -1,30 +1,27 @@
 # Tech decisions
 
-Versions checked on Maven Central / Google Maven on 2026-09-23.
+Project dependencies checked on Maven Central and Google Maven on 2026-11-19.
 
 ## Platform
 
 | Area | Choice | Alternatives | Why |
 |---|---|---|---|
-| Language | Kotlin 2.4.20 | Java | Kotlin-first platform. Coroutines, Compose need it. |
-| UI | Jetpack Compose (BOM 2026.09.00) | XML Views; Flutter; Compose Multiplatform | Views: legacy, more code. Flutter: no native Material 3 Expressive, harder system integration (overlay, services). CMP: iOS cannot do unlock detection, so no gain. |
+| Language | Kotlin 2.4.21 | Java | Kotlin-first platform. Coroutines, Compose need it. |
+| UI | Jetpack Compose (BOM 2026.11.01) | XML Views; Flutter; Compose Multiplatform | Views: legacy, more code. Flutter: no native Material 3 Expressive, harder system integration (overlay, services). CMP: iOS cannot do unlock detection, so no gain. |
 | minSdk | 31 (Android 12) | 26, 29 | 31 gives Material You dynamic color and the splash API natively. Loses devices older than 2021. |
-| targetSdk / compileSdk | 37 | 36 | 37 is installed and newest. Play needs a recent target anyway. |
-| Build | AGP 9.4.1 + Gradle 9.7.1, version catalog | AGP 8.x | AGP 9 has built-in Kotlin (no `kotlin-android` plugin). Newest stable. |
-| Annotation processing | KSP 2.3.12 | kapt | kapt is in maintenance and slow. Room 3 is KSP-only. |
+| targetSdk / compileSdk | 37 / 37.2 | 36 | Compose 1.13 requires compile SDK 37.1 or newer. |
+| Build | AGP 9.5.1 + Gradle 9.9.1, version catalog | AGP 8.x | AGP 9 has built-in Kotlin. |
+| Annotation processing | KSP 2.3.14 | kapt | kapt is in maintenance and slow. Room 3 is KSP-only. |
 
 ## Libraries
 
-### Design system — Material 3 **1.5.0-alpha28**
+### Design system — Material 3 **1.5.0**
 | Option | Pros | Cons |
 |---|---|---|
-| **1.5.0-alpha (chosen)** | Full Material 3 Expressive: `MaterialExpressiveTheme`, `MaterialShapes`, expressive motion, button groups. This is the Bloom look. | Alpha. APIs can change. Needs opt-in annotations. |
-| 1.4.0 stable (in BOM) | Stable. | Expressive components missing (`MaterialShapes` not in 1.4.0; checked in the AAR). |
+| **Material 3 (chosen)** | The Compose BOM supplies the stable release with Material 3 Expressive features such as `MaterialExpressiveTheme`, `MaterialShapes`, expressive motion, and button groups. | Experimental APIs still require opt-in. |
 | Custom design system | Full control. | Much more code; loses accessibility defaults. |
 
-Only Material 3 is alpha. Everything else is stable.
-
-### Navigation — Navigation 3 **1.1.7**
+### Navigation — Navigation 3 **1.2.2**
 | Option | Pros | Cons |
 |---|---|---|
 | **Navigation 3 (chosen)** | New Compose-first API. You own the back stack as a list. Simple, testable. Stable. | Young; fewer examples. Tab back-stack handling is manual. |
@@ -41,7 +38,7 @@ Only Material 3 is alpha. Everything else is stable.
 
 SQLite driver: `AndroidSQLiteDriver` (system SQLite, 0 KB). Alternative `BundledSQLiteDriver` gives the same SQLite on all devices but adds about 1 MB native code per ABI.
 
-### Settings — DataStore Preferences **1.2.1**
+### Settings — DataStore Preferences **1.3.0**
 | Option | Pros | Cons |
 |---|---|---|
 | **Preferences DataStore (chosen)** | Async, Flow-based, safe. Official replacement for SharedPreferences. | Not type-safe per key (small risk; 5 keys). |
@@ -61,7 +58,7 @@ Revisit when the graph grows (more modules, many screens): Hilt or Metro.
 ### Async — Kotlin Coroutines **1.11.0** + Flow
 No real alternative. RxJava is legacy for new Kotlin apps.
 
-### Serialization — kotlinx.serialization **1.11.0**
+### Serialization — kotlinx.serialization **1.13.0**
 Needed for Navigation 3 keys (saved back stack). Alternative: Parcelable keys — more code.
 
 ### Date and time — `java.time` (built in)
