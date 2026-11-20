@@ -13,6 +13,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ServiceInfo
 import android.media.AudioManager
+import android.provider.Settings
+import android.view.accessibility.AccessibilityManager
 import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -24,17 +26,25 @@ import androidx.lifecycle.lifecycleScope
 import cz.kutner.why.MainActivity
 import cz.kutner.why.R
 import cz.kutner.why.container
+import cz.kutner.why.data.OfferDecision
 import cz.kutner.why.data.PromptChoices
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.domain.Answer
+import cz.kutner.why.domain.FastAnswers
 import cz.kutner.why.domain.PromptPolicy
 import cz.kutner.why.domain.TimeOfDayOrder
+import cz.kutner.why.domain.Trick
+import cz.kutner.why.domain.TrickPicker
+import cz.kutner.why.domain.TrickSetup
 import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.domain.answer
 import cz.kutner.why.domain.startOfDay
+import cz.kutner.why.ui.overlay.AnnoyOfferScreen
+import cz.kutner.why.ui.overlay.AnswerStats
 import cz.kutner.why.ui.overlay.NudgeScreen
 import cz.kutner.why.ui.overlay.OfferScreen
+import cz.kutner.why.ui.overlay.PromptAnswer
 import cz.kutner.why.ui.overlay.PromptScreen
 import cz.kutner.why.ui.style
 import cz.kutner.why.ui.theme.PebbleStyle
@@ -45,6 +55,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import kotlin.random.Random
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -66,6 +77,7 @@ class UnlockService : LifecycleService() {
     private var unlockWatch: Job? = null
     private var prepared: Prepared? = null
     private var showingPermissionHint = false
+    private var lastTrick: Trick? = null
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -185,15 +197,24 @@ class UnlockService : LifecycleService() {
         prepared = null
         val unlockNumber = app.unlocks.countSince(startOfDay(now, app.clock.zone))
         val time = timeFormatter(this).format(Instant.ofEpochMilli(now).atZone(app.clock.zone))
+        val setup = pickTrick(settings, choices.reasons.size)
+        val showHint = setup != null && setup.trick !in settings.tricksSeen
+        if (showHint) app.settings.markTrickSeen(setup.trick)
         showThemed(settings) {
             PromptScreen(
                 time = time,
                 unlockNumber = unlockNumber,
                 reasons = choices.reasons,
                 typedBefore = choices.typed,
-                onReason = { answer(id, settings, reason = it) },
-                onHabit = { answer(id, settings, habit = true) },
-                onOther = { answer(id, settings, text = it) },
+                setup = setup,
+                showHint = showHint,
+                onAnswer = { answer, stats ->
+                    when (answer) {
+                        is PromptAnswer.Picked -> answer(id, settings, stats, setup?.trick, reason = answer.reason)
+                        PromptAnswer.Habit -> answer(id, settings, stats, setup?.trick, habit = true)
+                        is PromptAnswer.Typed -> answer(id, settings, stats, setup?.trick, text = answer.text)
+                    }
+                },
                 onOpenApp = { openApp(id) },
                 onPause = {
                     lifecycleScope.launch {
@@ -205,14 +226,48 @@ class UnlockService : LifecycleService() {
         }
     }
 
+    private fun pickTrick(settings: AppSettings, reasons: Int): TrickSetup? {
+        val trick = TrickPicker.pick(
+            enabled = settings.tricksOn,
+            last = lastTrick,
+            answers = reasons + 1,
+            screenReader = getSystemService(AccessibilityManager::class.java).isTouchExplorationEnabled,
+            reducedMotion = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f,
+            random = Random.Default,
+        ) ?: return null
+        lastTrick = trick
+        return TrickSetup.create(trick, reasons, Random.Default)
+    }
+
     private fun showThemed(settings: AppSettings, content: @Composable () -> Unit) =
         overlays.show { WhyTheme(settings.themeMode, settings.dynamicColor, content = content) }
 
-    private fun answer(id: Long, settings: AppSettings, reason: Reason? = null, habit: Boolean = false, text: String? = null) {
+    private fun answer(
+        id: Long,
+        settings: AppSettings,
+        stats: AnswerStats,
+        trick: Trick?,
+        reason: Reason? = null,
+        habit: Boolean = false,
+        text: String? = null,
+    ) {
         lifecycleScope.launch {
-            app.unlocks.answer(id, reasonId = reason?.id, isHabit = habit, customText = text)
+            app.unlocks.answer(
+                id,
+                reasonId = reason?.id,
+                isHabit = habit,
+                customText = text,
+                answerMs = stats.answerMs,
+                earlyTaps = stats.earlyTaps,
+                trick = trick?.name,
+            )
             val offer = text?.let { app.unlocks.dueOfferFor(it) }
-            if (offer != null) showOffer(offer, settings) else overlays.dismiss()
+            val fast = if (offer == null && trick == null) fastAnswers(settings, stats.answerMs) else null
+            when {
+                offer != null -> showOffer(offer, settings)
+                fast != null -> showAnnoyOffer(fast, settings)
+                else -> overlays.dismiss()
+            }
             val style = reason?.style ?: if (habit) PebbleStyle.Habit else PebbleStyle.Other
             scheduleNudge(id, settings, NudgeTarget(reason?.label ?: text, style), if (reason?.nudge == false) 0 else settings.nudgeMinutes)
         }
@@ -223,6 +278,29 @@ class UnlockService : LifecycleService() {
             OfferScreen(label = offer.label, count = offer.count) { decision ->
                 lifecycleScope.launch {
                     app.unlocks.decide(offer, decision)
+                    overlays.dismiss()
+                }
+            }
+        }
+    }
+
+    private suspend fun fastAnswers(settings: AppSettings, answerMs: Long): Int? = FastAnswers.offer(
+        latestMs = answerMs,
+        recent = app.unlocks.recentPlainAnswerTimes(FastAnswers.SAMPLE),
+        annoyingMode = settings.annoyingMode,
+        offerAfter = settings.annoyOfferAfter,
+        now = app.clock.millis(),
+    )
+
+    private fun showAnnoyOffer(fast: Int, settings: AppSettings) {
+        showThemed(settings) {
+            AnnoyOfferScreen(fast = fast, total = FastAnswers.SAMPLE) { decision ->
+                lifecycleScope.launch {
+                    when (decision) {
+                        OfferDecision.Add -> app.settings.setAnnoyingMode(true)
+                        OfferDecision.NotNow -> app.settings.setAnnoyOfferAfter(app.clock.millis() + ANNOY_OFFER_SNOOZE_MS)
+                        OfferDecision.Never -> app.settings.setAnnoyOfferAfter(Long.MAX_VALUE)
+                    }
                     overlays.dismiss()
                 }
             }
@@ -324,6 +402,7 @@ class UnlockService : LifecycleService() {
         private const val STOPPED_CHANNEL_ID = "service_stopped"
         private const val STOPPED_NOTIFICATION_ID = 3
         private const val SNOOZE_MINUTES = 5
+        private val ANNOY_OFFER_SNOOZE_MS = 7.days.inWholeMilliseconds
         private const val UNLOCKED_EARLY = "cz.kutner.why.UNLOCKED_EARLY"
         private val UNLOCK_WATCH_STEP = 100.milliseconds
         private val UNLOCK_WATCH_LIMIT = 60.seconds

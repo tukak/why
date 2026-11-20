@@ -84,10 +84,22 @@ class UnlockRepository(
 
     suspend fun closeOrphanSessions() = unlockDao.closeOrphans()
 
-    suspend fun answer(id: Long, reasonId: Long? = null, isHabit: Boolean = false, customText: String? = null, isAppCheck: Boolean = false) {
+    suspend fun answer(
+        id: Long,
+        reasonId: Long? = null,
+        isHabit: Boolean = false,
+        customText: String? = null,
+        isAppCheck: Boolean = false,
+        answerMs: Long? = null,
+        earlyTaps: Int = 0,
+        trick: String? = null,
+    ) {
         val text = customText?.trim()?.takeIf { it.isNotEmpty() }
-        unlockDao.answer(id, reasonId, isHabit, text, text?.let(TypedReasons::normalize)?.takeIf { it.isNotEmpty() }, isAppCheck)
+        unlockDao.answer(id, reasonId, isHabit, text, text?.let(TypedReasons::normalize)?.takeIf { it.isNotEmpty() }, isAppCheck, answerMs, earlyTaps, trick)
     }
+
+    /** Newest first, answers given without a trick only. */
+    suspend fun recentPlainAnswerTimes(limit: Int): List<Long> = unlockDao.recentPlainAnswerTimes(limit)
 
     suspend fun unlockCount(reason: Reason): Int = unlockDao.countForReason(reason.id)
 

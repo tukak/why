@@ -16,6 +16,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -28,8 +29,11 @@ import androidx.navigation3.ui.NavDisplay
 import cz.kutner.why.R
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
+import cz.kutner.why.domain.Trick
 import cz.kutner.why.ui.reasons.ReasonsScreen
+import cz.kutner.why.ui.settings.AnnoyScreen
 import cz.kutner.why.ui.settings.SettingsScreen
+import cz.kutner.why.ui.settings.TryTrickScreen
 import cz.kutner.why.ui.today.TodayScreen
 import cz.kutner.why.ui.week.WeekScreen
 import kotlinx.serialization.Serializable
@@ -38,6 +42,8 @@ import kotlinx.serialization.Serializable
 @Serializable data object WeekKey : NavKey
 @Serializable data object ReasonsKey : NavKey
 @Serializable data object SettingsKey : NavKey
+@Serializable data object AnnoyKey : NavKey
+@Serializable data class TryTrickKey(val trick: String) : NavKey
 
 private data class Tab(val key: NavKey, val label: Int, val icon: String)
 
@@ -68,16 +74,25 @@ fun WhyNavigation() {
                 entry<TodayKey> { TodayScreen(onSettings = { backStack.add(SettingsKey) }) }
                 entry<WeekKey> { WeekScreen() }
                 entry<ReasonsKey> { ReasonsScreen() }
-                entry<SettingsKey>(
-                    metadata = NavDisplay.transitionSpec { sharedAxisX(forward = true) } +
-                        NavDisplay.popTransitionSpec { sharedAxisX(forward = false) } +
-                        NavDisplay.predictivePopTransitionSpec { sharedAxisX(forward = false) },
-                ) { SettingsScreen(onBack = { backStack.removeLastOrNull() }) }
+                entry<SettingsKey>(metadata = deeper) {
+                    SettingsScreen(onBack = { backStack.removeLastOrNull() }, onAnnoy = { backStack.add(AnnoyKey) })
+                }
+                entry<AnnoyKey>(metadata = deeper) {
+                    AnnoyScreen(onBack = { backStack.removeLastOrNull() }, onTry = { backStack.add(TryTrickKey(it.name)) })
+                }
+                entry<TryTrickKey>(metadata = deeper) { key ->
+                    val trick = Trick.of(key.trick)
+                    if (trick == null) LaunchedEffect(Unit) { backStack.removeLastOrNull() } else TryTrickScreen(trick, onBack = { backStack.removeLastOrNull() })
+                }
             },
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding()),
         )
     }
 }
+
+private val deeper = NavDisplay.transitionSpec { sharedAxisX(forward = true) } +
+    NavDisplay.popTransitionSpec { sharedAxisX(forward = false) } +
+    NavDisplay.predictivePopTransitionSpec { sharedAxisX(forward = false) }
 
 /** Material "fade through": for switching between top-level tabs. */
 private fun fadeThrough(): ContentTransform =

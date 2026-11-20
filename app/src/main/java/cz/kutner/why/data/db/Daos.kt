@@ -50,8 +50,18 @@ interface UnlockDao {
     @Query("UPDATE unlock_event SET lockedAt = NULL WHERE id = :id")
     suspend fun reopen(id: Long)
 
-    @Query("UPDATE unlock_event SET reasonId = :reasonId, isHabit = :isHabit, customText = :customText, customKey = :customKey, isAppCheck = :isAppCheck WHERE id = :id")
-    suspend fun answer(id: Long, reasonId: Long?, isHabit: Boolean, customText: String?, customKey: String?, isAppCheck: Boolean)
+    @Query("UPDATE unlock_event SET reasonId = :reasonId, isHabit = :isHabit, customText = :customText, customKey = :customKey, isAppCheck = :isAppCheck, answerMs = :answerMs, earlyTaps = :earlyTaps, trick = :trick WHERE id = :id")
+    suspend fun answer(
+        id: Long,
+        reasonId: Long?,
+        isHabit: Boolean,
+        customText: String?,
+        customKey: String?,
+        isAppCheck: Boolean,
+        answerMs: Long?,
+        earlyTaps: Int,
+        trick: String?,
+    )
 
     @Query("SELECT COUNT(*) FROM unlock_event WHERE reasonId = :reasonId")
     suspend fun countForReason(reasonId: Long): Int
@@ -76,6 +86,10 @@ interface UnlockDao {
 
     @Query("SELECT reasonId, unlockedAt FROM unlock_event WHERE reasonId IS NOT NULL AND unlockedAt >= :from")
     suspend fun reasonAnswers(from: Long): List<ReasonAnswer>
+
+    /** Answers without a trick only: a trick changes how fast an answer can be. */
+    @Query("SELECT answerMs FROM unlock_event WHERE answerMs IS NOT NULL AND trick IS NULL ORDER BY unlockedAt DESC LIMIT :limit")
+    suspend fun recentPlainAnswerTimes(limit: Int): List<Long>
 }
 
 @Dao

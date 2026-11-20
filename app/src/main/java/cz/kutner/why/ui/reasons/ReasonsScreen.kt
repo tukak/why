@@ -53,6 +53,7 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.OfferDecision
 import cz.kutner.why.data.db.Reason
+import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
@@ -71,6 +72,7 @@ fun ReasonsScreen() {
     val app = LocalContext.current.container
     val vm = viewModel { ReasonsViewModel(app.unlocks, app.clock) }
     val state by vm.state.collectAsStateWithLifecycle()
+    val settings by app.settings.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
     var editing by remember { mutableStateOf<Editing?>(null) }
     var merging by remember { mutableStateOf<Reason?>(null) }
     var mergeInto by remember { mutableStateOf<Reason?>(null) }
@@ -87,7 +89,7 @@ fun ReasonsScreen() {
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(stringResource(R.string.reasons_title), style = MaterialTheme.typography.headlineLarge)
-                Text(stringResource(R.string.reasons_subtitle), style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
+                Text(stringResource(if (settings.annoyingMode) R.string.reasons_subtitle_annoy else R.string.reasons_subtitle), style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
             }
 
             Column(Modifier.background(colors.surfaceContainerLowest, RoundedCornerShape(28.dp)).padding(vertical = 4.dp)) {

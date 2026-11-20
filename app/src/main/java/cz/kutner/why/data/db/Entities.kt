@@ -23,6 +23,8 @@ data class Reason(
  * Answer states: [reasonId] set, [isHabit] true, [customText] set, or [isAppCheck] true (unlocked to open this app).
  * All empty means unanswered.
  * [customKey] is [customText] normalized once on save, so grouping typed answers needs no text processing.
+ * [answerMs] is the time from when the answers could be tapped to the answer.
+ * [earlyTaps] counts taps on answers that could not be tapped yet; [trick] is the annoying-mode trick shown, if any.
  */
 @Entity(tableName = "unlock_event", indices = [Index("unlockedAt"), Index("customKey")])
 data class UnlockEvent(
@@ -34,6 +36,9 @@ data class UnlockEvent(
     val customText: String? = null,
     val customKey: String? = null,
     @ColumnInfo(defaultValue = "0") val isAppCheck: Boolean = false,
+    val answerMs: Long? = null,
+    @ColumnInfo(defaultValue = "0") val earlyTaps: Int = 0,
+    val trick: String? = null,
 )
 
 /** What the user decided about adding a typed answer as a reason. [key] is the normalized text. */

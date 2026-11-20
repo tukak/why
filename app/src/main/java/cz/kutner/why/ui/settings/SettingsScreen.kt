@@ -3,6 +3,7 @@ package cz.kutner.why.ui.settings
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
@@ -51,6 +53,7 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.data.settings.ThemeMode
+import cz.kutner.why.domain.Trick
 import cz.kutner.why.ui.components.BackgroundHelp
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
@@ -67,7 +70,7 @@ import kotlinx.coroutines.launch
 private const val DONATE_URL = "https://ko-fi.com/tukak"
 
 @Composable
-fun SettingsScreen(onBack: () -> Unit) {
+fun SettingsScreen(onBack: () -> Unit, onAnnoy: () -> Unit) {
     val context = LocalContext.current
     val repo = context.container.settings
     val settings by repo.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
@@ -130,6 +133,25 @@ fun SettingsScreen(onBack: () -> Unit) {
             }
             ChoiceChips(listOf(0, 3, 10, 30), selected = settings.resumeSeconds, onSelect = { scope.launch { repo.setResumeSeconds(it) } }) {
                 if (it == 0) stringResource(R.string.settings_off) else stringResource(R.string.duration_seconds, it)
+            }
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).clickable(onClick = onAnnoy).padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.annoy_title), style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        if (settings.annoyingMode) {
+                            stringResource(R.string.settings_annoy_on, settings.tricksOn.size, Trick.entries.size)
+                        } else {
+                            stringResource(R.string.settings_annoy_off)
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = colors.onSurfaceVariant,
+                    )
+                }
+                LineIcon(Icons.ArrowRight, colors.onSurfaceVariant)
             }
             SwitchRow(
                 title = stringResource(R.string.settings_reflection),

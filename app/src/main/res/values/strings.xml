@@ -80,6 +80,7 @@
 
     <string name="reasons_title">Reasons</string>
     <string name="reasons_subtitle">Most used first. When you unlock, they are sorted for the time of day.</string>
+    <string name="reasons_subtitle_annoy">Most used first. When you unlock, annoying mode can change their order and look.</string>
     <string name="reasons_count">%d×</string>
     <string name="reasons_edit">Edit %1$s</string>
     <string name="reasons_edit_title">Edit reason</string>
@@ -177,4 +178,81 @@
     </plurals>
     <string name="reasons_merge_do">Merge</string>
     <string name="reasons_cancel">Cancel</string>
+
+    <!-- Annoying mode -->
+    <string name="prompt_too_fast">Too fast. Wait for the answers.</string>
+    <string name="prompt_breath_hold">Hold the circle</string>
+    <string name="prompt_breath_in">Breathe in</string>
+    <string name="prompt_breath_out">Breathe out</string>
+    <string name="prompt_breath_again">Hold for the whole breath.</string>
+    <string name="prompt_drop_here">Drop here</string>
+    <string name="prompt_type_label">Type your reason</string>
+    <string name="prompt_type_placeholder">Type 2 letters</string>
+    <string name="prompt_type_help">Type 2 letters of your reason below.</string>
+    <string name="prompt_type_no_match">No match. Tap the arrow to save it as your own reason.</string>
+    <string name="prompt_confirm">Really “%1$s”?</string>
+    <string name="prompt_confirm_yes">Yes</string>
+    <string name="prompt_confirm_no">No, go back</string>
+    <string name="prompt_question_1">Can it wait?</string>
+    <string name="prompt_question_2">What will you do in the next 2 minutes?</string>
+    <string name="prompt_question_3">Is this the best use of now?</string>
+    <string name="prompt_question_4">What are you looking for?</string>
+    <string name="prompt_new_trick">New: %1$s. %2$s</string>
+    <string name="annoy_title">Annoying mode</string>
+    <string name="annoy_on">On</string>
+    <string name="annoy_off">Off</string>
+    <string name="annoy_count" tools:ignore="PluralsCandidate">%1$d of %2$d tricks on</string>
+    <string name="annoy_turn_on" tools:ignore="PluralsCandidate">Turn it on to use all %1$d tricks.</string>
+    <string name="annoy_explain">Each unlock uses one trick, chosen at random from the ones that are on.</string>
+    <string name="annoy_try">Try</string>
+    <string name="annoy_try_label">Try %1$s</string>
+    <string name="annoy_skipped">With TalkBack or Remove animations on, Drift, Pick a pebble and Tilt to answer are skipped. With TalkBack, Drag to the jar is skipped too. With more than 11 reasons, Drift, Pick a pebble, Tilt to answer and Drag to the jar are skipped.</string>
+    <string name="settings_annoy_on" tools:ignore="PluralsCandidate">On · %1$d of %2$d tricks</string>
+    <string name="settings_annoy_off">Off. Changes the question at every unlock.</string>
+    <string name="trick_group_timing">Timing</string>
+    <string name="trick_group_layout">Layout</string>
+    <string name="trick_group_words">Words</string>
+    <string name="trick_group_body">Body</string>
+    <string name="trick_pause">Pause</string>
+    <string name="trick_pause_text">The answers wake up after 1–3 s.</string>
+    <string name="trick_stagger">Staggered wake-up</string>
+    <string name="trick_stagger_text">Each answer wakes up on its own. Just habit first.</string>
+    <string name="trick_early_reset">Early tap resets</string>
+    <string name="trick_early_reset_text">Wait for the answers. A tap too early starts the pause again.</string>
+    <string name="trick_hold">Hold to choose</string>
+    <string name="trick_hold_text">Press and hold an answer.</string>
+    <string name="trick_second_check">Second check</string>
+    <string name="trick_second_check_text">Confirm your answer one more time.</string>
+    <string name="trick_shuffle">Random order</string>
+    <string name="trick_shuffle_text">The answers are not sorted by time of day.</string>
+    <string name="trick_habit_trap">Habit trap</string>
+    <string name="trick_habit_trap_text">Just habit sits where you tap most.</string>
+    <string name="trick_new_grid">New grid</string>
+    <string name="trick_new_grid_text">3 columns, a list or a circle.</string>
+    <string name="trick_wild">Shapes and sizes</string>
+    <string name="trick_wild_text">Wild shapes, sizes, colors and fonts. Read before you tap.</string>
+    <string name="trick_drift">Drift</string>
+    <string name="trick_drift_text">The answers float slowly. Aim well.</string>
+    <string name="trick_pebbles">Pick a pebble</string>
+    <string name="trick_pebbles_text">The answers fall into the jar. Tap the pebble with your reason.</string>
+    <string name="trick_scramble">Scrambled labels</string>
+    <string name="trick_scramble_text">The letters mix, then become readable.</string>
+    <string name="trick_type_it">Type it</string>
+    <string name="trick_type_it_text">Type 2 letters to find your answer.</string>
+    <string name="trick_question">Different question</string>
+    <string name="trick_question_text">The question changes. Read it.</string>
+    <string name="trick_tilt">Tilt to answer</string>
+    <string name="trick_tilt_text">Tilt the phone to roll the ball to your answer.</string>
+    <string name="trick_breath">One breath</string>
+    <string name="trick_breath_text">Hold the circle for one breath first.</string>
+    <string name="trick_drag">Drag to the jar</string>
+    <string name="trick_drag_text">Drag your answer into the jar.</string>
+    <string name="annoy_offer_title">Your thumb knows this screen by heart</string>
+    <string name="annoy_offer_text">Annoying mode changes the screen at every unlock, so you have to look before you tap. Turn it off any time in Settings.</string>
+    <string name="annoy_offer_add">Turn on annoying mode</string>
+    <string name="annoy_offer_never">Don’t ask again</string>
+    <plurals name="annoy_offer_count">
+        <item quantity="one">%1$d of your last %2$d answers took less than a second.</item>
+        <item quantity="other">%1$d of your last %2$d answers took less than a second.</item>
+    </plurals>
 </resources>
