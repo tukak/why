@@ -206,7 +206,9 @@
     <string name="annoy_explain">Jedes Entsperren nutzt einen Trick, zufällig gewählt aus den eingeschalteten.</string>
     <string name="annoy_try">Testen</string>
     <string name="annoy_try_label">%1$s testen</string>
-    <string name="annoy_skipped">Mit TalkBack oder ohne Animationen fallen Treiben, Kiesel wählen und Kippen weg. Mit TalkBack auch Ins Glas ziehen. Mit mehr als 11 Gründen fallen Treiben, Kiesel wählen, Kippen und Ins Glas ziehen weg.</string>
+    <string name="annoy_skipped">Mit TalkBack oder ohne Animationen fallen Treiben, Kiesel wählen und Kippen weg. Mit TalkBack auch Ins Glas ziehen.</string>
+    <string name="annoy_limit">Geht mit bis zu %1$d Gründen.</string>
+    <string name="annoy_limit_over">Nicht verfügbar mit mehr als %1$d Gründen.</string>
     <string name="settings_annoy_on">An · %1$d von %2$d Tricks</string>
     <string name="settings_annoy_off">Aus. Ändert die Frage bei jedem Entsperren.</string>
     <string name="trick_group_timing">Timing</string>

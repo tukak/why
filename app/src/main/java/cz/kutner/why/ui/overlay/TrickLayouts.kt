@@ -243,16 +243,22 @@ private fun CompactAnswer(
         onTap = { ui.tap(choice) },
         modifier = modifier,
     ) {
-        Column(
-            Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(3.dp, Alignment.CenterVertically),
-        ) {
-            Pebble(choice.style, 18.dp)
-            FitText(ui.label(choice), MaterialTheme.typography.labelLarge, 15.sp, Modifier.weight(1f, fill = false))
+        BoxWithConstraints(Modifier.fillMaxSize()) {
+            // In a low tile the label needs all the height; the tile's color still shows the reason.
+            val pebble = maxHeight >= COMPACT_PEBBLE_MIN_HEIGHT
+            Column(
+                Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = if (pebble) 6.dp else 3.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(3.dp, Alignment.CenterVertically),
+            ) {
+                if (pebble) Pebble(choice.style, 18.dp)
+                FitText(ui.label(choice), MaterialTheme.typography.labelLarge, 15.sp, Modifier.weight(1f, fill = false))
+            }
         }
     }
 }
+
+private val COMPACT_PEBBLE_MIN_HEIGHT = 52.dp
 
 /** "Just habit" in the middle, the reasons in a ring around it. Used for up to [cz.kutner.why.domain.TrickSetup.CIRCLE_MAX_ANSWERS] answers. */
 @Composable
@@ -282,19 +288,20 @@ internal fun DriftAnswers(items: List<Choice>, seed: Long, ui: AnswerUi, modifie
     val speeds = remember(seed, items.size) { Random(seed).let { r -> items.map { r.nextInt(2_600, 5_200) to r.nextFloat() * 2f * PI.toFloat() } } }
     val transition = rememberInfiniteTransition(label = "drift")
     BoxWithConstraints(modifier.fillMaxSize()) {
-        val rows = ceil(items.size / 2f).toInt().coerceAtLeast(1)
-        val cellW = maxWidth / 2
+        val columns = gridColumns(items.size)
+        val rows = ceil(items.size / columns.toFloat()).toInt().coerceAtLeast(1)
+        val cellW = maxWidth / columns
         val cellH = maxHeight / rows
-        val swing = ((cellH - 48.dp) / 2).coerceIn(2.dp, 14.dp)
+        // Crowded cells swing less, so the answers keep their size.
+        val swing = ((cellH - 60.dp) / 2).coerceIn(2.dp, 14.dp)
         val w = cellW - swing * 2 - 6.dp
         val h = min(cellH - swing * 2 - 6.dp, 72.dp)
         val swingPx = with(LocalDensity.current) { swing.toPx() }
         items.forEachIndexed { i, choice ->
             val (duration, phase) = speeds[i]
             val t by transition.animateFloat(0f, 2f * PI.toFloat(), infiniteRepeatable(tween(duration, easing = LinearEasing), RepeatMode.Restart), label = "drift$i")
-            val lone = i == items.lastIndex && items.size % 2 == 1
-            val x = if (lone) maxWidth / 2 - w / 2 else cellW * (i % 2) + (cellW - w) / 2
-            val y = cellH * (i / 2) + (cellH - h) / 2
+            val x = cellX(i, items.size, columns, cellW) + (cellW - w) / 2
+            val y = cellH * (i / columns) + (cellH - h) / 2
             CompactAnswer(
                 choice,
                 ui,
@@ -305,6 +312,17 @@ internal fun DriftAnswers(items: List<Choice>, seed: Long, ui: AnswerUi, modifie
             )
         }
     }
+}
+
+/** Two columns keep answers large; with many answers three columns keep them tall enough to read. */
+private fun gridColumns(answers: Int): Int = if (answers > 12) 3 else 2
+
+/** The left edge of cell [i]; a last row that is not full is centered. */
+private fun cellX(i: Int, count: Int, columns: Int, cellW: Dp): Dp {
+    val lastRowStart = (count - 1) / columns * columns
+    val inLastRow = count - lastRowStart
+    val shift = if (i >= lastRowStart && inLastRow < columns) cellW * (columns - inLastRow) / 2 else 0.dp
+    return cellW * (i % columns) + shift
 }
 
 private val pebbleOutlines = listOf(
@@ -389,8 +407,8 @@ internal fun TiltAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
     BoxWithConstraints(modifier.fillMaxSize()) {
         val leftCount = ceil(items.size / 2f).toInt().coerceAtLeast(1)
         val rows = leftCount
-        val w = min(maxWidth * 0.34f, 132.dp)
-        val h = min(64.dp, maxHeight / rows - 10.dp).coerceAtLeast(34.dp)
+        val w = min(maxWidth * 0.36f, 140.dp)
+        val h = min(64.dp, maxHeight / rows - 4.dp).coerceAtLeast(34.dp)
         val rowH = maxHeight / rows
         val places = items.mapIndexed { i, _ ->
             val left = i < leftCount
@@ -451,10 +469,12 @@ internal fun DragAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
         val jarW = min(maxWidth * 0.55f, 220.dp)
         val jarH = min(maxHeight * 0.28f, 110.dp)
         val area = maxHeight - jarH - 16.dp
-        val rows = ceil(items.size / 2f).toInt().coerceAtLeast(1)
+        val columns = gridColumns(items.size)
+        val rows = ceil(items.size / columns.toFloat()).toInt().coerceAtLeast(1)
+        val cellW = maxWidth / columns
         val cellH = area / rows
         val h = min(56.dp, cellH - 8.dp).coerceAtLeast(34.dp)
-        val w = maxWidth / 2 - 10.dp
+        val w = cellW - 10.dp
         val density = LocalDensity.current
         val jar = with(density) { Rect(Offset(((maxWidth - jarW) / 2).toPx(), (maxHeight - jarH).toPx()), Size(jarW.toPx(), jarH.toPx())) }
         Box(
@@ -467,9 +487,8 @@ internal fun DragAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
             Text(stringResource(R.string.prompt_drop_here), style = MaterialTheme.typography.labelLarge, color = colors.onSurfaceVariant)
         }
         items.forEachIndexed { i, choice ->
-            val lone = i == items.lastIndex && items.size % 2 == 1
-            val x = if (lone) (maxWidth - w) / 2 else (maxWidth / 2) * (i % 2) + 5.dp
-            val y = cellH * (i / 2) + (cellH - h) / 2
+            val x = cellX(i, items.size, columns, cellW) + 5.dp
+            val y = cellH * (i / columns) + (cellH - h) / 2
             val home = with(density) { Offset(x.toPx(), y.toPx()) }
             val half = with(density) { Offset(w.toPx() / 2, h.toPx() / 2) }
             val drag = remember { Animatable(Offset.Zero, Offset.VectorConverter) }

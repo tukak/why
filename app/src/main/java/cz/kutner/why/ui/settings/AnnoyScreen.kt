@@ -56,12 +56,15 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
-    val repo = LocalContext.current.container.settings
+    val app = LocalContext.current.container
+    val repo = app.settings
     val settings by repo.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
+    val reasons by app.unlocks.reasons.collectAsStateWithLifecycle(initialValue = emptyList())
+    val answers = reasons.count { !it.archived } + 1
     val scope = rememberCoroutineScope()
     val colors = MaterialTheme.colorScheme
     val on = settings.annoyingMode
-    val total = Trick.entries.size
+    val total = Trick.entries.count { answers <= it.maxAnswers }
 
     Column(
         Modifier
@@ -90,7 +93,7 @@ fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
                 Column(Modifier.weight(1f)) {
                     Text(stringResource(if (on) R.string.annoy_on else R.string.annoy_off), style = MaterialTheme.typography.titleLarge)
                     Text(
-                        if (on) stringResource(R.string.annoy_count, settings.tricksOn.size, total) else stringResource(R.string.annoy_turn_on, total),
+                        if (on) stringResource(R.string.annoy_count, settings.tricksOn.count { answers <= it.maxAnswers }, total) else stringResource(R.string.annoy_turn_on, total),
                         style = MaterialTheme.typography.bodySmall,
                         color = colors.onTertiaryContainer,
                     )
@@ -116,6 +119,7 @@ fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
                             trick = trick,
                             checked = trick in settings.tricksOn,
                             enabled = on,
+                            fits = answers <= trick.maxAnswers,
                             onCheck = { scope.launch { repo.setTrickOn(trick, it) } },
                             onTry = { onTry(trick) },
                         )
@@ -129,16 +133,24 @@ fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
 }
 
 @Composable
-private fun TrickRow(trick: Trick, checked: Boolean, enabled: Boolean, onCheck: (Boolean) -> Unit, onTry: () -> Unit) {
+private fun TrickRow(trick: Trick, checked: Boolean, enabled: Boolean, fits: Boolean, onCheck: (Boolean) -> Unit, onTry: () -> Unit) {
     val name = stringResource(trick.title)
     Row(Modifier.padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Column(Modifier.weight(1f)) {
             Text(name, style = MaterialTheme.typography.labelLarge)
             Text(stringResource(trick.description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (trick.maxAnswers != Int.MAX_VALUE) {
+                val maxReasons = trick.maxAnswers - 1
+                Text(
+                    if (fits) stringResource(R.string.annoy_limit, maxReasons) else stringResource(R.string.annoy_limit_over, maxReasons),
+                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
         val tryLabel = stringResource(R.string.annoy_try_label, name)
-        FilledTonalButton(onClick = onTry, modifier = Modifier.semantics { contentDescription = tryLabel }) { Text(stringResource(R.string.annoy_try)) }
-        Switch(checked = checked, enabled = enabled, onCheckedChange = onCheck, modifier = Modifier.semantics { contentDescription = name })
+        FilledTonalButton(onClick = onTry, enabled = fits, modifier = Modifier.semantics { contentDescription = tryLabel }) { Text(stringResource(R.string.annoy_try)) }
+        Switch(checked = checked && fits, enabled = enabled && fits, onCheckedChange = onCheck, modifier = Modifier.semantics { contentDescription = name })
     }
 }
 

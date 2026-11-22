@@ -226,7 +226,9 @@
     <string name="annoy_explain">Každé odomknutie použije jeden trik, náhodne vybraný zo zapnutých.</string>
     <string name="annoy_try">Skúsiť</string>
     <string name="annoy_try_label">Skúsiť: %1$s</string>
-    <string name="annoy_skipped">S TalkBackom alebo vypnutými animáciami sa vynechá Plávanie, Vyber kamienok a Nakloň telefón. S TalkBackom aj Pretiahni do pohára. S viac ako 11 dôvodmi sa vynechá Plávanie, Vyber kamienok, Nakloň telefón a Pretiahni do pohára.</string>
+    <string name="annoy_skipped">S TalkBackom alebo vypnutými animáciami sa vynechá Plávanie, Vyber kamienok a Nakloň telefón. S TalkBackom aj Pretiahni do pohára.</string>
+    <string name="annoy_limit">Funguje s najviac %1$d dôvodmi.</string>
+    <string name="annoy_limit_over">Nedostupné s viac ako %1$d dôvodmi.</string>
     <string name="settings_annoy_on">Zapnuté · %1$d z %2$d trikov</string>
     <string name="settings_annoy_off">Vypnuté. Mení otázku pri každom odomknutí.</string>
     <string name="trick_group_timing">Načasovanie</string>

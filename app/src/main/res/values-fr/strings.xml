@@ -216,7 +216,9 @@
     <string name="annoy_explain">Chaque déverrouillage utilise une astuce, choisie au hasard parmi celles qui sont activées.</string>
     <string name="annoy_try">Essayer</string>
     <string name="annoy_try_label">Essayer : %1$s</string>
-    <string name="annoy_skipped">Avec TalkBack ou sans animations, Dérive, Choisis un galet et Incline pour répondre sont ignorés. Avec TalkBack, Glisse dans le bocal aussi. Avec plus de 11 raisons, Dérive, Choisis un galet, Incline pour répondre et Glisse dans le bocal sont ignorés.</string>
+    <string name="annoy_skipped">Avec TalkBack ou sans animations, Dérive, Choisis un galet et Incline pour répondre sont ignorés. Avec TalkBack, Glisse dans le bocal aussi.</string>
+    <string name="annoy_limit">Fonctionne avec %1$d raisons au plus.</string>
+    <string name="annoy_limit_over">Indisponible avec plus de %1$d raisons.</string>
     <string name="settings_annoy_on">Activé · %1$d astuces sur %2$d</string>
     <string name="settings_annoy_off">Désactivé. Change la question à chaque déverrouillage.</string>
     <string name="trick_group_timing">Temps</string>

@@ -60,9 +60,9 @@ class TricksTest {
 
     @Test
     fun `layouts with fixed places are skipped when the answers do not fit`() {
-        repeat(500) { seed -> assertTrue(pick(answers = 13, seed = seed)!!.maxAnswers >= 13) }
-        // The default 6 reasons and up to 11 fit every layout.
-        assertEquals(Trick.entries.toSet(), (0 until 2_000).mapNotNull { pick(answers = 12, seed = it) }.toSet())
+        repeat(500) { seed -> assertTrue(pick(answers = 18, seed = seed)!!.maxAnswers >= 18) }
+        // The default 6 reasons and up to 16 fit every layout.
+        assertEquals(Trick.entries.toSet(), (0 until 2_000).mapNotNull { pick(answers = 17, seed = it) }.toSet())
     }
 
     @Test

@@ -5,7 +5,7 @@ import kotlin.random.Random
 enum class TrickGroup { Timing, Layout, Words, Body }
 
 /** Layouts that place every answer on screen at once get too small above this many answers on a small phone. */
-const val MAX_PLACED = 12
+const val MAX_PLACED = 17
 
 /**
  * One way annoying mode changes the question screen, so a tap from habit does not land.

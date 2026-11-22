@@ -216,7 +216,9 @@
     <string name="annoy_explain">Cada desbloqueio usa um truque, escolhido ao acaso entre os ativados.</string>
     <string name="annoy_try">Testar</string>
     <string name="annoy_try_label">Testar %1$s</string>
-    <string name="annoy_skipped">Com o TalkBack ou sem animações, Flutuando, Escolha uma pedrinha e Incline para responder ficam de fora. Com o TalkBack, Arraste para o pote também. Com mais de 11 motivos, Flutuando, Escolha uma pedrinha, Incline para responder e Arraste para o pote ficam de fora.</string>
+    <string name="annoy_skipped">Com o TalkBack ou sem animações, Flutuando, Escolha uma pedrinha e Incline para responder ficam de fora. Com o TalkBack, Arraste para o pote também.</string>
+    <string name="annoy_limit">Funciona com até %1$d motivos.</string>
+    <string name="annoy_limit_over">Indisponível com mais de %1$d motivos.</string>
     <string name="settings_annoy_on">Ativado · %1$d de %2$d truques</string>
     <string name="settings_annoy_off">Desativado. Muda a pergunta a cada desbloqueio.</string>
     <string name="trick_group_timing">Tempo</string>
