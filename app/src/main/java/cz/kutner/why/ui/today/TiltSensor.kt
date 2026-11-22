@@ -24,10 +24,15 @@ class TiltSensor(private val onChange: () -> Unit) : SensorEventListener {
         private set
     var rotation = Surface.ROTATION_0
 
+    /** False until the first sensor event; before it, [ax] and [ay] are only the start values. */
+    var hasReading = false
+        private set
+
     private var reportedX = ax
     private var reportedY = ay
 
     override fun onSensorChanged(event: SensorEvent) {
+        hasReading = true
         val x = event.values[0]
         val y = event.values[1]
         when (rotation) {

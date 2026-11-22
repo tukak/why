@@ -231,7 +231,7 @@ private fun CompactAnswer(
     choice: Choice,
     ui: AnswerUi,
     modifier: Modifier,
-    shape: Shape = RoundedCornerShape(20.dp),
+    shape: Shape = COMPACT_SHAPE,
     tappable: Boolean = true,
 ) {
     AnswerSurface(
@@ -259,6 +259,7 @@ private fun CompactAnswer(
 }
 
 private val COMPACT_PEBBLE_MIN_HEIGHT = 52.dp
+private val COMPACT_SHAPE = RoundedCornerShape(20.dp)
 
 /** "Just habit" in the middle, the reasons in a ring around it. Used for up to [cz.kutner.why.domain.TrickSetup.CIRCLE_MAX_ANSWERS] answers. */
 @Composable
@@ -307,12 +308,20 @@ internal fun DriftAnswers(items: List<Choice>, seed: Long, ui: AnswerUi, modifie
                 ui,
                 Modifier
                     .offset(x, y)
-                    .offset { IntOffset((swingPx * sin(t + phase)).roundToInt(), (swingPx * cos(t * 1.3f + phase)).roundToInt()) }
+                    .offset { driftOffset(t, phase).let { (dx, dy) -> IntOffset((swingPx * dx).roundToInt(), (swingPx * dy).roundToInt()) } }
                     .size(w, h),
             )
         }
     }
 }
+
+/** Level moves toward the current tilt over about [LEVEL_SECONDS], so a held angle stops pulling and a change of angle pulls. */
+internal fun followLevel(level: Offset, reading: Offset, dt: Float): Offset = level + (reading - level) * (dt / LEVEL_SECONDS).coerceAtMost(1f)
+
+private const val LEVEL_SECONDS = 2f
+
+/** A figure eight with radius 1. Whole-number frequencies close the loop at t = 2π, where the animation restarts. */
+internal fun driftOffset(t: Float, phase: Float): Pair<Float, Float> = sin(t + phase) to cos(2f * t + phase)
 
 /** Two columns keep answers large; with many answers three columns keep them tall enough to read. */
 private fun gridColumns(answers: Int): Int = if (answers > 12) 3 else 2
@@ -398,7 +407,7 @@ internal fun PebbleJar(items: List<Choice>, seed: Long, ui: AnswerUi, modifier: 
     }
 }
 
-/** A ball rolls with the phone's tilt; the answer it touches is the answer. The tilt at the start counts as level. */
+/** A ball rolls with the phone's tilt; the answer it touches is the answer. The way the phone is held counts as level. */
 @Composable
 internal fun TiltAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier = Modifier) {
     val sensor = rememberTiltSensor {}
@@ -427,13 +436,16 @@ internal fun TiltAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
             var velocity = Offset.Zero
             var position = Offset(bounds.width / 2, bounds.height / 2)
             delay(300)
-            val level = Offset(sensor.ax, sensor.ay)
+            while (!sensor.hasReading) withFrameNanos { }
+            var level = Offset(sensor.ax, sensor.ay)
             var last = withFrameNanos { it }
             while (true) {
                 val now = withFrameNanos { it }
                 val dt = ((now - last) / 1e9f).coerceAtMost(0.05f)
                 last = now
-                velocity = (velocity + (Offset(sensor.ax, sensor.ay) - level) * (pull * dt)) * (1f - 1.5f * dt)
+                val reading = Offset(sensor.ax, sensor.ay)
+                level = followLevel(level, reading, dt)
+                velocity = (velocity + (reading - level) * (pull * dt)) * (1f - 1.5f * dt)
                 position += velocity * dt
                 if (position.x < r || position.x > bounds.width - r) velocity = velocity.copy(x = -velocity.x * 0.5f)
                 if (position.y < r || position.y > bounds.height - r) velocity = velocity.copy(y = -velocity.y * 0.5f)
@@ -500,7 +512,10 @@ internal fun DragAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
                     .offset(x, y)
                     .offset { IntOffset(drag.value.x.roundToInt(), drag.value.y.roundToInt()) }
                     .zIndex(if (drag.value != Offset.Zero) 1f else 0f)
-                    .graphicsLayer { shadowElevation = if (drag.value != Offset.Zero) 12f else 0f }
+                    .graphicsLayer {
+                        shadowElevation = if (drag.value != Offset.Zero) 12f else 0f
+                        shape = COMPACT_SHAPE
+                    }
                     .pointerInput(Unit) {
                         detectDragGestures(
                             onDrag = { change, amount ->
