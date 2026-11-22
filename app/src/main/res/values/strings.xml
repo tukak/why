@@ -217,7 +217,7 @@
     <string name="trick_group_words">Words</string>
     <string name="trick_group_body">Body</string>
     <string name="trick_pause">Pause</string>
-    <string name="trick_pause_text">The answers wake up after 1–3 s.</string>
+    <string name="trick_pause_text">The answers wake up after 1–3 s.</string>
     <string name="trick_stagger">Staggered wake-up</string>
     <string name="trick_stagger_text">Each answer wakes up on its own. Just habit first.</string>
     <string name="trick_early_reset">Early tap resets</string>

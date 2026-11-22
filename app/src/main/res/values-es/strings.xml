@@ -75,7 +75,7 @@
     <string name="week_insight_longer">Los desbloqueos por costumbre duran %.1f veces lo que duran los desbloqueos con un motivo.</string>
     <string name="week_insight_shorter">Los desbloqueos por costumbre duran menos que los que tienen un motivo. Buena señal.</string>
     <string name="week_insight_balanced">Los desbloqueos por costumbre duran más o menos lo mismo que los que tienen un motivo.</string>
-    <string name="week_insight_empty">Responde algunas preguntas. Aquí aparecerán los patrones.</string>
+    <string name="week_insight_empty">Responde algunas preguntas. Aquí verás cómo usas el teléfono.</string>
     <string name="week_with_reason">con un motivo</string>
     <string name="week_daily">Frascos diarios</string>
     <string name="week_time">En qué se fue el tiempo</string>
@@ -146,7 +146,7 @@
     <string name="onboarding_text">Una pregunta rápida cada vez que tomas el teléfono. Descubre qué te atrae.</string>
     <string name="onboarding_unlocks">Detectar desbloqueos</string>
     <string name="onboarding_unlocks_hint">Integrado. No necesita permiso.</string>
-    <string name="onboarding_overlay">Preguntar sobre otras apps</string>
+    <string name="onboarding_overlay">Preguntar encima de otras apps</string>
     <string name="onboarding_overlay_hint">Necesita “Mostrar sobre otras aplicaciones”.</string>
     <string name="onboarding_notification">Notificaciones</string>
     <string name="onboarding_notification_hint">Una notificación discreta la mantiene activa.</string>
@@ -156,9 +156,9 @@
     <string name="onboarding_ready">Listo</string>
     <string name="onboarding_allow">Permitir</string>
     <string name="onboarding_privacy">Todo se queda en este teléfono. Sin acceso a internet. Nunca lee qué apps usas.</string>
-    <string name="onboarding_permission_lost">Android desactivó “Preguntar sobre otras apps”. Vuelve a permitirlo para que ¿Por qué? siga preguntando.</string>
+    <string name="onboarding_permission_lost">Android desactivó “Preguntar encima de otras apps”. Vuelve a permitirlo para que ¿Por qué? siga preguntando.</string>
     <string name="onboarding_start">Empecemos</string>
-    <string name="onboarding_needs_overlay">Permite “Preguntar sobre otras apps” para empezar.</string>
+    <string name="onboarding_needs_overlay">Permite “Preguntar encima de otras apps” para empezar.</string>
 
     <plurals name="offer_text">
         <item quantity="one">Escribiste esto %d vez. ¿Lo añades a tus motivos para que la próxima vez sea un solo toque?</item>
@@ -175,7 +175,7 @@
     <string name="stopped_channel">Preguntas detenidas</string>
     <string name="stopped_title">Las preguntas están desactivadas</string>
     <string name="stopped_text">Android detuvo la app. Toca para volver a activar las preguntas.</string>
-    <string name="service_text_no_overlay">Ahora no puede preguntar. Toca para permitir “Preguntar sobre otras apps”.</string>
+    <string name="service_text_no_overlay">Ahora no puede preguntar. Toca para permitir “Preguntar encima de otras apps”.</string>
     <string name="answer_app_check">Mirar ¿Por qué?</string>
     <string name="prompt_open_app">Abrir ¿Por qué?</string>
     <string name="reasons_merge">Unir con otro motivo</string>
@@ -191,10 +191,10 @@
 
     <!-- Annoying mode -->
     <string name="prompt_too_fast">Demasiado rápido. Espera a las respuestas.</string>
-    <string name="prompt_breath_hold">Mantén el círculo</string>
+    <string name="prompt_breath_hold">Mantén pulsado el círculo</string>
     <string name="prompt_breath_in">Inspira</string>
     <string name="prompt_breath_out">Espira</string>
-    <string name="prompt_breath_again">Mantén durante toda la respiración.</string>
+    <string name="prompt_breath_again">Mantén pulsado durante toda la respiración.</string>
     <string name="prompt_drop_here">Suelta aquí</string>
     <string name="prompt_type_label">Escribe tu motivo</string>
     <string name="prompt_type_placeholder">Escribe 2 letras</string>
@@ -205,7 +205,7 @@
     <string name="prompt_confirm_no">No, volver</string>
     <string name="prompt_question_1">¿Puede esperar?</string>
     <string name="prompt_question_2">¿Qué harás en los próximos 2 minutos?</string>
-    <string name="prompt_question_3">¿Es el mejor uso de este momento?</string>
+    <string name="prompt_question_3">¿Es lo mejor que puedes hacer ahora?</string>
     <string name="prompt_question_4">¿Qué estás buscando?</string>
     <string name="prompt_new_trick">Nuevo: %1$s. %2$s</string>
     <string name="annoy_title">Modo molesto</string>
@@ -213,7 +213,7 @@
     <string name="annoy_off">Desactivado</string>
     <string name="annoy_count">%1$d de %2$d trucos activados</string>
     <string name="annoy_turn_on">Actívalo para usar los %1$d trucos.</string>
-    <string name="annoy_explain">Cada desbloqueo usa un truco, elegido al azar entre los activados.</string>
+    <string name="annoy_explain">Al desbloquear, la app elige al azar uno de los trucos activados.</string>
     <string name="annoy_try">Probar</string>
     <string name="annoy_try_label">Probar %1$s</string>
     <string name="annoy_limit">Funciona con hasta %1$d motivos.</string>
@@ -227,24 +227,24 @@
     <string name="trick_group_words">Palabras</string>
     <string name="trick_group_body">Cuerpo</string>
     <string name="trick_pause">Pausa</string>
-    <string name="trick_pause_text">Las respuestas despiertan tras 1–3 s.</string>
-    <string name="trick_stagger">Despertar escalonado</string>
-    <string name="trick_stagger_text">Cada respuesta despierta por su cuenta. Por costumbre, la primera.</string>
-    <string name="trick_early_reset">Tocar antes reinicia</string>
+    <string name="trick_pause_text">Las respuestas se activan tras 1–3 s.</string>
+    <string name="trick_stagger">Respuestas por turnos</string>
+    <string name="trick_stagger_text">Las respuestas se activan una a una. “Por costumbre” va primero.</string>
+    <string name="trick_early_reset">Toque anticipado reinicia la pausa</string>
     <string name="trick_early_reset_text">Espera a las respuestas. Un toque demasiado pronto reinicia la pausa.</string>
-    <string name="trick_hold">Mantén para elegir</string>
+    <string name="trick_hold">Mantén pulsado para elegir</string>
     <string name="trick_hold_text">Mantén pulsada una respuesta.</string>
     <string name="trick_second_check">Segunda confirmación</string>
     <string name="trick_second_check_text">Confirmas tu respuesta una vez más.</string>
     <string name="trick_shuffle">Orden aleatorio</string>
     <string name="trick_shuffle_text">Las respuestas no se ordenan según la hora del día.</string>
-    <string name="trick_habit_trap">Trampa de costumbre</string>
-    <string name="trick_habit_trap_text">Por costumbre está donde más tocas.</string>
+    <string name="trick_habit_trap">Trampa del hábito</string>
+    <string name="trick_habit_trap_text">“Por costumbre” aparece donde más tocas.</string>
     <string name="trick_new_grid">Nueva cuadrícula</string>
     <string name="trick_new_grid_text">3 columnas, una lista o un círculo.</string>
     <string name="trick_wild">Formas y tamaños</string>
-    <string name="trick_wild_text">Formas, tamaños, colores y letras locas. Lee antes de tocar.</string>
-    <string name="trick_drift">A la deriva</string>
+    <string name="trick_wild_text">Formas, tamaños, colores y tipos de letra locos. Lee antes de tocar.</string>
+    <string name="trick_drift">Respuestas flotantes</string>
     <string name="trick_drift_text">Las respuestas flotan despacio. Apunta bien.</string>
     <string name="trick_pebbles">Elige un guijarro</string>
     <string name="trick_pebbles_text">Las respuestas caen al frasco. Toca el guijarro con tu motivo.</string>
@@ -255,9 +255,9 @@
     <string name="trick_question">Otra pregunta</string>
     <string name="trick_question_text">La pregunta cambia. Léela.</string>
     <string name="trick_tilt">Inclina para responder</string>
-    <string name="trick_tilt_text">Inclina el teléfono para rodar la bola hasta tu respuesta.</string>
+    <string name="trick_tilt_text">Inclina el teléfono para que la bola ruede hasta tu respuesta.</string>
     <string name="trick_breath">Una respiración</string>
-    <string name="trick_breath_text">Primero mantén el círculo durante una respiración.</string>
+    <string name="trick_breath_text">Primero mantén pulsado el círculo durante una respiración.</string>
     <string name="trick_drag">Arrastra al frasco</string>
     <string name="trick_drag_text">Arrastra tu respuesta al frasco.</string>
     <string name="annoy_offer_title">Tu pulgar se sabe esta pantalla de memoria</string>

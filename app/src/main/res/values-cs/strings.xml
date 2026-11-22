@@ -43,10 +43,10 @@
 
     <string name="today_title">Dnešní sklenice</string>
     <plurals name="today_unlocks">
-        <item quantity="one">odemknutí zatím</item>
-        <item quantity="few">odemknutí zatím</item>
-        <item quantity="many">odemknutí zatím</item>
-        <item quantity="other">odemknutí zatím</item>
+        <item quantity="one">odemknutí dnes</item>
+        <item quantity="few">odemknutí dnes</item>
+        <item quantity="many">odemknutí dnes</item>
+        <item quantity="other">odemknutí dnes</item>
     </plurals>
     <plurals name="today_fewer">
         <item quantity="one">%d méně než obvykle</item>
@@ -90,7 +90,7 @@
 
     <string name="reasons_title">Důvody</string>
     <string name="reasons_subtitle">Nejčastější nahoře. Při odemknutí je řadím podle denní doby.</string>
-    <string name="reasons_subtitle_annoy">Nejpoužívanější nahoře. Při odemčení může otravný režim změnit jejich pořadí a vzhled.</string>
+    <string name="reasons_subtitle_annoy">Nejčastější nahoře. Při odemknutí může otravný režim změnit jejich pořadí a vzhled.</string>
     <string name="reasons_count">%d×</string>
     <string name="reasons_edit">Upravit %1$s</string>
     <string name="reasons_edit_title">Upravit důvod</string>
@@ -145,7 +145,7 @@
     <string name="reflection_screen">%s na obrazovce</string>
     <string name="reflection_as_usual">Stejně jako obvykle</string>
     <string name="settings_background">Na pozadí</string>
-    <string name="settings_battery_ok">Baterie je bez omezení.</string>
+    <string name="settings_battery_ok">Využití baterie je bez omezení.</string>
     <string name="settings_free_title">Zdarma. Bez reklam. Bez sledování.</string>
     <string name="settings_free_text">Jestli ti aplikace pomáhá, mně pomůže káva.</string>
     <string name="settings_coffee">Kup mi kávu</string>
@@ -155,7 +155,7 @@
     <string name="onboarding_unlocks">Rozpoznat odemknutí</string>
     <string name="onboarding_unlocks_hint">Vestavěné. Bez oprávnění.</string>
     <string name="onboarding_overlay">Ptát se přes jiné aplikace</string>
-    <string name="onboarding_overlay_hint">Potřebuje „Zobrazení přes ostatní aplikace“.</string>
+    <string name="onboarding_overlay_hint">Potřebuje „Zobrazení přes jiné aplikace“.</string>
     <string name="onboarding_notification">Oznámení</string>
     <string name="onboarding_notification_hint">Tiché oznámení ji drží v chodu.</string>
     <string name="onboarding_battery">Nechat běžet na pozadí</string>
@@ -169,10 +169,10 @@
     <string name="onboarding_needs_overlay">Pro začátek povol „Ptát se přes jiné aplikace“.</string>
 
     <plurals name="offer_text">
-        <item quantity="one">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
-        <item quantity="few">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
-        <item quantity="many">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
-        <item quantity="other">Tahle odpověď se objevila už %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+        <item quantity="one">Tahle odpověď už byla zadaná %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+        <item quantity="few">Tahle odpověď už byla zadaná %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+        <item quantity="many">Tahle odpověď už byla zadaná %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
+        <item quantity="other">Tahle odpověď už byla zadaná %d×. Přidat ji mezi důvody, ať příště stačí klepnout?</item>
     </plurals>
     <string name="offer_add">Přidat mezi důvody</string>
     <string name="offer_not_now">Teď ne</string>
@@ -215,7 +215,7 @@
     <string name="prompt_confirm_no">Ne, zpět</string>
     <string name="prompt_question_1">Počká to?</string>
     <string name="prompt_question_2">Co uděláš v příštích 2 minutách?</string>
-    <string name="prompt_question_3">Je tohle nejlepší využití téhle chvíle?</string>
+    <string name="prompt_question_3">Je to to nejlepší, co teď můžeš dělat?</string>
     <string name="prompt_question_4">Co hledáš?</string>
     <string name="prompt_new_trick">Novinka: %1$s. %2$s</string>
     <string name="annoy_title">Otravný režim</string>
@@ -223,25 +223,25 @@
     <string name="annoy_off">Vypnuto</string>
     <string name="annoy_count">Zapnuto %1$d z %2$d triků</string>
     <string name="annoy_turn_on">Zapni ho a používej všech %1$d triků.</string>
-    <string name="annoy_explain">Každé odemčení použije jeden trik, náhodně vybraný ze zapnutých.</string>
+    <string name="annoy_explain">Při každém odemknutí se náhodně použije jeden ze zapnutých triků.</string>
     <string name="annoy_try">Zkusit</string>
     <string name="annoy_try_label">Zkusit: %1$s</string>
-    <string name="annoy_limit">Funguje s nejvýše %1$d důvody.</string>
-    <string name="annoy_limit_over">Nedostupné s více než %1$d důvody.</string>
+    <string name="annoy_limit">Funguje, pokud máš nejvýše %1$d důvodů.</string>
+    <string name="annoy_limit_over">Nefunguje, pokud máš víc než %1$d důvodů.</string>
     <string name="annoy_off_screen_reader">Nedostupné se zapnutým TalkBackem.</string>
     <string name="annoy_off_animations">Nedostupné s vypnutými animacemi.</string>
     <string name="settings_annoy_on">Zapnuto · %1$d z %2$d triků</string>
-    <string name="settings_annoy_off">Vypnuto. Mění otázku při každém odemčení.</string>
+    <string name="settings_annoy_off">Vypnuto. Při každém odemknutí mění otázku.</string>
     <string name="trick_group_timing">Načasování</string>
     <string name="trick_group_layout">Rozložení</string>
     <string name="trick_group_words">Slova</string>
     <string name="trick_group_body">Tělo</string>
     <string name="trick_pause">Pauza</string>
-    <string name="trick_pause_text">Odpovědi se probudí po 1–3 s.</string>
+    <string name="trick_pause_text">Odpovědi se probudí po 1–3 s.</string>
     <string name="trick_stagger">Postupné probouzení</string>
-    <string name="trick_stagger_text">Každá odpověď se probudí sama. Jen ze zvyku jako první.</string>
-    <string name="trick_early_reset">Brzké klepnutí vrací pauzu</string>
-    <string name="trick_early_reset_text">Počkej na odpovědi. Klepnutí moc brzy spustí pauzu znovu.</string>
+    <string name="trick_stagger_text">Každá odpověď se probudí v jinou chvíli. „Jen ze zvyku“ jako první.</string>
+    <string name="trick_early_reset">Brzké klepnutí spustí pauzu znovu</string>
+    <string name="trick_early_reset_text">Počkej na odpovědi. Když klepneš moc brzy, pauza začne znovu.</string>
     <string name="trick_hold">Podrž a vyber</string>
     <string name="trick_hold_text">Odpověď stiskni a podrž.</string>
     <string name="trick_second_check">Druhé potvrzení</string>
@@ -249,34 +249,34 @@
     <string name="trick_shuffle">Náhodné pořadí</string>
     <string name="trick_shuffle_text">Odpovědi nejsou seřazené podle denní doby.</string>
     <string name="trick_habit_trap">Past na zvyk</string>
-    <string name="trick_habit_trap_text">Jen ze zvyku je tam, kam klepeš nejčastěji.</string>
+    <string name="trick_habit_trap_text">„Jen ze zvyku“ je tam, kam klepeš nejčastěji.</string>
     <string name="trick_new_grid">Nová mřížka</string>
     <string name="trick_new_grid_text">3 sloupce, seznam nebo kruh.</string>
     <string name="trick_wild">Tvary a velikosti</string>
-    <string name="trick_wild_text">Divoké tvary, velikosti, barvy a písma. Než klepneš, čti.</string>
-    <string name="trick_drift">Plavání</string>
-    <string name="trick_drift_text">Odpovědi pomalu plavou. Miř dobře.</string>
+    <string name="trick_wild_text">Divoké tvary, velikosti, barvy a písma. Čti, než klepneš.</string>
+    <string name="trick_drift">Plovoucí odpovědi</string>
+    <string name="trick_drift_text">Odpovědi pomalu plují. Miř dobře.</string>
     <string name="trick_pebbles">Vyber oblázek</string>
     <string name="trick_pebbles_text">Odpovědi padají do sklenice. Klepni na oblázek se svým důvodem.</string>
     <string name="trick_scramble">Přeházená písmena</string>
-    <string name="trick_scramble_text">Písmena se zamíchají a pak jdou přečíst.</string>
+    <string name="trick_scramble_text">Písmena se zamíchají a pak se dají přečíst.</string>
     <string name="trick_type_it">Napiš to</string>
     <string name="trick_type_it_text">Napiš 2 písmena a najdi svou odpověď.</string>
     <string name="trick_question">Jiná otázka</string>
     <string name="trick_question_text">Otázka se mění. Přečti si ji.</string>
     <string name="trick_tilt">Nakloň telefon</string>
-    <string name="trick_tilt_text">Nakláněním telefonu dokutálej kuličku ke své odpovědi.</string>
-    <string name="trick_breath">Jeden nádech</string>
-    <string name="trick_breath_text">Nejdřív podrž kruh po jeden nádech.</string>
+    <string name="trick_tilt_text">Nakloň telefon a dokutálej kuličku ke své odpovědi.</string>
+    <string name="trick_breath">Nádech a výdech</string>
+    <string name="trick_breath_text">Nejdřív drž kruh po celý nádech i výdech.</string>
     <string name="trick_drag">Přetáhni do sklenice</string>
     <string name="trick_drag_text">Přetáhni svou odpověď do sklenice.</string>
     <string name="annoy_offer_title">Tvůj palec zná tuhle obrazovku nazpaměť</string>
-    <string name="annoy_offer_text">Otravný režim mění obrazovku při každém odemčení, takže se musíš podívat, než klepneš. Kdykoli ho vypneš v Nastavení.</string>
+    <string name="annoy_offer_text">Otravný režim mění obrazovku při každém odemknutí, takže se musíš podívat, než klepneš. Kdykoli ho můžeš vypnout v Nastavení.</string>
     <string name="annoy_offer_add">Zapnout otravný režim</string>
     <string name="annoy_offer_never">Už se neptat</string>
     <plurals name="annoy_offer_count">
         <item quantity="one">%1$d z tvých posledních %2$d odpovědí trvalo méně než sekundu.</item>
-        <item quantity="few">%1$d z tvých posledních %2$d odpovědí trvalo méně než sekundu.</item>
+        <item quantity="few">%1$d z tvých posledních %2$d odpovědí trvaly méně než sekundu.</item>
         <item quantity="many">%1$d z tvých posledních %2$d odpovědí trvalo méně než sekundu.</item>
         <item quantity="other">%1$d z tvých posledních %2$d odpovědí trvalo méně než sekundu.</item>
     </plurals>

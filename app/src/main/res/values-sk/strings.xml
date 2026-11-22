@@ -43,10 +43,10 @@
 
     <string name="today_title">Dnešný pohár</string>
     <plurals name="today_unlocks">
-        <item quantity="one">odomknutie zatiaľ</item>
-        <item quantity="few">odomknutia zatiaľ</item>
-        <item quantity="many">odomknutia zatiaľ</item>
-        <item quantity="other">odomknutí zatiaľ</item>
+        <item quantity="one">odomknutie dnes</item>
+        <item quantity="few">odomknutia dnes</item>
+        <item quantity="many">odomknutia dnes</item>
+        <item quantity="other">odomknutí dnes</item>
     </plurals>
     <plurals name="today_fewer">
         <item quantity="one">o %d menej ako zvyčajne</item>
@@ -90,7 +90,7 @@
 
     <string name="reasons_title">Dôvody</string>
     <string name="reasons_subtitle">Najpoužívanejšie navrchu. Pri odomknutí sa zoradia podľa dennej doby.</string>
-    <string name="reasons_subtitle_annoy">Najpoužívanejšie hore. Pri odomknutí môže otravný režim zmeniť ich poradie a vzhľad.</string>
+    <string name="reasons_subtitle_annoy">Najpoužívanejšie navrchu. Pri odomknutí môže otravný režim zmeniť ich poradie a vzhľad.</string>
     <string name="reasons_count">%d×</string>
     <string name="reasons_edit">Upraviť %1$s</string>
     <string name="reasons_edit_title">Upraviť dôvod</string>
@@ -155,10 +155,10 @@
     <string name="onboarding_unlocks">Zaznamenať odomknutia</string>
     <string name="onboarding_unlocks_hint">Zabudované. Netreba žiadne povolenie.</string>
     <string name="onboarding_overlay">Pýtať sa cez iné aplikácie</string>
-    <string name="onboarding_overlay_hint">Treba povoliť „Zobrazenie cez iné aplikácie“.</string>
+    <string name="onboarding_overlay_hint">Treba povoliť „Zobrazovanie cez iné aplikácie“.</string>
     <string name="onboarding_notification">Upozornenia</string>
     <string name="onboarding_notification_hint">Vďaka tichému upozorneniu môže aplikácia bežať ďalej.</string>
-    <string name="onboarding_battery">Bežať stále</string>
+    <string name="onboarding_battery">Bežať na pozadí</string>
     <string name="onboarding_battery_hint">Otvor „Spotreba batérie aplikáciou“ a vyber „Bez obmedzení“. Ak uvidíš prepínač, ťukni na text „Povoliť používanie na pozadí“, nie na prepínač.</string>
     <string name="background_tips">Ďalšie tipy pre telefóny %1$s</string>
     <string name="onboarding_ready">Hotovo</string>
@@ -215,7 +215,7 @@
     <string name="prompt_confirm_no">Nie, späť</string>
     <string name="prompt_question_1">Počká to?</string>
     <string name="prompt_question_2">Čo urobíš v najbližších 2 minútach?</string>
-    <string name="prompt_question_3">Je toto najlepšie využitie tejto chvíle?</string>
+    <string name="prompt_question_3">Je to to najlepšie, čo teraz môžeš robiť?</string>
     <string name="prompt_question_4">Čo hľadáš?</string>
     <string name="prompt_new_trick">Novinka: %1$s. %2$s</string>
     <string name="annoy_title">Otravný režim</string>
@@ -223,11 +223,11 @@
     <string name="annoy_off">Vypnuté</string>
     <string name="annoy_count">Zapnuté %1$d z %2$d trikov</string>
     <string name="annoy_turn_on">Zapni ho a používaj všetkých %1$d trikov.</string>
-    <string name="annoy_explain">Každé odomknutie použije jeden trik, náhodne vybraný zo zapnutých.</string>
+    <string name="annoy_explain">Pri každom odomknutí sa náhodne použije jeden zo zapnutých trikov.</string>
     <string name="annoy_try">Skúsiť</string>
     <string name="annoy_try_label">Skúsiť: %1$s</string>
-    <string name="annoy_limit">Funguje s najviac %1$d dôvodmi.</string>
-    <string name="annoy_limit_over">Nedostupné s viac ako %1$d dôvodmi.</string>
+    <string name="annoy_limit">Funguje, ak máš najviac %1$d dôvodov.</string>
+    <string name="annoy_limit_over">Nefunguje, ak máš viac ako %1$d dôvodov.</string>
     <string name="annoy_off_screen_reader">Nedostupné so zapnutým TalkBackom.</string>
     <string name="annoy_off_animations">Nedostupné s vypnutými animáciami.</string>
     <string name="settings_annoy_on">Zapnuté · %1$d z %2$d trikov</string>
@@ -237,11 +237,11 @@
     <string name="trick_group_words">Slová</string>
     <string name="trick_group_body">Telo</string>
     <string name="trick_pause">Pauza</string>
-    <string name="trick_pause_text">Odpovede sa prebudia po 1–3 s.</string>
+    <string name="trick_pause_text">Odpovede sa prebudia po 1–3 s.</string>
     <string name="trick_stagger">Postupné prebúdzanie</string>
-    <string name="trick_stagger_text">Každá odpoveď sa prebudí sama. Len zo zvyku ako prvá.</string>
-    <string name="trick_early_reset">Skoré ťuknutie vracia pauzu</string>
-    <string name="trick_early_reset_text">Počkaj na odpovede. Ťuknutie príliš skoro spustí pauzu znova.</string>
+    <string name="trick_stagger_text">Každá odpoveď sa prebudí v inom čase. „Len zo zvyku“ ako prvá.</string>
+    <string name="trick_early_reset">Skoré ťuknutie spustí pauzu znova</string>
+    <string name="trick_early_reset_text">Počkaj na odpovede. Keď ťukneš príliš skoro, pauza začne znova.</string>
     <string name="trick_hold">Podrž a vyber</string>
     <string name="trick_hold_text">Odpoveď stlač a podrž.</string>
     <string name="trick_second_check">Druhé potvrdenie</string>
@@ -249,12 +249,12 @@
     <string name="trick_shuffle">Náhodné poradie</string>
     <string name="trick_shuffle_text">Odpovede nie sú zoradené podľa dennej doby.</string>
     <string name="trick_habit_trap">Pasca na zvyk</string>
-    <string name="trick_habit_trap_text">Len zo zvyku je tam, kam ťukáš najčastejšie.</string>
+    <string name="trick_habit_trap_text">„Len zo zvyku“ je tam, kam ťukáš najčastejšie.</string>
     <string name="trick_new_grid">Nová mriežka</string>
     <string name="trick_new_grid_text">3 stĺpce, zoznam alebo kruh.</string>
     <string name="trick_wild">Tvary a veľkosti</string>
-    <string name="trick_wild_text">Divoké tvary, veľkosti, farby a písma. Kým ťukneš, čítaj.</string>
-    <string name="trick_drift">Plávanie</string>
+    <string name="trick_wild_text">Divoké tvary, veľkosti, farby a písma. Čítaj, skôr než ťukneš.</string>
+    <string name="trick_drift">Plávajúce odpovede</string>
     <string name="trick_drift_text">Odpovede pomaly plávajú. Mier dobre.</string>
     <string name="trick_pebbles">Vyber kamienok</string>
     <string name="trick_pebbles_text">Odpovede padajú do pohára. Ťukni na kamienok so svojím dôvodom.</string>
@@ -265,18 +265,18 @@
     <string name="trick_question">Iná otázka</string>
     <string name="trick_question_text">Otázka sa mení. Prečítaj si ju.</string>
     <string name="trick_tilt">Nakloň telefón</string>
-    <string name="trick_tilt_text">Nakláňaním telefónu dokotúľaj guličku k svojej odpovedi.</string>
-    <string name="trick_breath">Jeden nádych</string>
-    <string name="trick_breath_text">Najprv podrž kruh počas jedného nádychu.</string>
+    <string name="trick_tilt_text">Nakloň telefón a dokotúľaj guličku k svojej odpovedi.</string>
+    <string name="trick_breath">Nádych a výdych</string>
+    <string name="trick_breath_text">Najprv drž kruh počas celého nádychu aj výdychu.</string>
     <string name="trick_drag">Pretiahni do pohára</string>
     <string name="trick_drag_text">Pretiahni svoju odpoveď do pohára.</string>
     <string name="annoy_offer_title">Tvoj palec pozná túto obrazovku naspamäť</string>
-    <string name="annoy_offer_text">Otravný režim mení obrazovku pri každom odomknutí, takže sa musíš pozrieť, kým ťukneš. Kedykoľvek ho vypneš v Nastaveniach.</string>
+    <string name="annoy_offer_text">Otravný režim mení obrazovku pri každom odomknutí, takže sa musíš pozrieť, skôr než ťukneš. Kedykoľvek ho môžeš vypnúť v Nastaveniach.</string>
     <string name="annoy_offer_add">Zapnúť otravný režim</string>
     <string name="annoy_offer_never">Už sa nepýtať</string>
     <plurals name="annoy_offer_count">
         <item quantity="one">%1$d z tvojich posledných %2$d odpovedí trvalo menej ako sekundu.</item>
-        <item quantity="few">%1$d z tvojich posledných %2$d odpovedí trvalo menej ako sekundu.</item>
+        <item quantity="few">%1$d z tvojich posledných %2$d odpovedí trvali menej ako sekundu.</item>
         <item quantity="many">%1$d z tvojich posledných %2$d odpovedí trvalo menej ako sekundu.</item>
         <item quantity="other">%1$d z tvojich posledných %2$d odpovedí trvalo menej ako sekundu.</item>
     </plurals>

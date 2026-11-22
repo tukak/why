@@ -156,7 +156,7 @@
         <item quantity="one">Du hast das %d-mal eingegeben. Als Grund speichern? Dann reicht nächstes Mal ein Tippen.</item>
         <item quantity="other">Du hast das %d-mal eingegeben. Als Grund speichern? Dann reicht nächstes Mal ein Tippen.</item>
     </plurals>
-    <string name="offer_add">Zu Gründen hinzufügen</string>
+    <string name="offer_add">Als Grund hinzufügen</string>
     <string name="offer_not_now">Nicht jetzt</string>
     <string name="offer_never">Hierzu nicht mehr fragen</string>
 
@@ -173,7 +173,7 @@
     <string name="reasons_merge_pick">„%1$s“ zusammenführen mit</string>
     <string name="reasons_merge_title">Gründe zusammenführen?</string>
     <plurals name="reasons_merge_confirm">
-        <item quantity="one">%1$d Entsperren wandert von „%2$s“ zu „%3$s“. „%2$s“ wird entfernt. Das lässt sich nicht rückgängig machen.</item>
+        <item quantity="one">%1$d Entsperrung wandert von „%2$s“ zu „%3$s“. „%2$s“ wird entfernt. Das lässt sich nicht rückgängig machen.</item>
         <item quantity="other">%1$d Entsperrungen wandern von „%2$s“ zu „%3$s“. „%2$s“ wird entfernt. Das lässt sich nicht rückgängig machen.</item>
     </plurals>
     <string name="reasons_merge_do">Zusammenführen</string>
@@ -181,10 +181,10 @@
 
     <!-- Annoying mode -->
     <string name="prompt_too_fast">Zu schnell. Warte auf die Antworten.</string>
-    <string name="prompt_breath_hold">Halte den Kreis</string>
+    <string name="prompt_breath_hold">Kreis gedrückt halten</string>
     <string name="prompt_breath_in">Einatmen</string>
     <string name="prompt_breath_out">Ausatmen</string>
-    <string name="prompt_breath_again">Halte einen ganzen Atemzug lang.</string>
+    <string name="prompt_breath_again">Halte den Kreis einen ganzen Atemzug lang gedrückt.</string>
     <string name="prompt_drop_here">Hier ablegen</string>
     <string name="prompt_type_label">Gib deinen Grund ein</string>
     <string name="prompt_type_placeholder">2 Buchstaben eingeben</string>
@@ -195,7 +195,7 @@
     <string name="prompt_confirm_no">Nein, zurück</string>
     <string name="prompt_question_1">Kann das warten?</string>
     <string name="prompt_question_2">Was machst du in den nächsten 2 Minuten?</string>
-    <string name="prompt_question_3">Ist das jetzt die beste Nutzung deiner Zeit?</string>
+    <string name="prompt_question_3">Ist das gerade das Beste, was du tun kannst?</string>
     <string name="prompt_question_4">Was suchst du?</string>
     <string name="prompt_new_trick">Neu: %1$s. %2$s</string>
     <string name="annoy_title">Nervmodus</string>
@@ -203,7 +203,7 @@
     <string name="annoy_off">Aus</string>
     <string name="annoy_count">%1$d von %2$d Tricks an</string>
     <string name="annoy_turn_on">Schalte ihn ein, um alle %1$d Tricks zu nutzen.</string>
-    <string name="annoy_explain">Jedes Entsperren nutzt einen Trick, zufällig gewählt aus den eingeschalteten.</string>
+    <string name="annoy_explain">Bei jedem Entsperren kommt einer der eingeschalteten Tricks zufällig zum Einsatz.</string>
     <string name="annoy_try">Testen</string>
     <string name="annoy_try_label">%1$s testen</string>
     <string name="annoy_limit">Geht mit bis zu %1$d Gründen.</string>
@@ -217,25 +217,25 @@
     <string name="trick_group_words">Wörter</string>
     <string name="trick_group_body">Körper</string>
     <string name="trick_pause">Pause</string>
-    <string name="trick_pause_text">Die Antworten werden nach 1–3 s wach.</string>
-    <string name="trick_stagger">Nacheinander wach</string>
-    <string name="trick_stagger_text">Jede Antwort wird einzeln wach. Aus Gewohnheit zuerst.</string>
-    <string name="trick_early_reset">Zu früh startet neu</string>
+    <string name="trick_pause_text">Nach 1–3 s kannst du die Antworten antippen.</string>
+    <string name="trick_stagger">Antworten nacheinander</string>
+    <string name="trick_stagger_text">Die Antworten werden nacheinander antippbar. „Aus Gewohnheit“ zuerst.</string>
+    <string name="trick_early_reset">Zu früh? Pause von vorn</string>
     <string name="trick_early_reset_text">Warte auf die Antworten. Wer zu früh tippt, startet die Pause neu.</string>
-    <string name="trick_hold">Halten zum Wählen</string>
-    <string name="trick_hold_text">Drücke eine Antwort und halte sie.</string>
+    <string name="trick_hold">Gedrückt halten</string>
+    <string name="trick_hold_text">Halte eine Antwort gedrückt.</string>
     <string name="trick_second_check">Zweite Bestätigung</string>
     <string name="trick_second_check_text">Du bestätigst deine Antwort noch einmal.</string>
     <string name="trick_shuffle">Zufällige Reihenfolge</string>
     <string name="trick_shuffle_text">Die Antworten sind nicht nach Tageszeit sortiert.</string>
     <string name="trick_habit_trap">Gewohnheitsfalle</string>
-    <string name="trick_habit_trap_text">Aus Gewohnheit liegt dort, wo du am häufigsten tippst.</string>
+    <string name="trick_habit_trap_text">„Aus Gewohnheit“ steht dort, wo du am häufigsten tippst.</string>
     <string name="trick_new_grid">Neues Raster</string>
     <string name="trick_new_grid_text">3 Spalten, eine Liste oder ein Kreis.</string>
     <string name="trick_wild">Formen und Größen</string>
     <string name="trick_wild_text">Wilde Formen, Größen, Farben und Schriften. Lies, bevor du tippst.</string>
-    <string name="trick_drift">Treiben</string>
-    <string name="trick_drift_text">Die Antworten schweben langsam. Ziel gut.</string>
+    <string name="trick_drift">Schwebende Antworten</string>
+    <string name="trick_drift_text">Die Antworten schweben langsam hin und her. Ziel genau.</string>
     <string name="trick_pebbles">Kiesel wählen</string>
     <string name="trick_pebbles_text">Die Antworten fallen ins Glas. Tippe auf den Kiesel mit deinem Grund.</string>
     <string name="trick_scramble">Gemischte Buchstaben</string>
@@ -245,9 +245,9 @@
     <string name="trick_question">Andere Frage</string>
     <string name="trick_question_text">Die Frage wechselt. Lies sie.</string>
     <string name="trick_tilt">Kippen</string>
-    <string name="trick_tilt_text">Kippe das Handy, um die Kugel zu deiner Antwort zu rollen.</string>
+    <string name="trick_tilt_text">Kippe das Handy, damit die Kugel zu deiner Antwort rollt.</string>
     <string name="trick_breath">Ein Atemzug</string>
-    <string name="trick_breath_text">Halte zuerst den Kreis einen Atemzug lang.</string>
+    <string name="trick_breath_text">Halte den Kreis zuerst einen Atemzug lang gedrückt.</string>
     <string name="trick_drag">Ins Glas ziehen</string>
     <string name="trick_drag_text">Zieh deine Antwort ins Glas.</string>
     <string name="annoy_offer_title">Dein Daumen kennt diesen Bildschirm auswendig</string>

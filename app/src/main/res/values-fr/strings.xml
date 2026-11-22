@@ -72,12 +72,12 @@
     <string name="duration_decimal_minutes">%.1f min</string>
 
     <string name="week_title">Cette semaine</string>
-    <string name="week_insight_longer">Les déverrouillages par habitude durent %.1f fois plus longtemps que les autres.</string>
+    <string name="week_insight_longer">Les déverrouillages par habitude durent %.1f fois plus longtemps que ceux avec une raison.</string>
     <string name="week_insight_shorter">Les déverrouillages par habitude sont plus courts que ceux avec une raison. Bon signe.</string>
     <string name="week_insight_balanced">Les déverrouillages par habitude durent à peu près autant que ceux avec une raison.</string>
     <string name="week_insight_empty">Réponds à quelques questions. Les tendances apparaîtront ici.</string>
     <string name="week_with_reason">avec une raison</string>
-    <string name="week_daily">Bocaux du jour</string>
+    <string name="week_daily">Un bocal par jour</string>
     <string name="week_time">Où est passé le temps</string>
     <string name="week_habit_hours">Quand tu déverrouilles par habitude</string>
     <string name="week_habit_hours_period">Déverrouillages par habitude, 4 dernières semaines</string>
@@ -149,11 +149,11 @@
     <string name="onboarding_overlay">Afficher la question sur les autres applis</string>
     <string name="onboarding_overlay_hint">Nécessite « Superposition sur d’autres applis ».</string>
     <string name="onboarding_notification">Notifications</string>
-    <string name="onboarding_notification_hint">Une notification discrète la garde active.</string>
+    <string name="onboarding_notification_hint">Une notification discrète permet à l’appli de rester active.</string>
     <string name="onboarding_battery">Rester active</string>
-    <string name="onboarding_battery_hint">Ouvre « Utilisation de la batterie par l’appli » et choisis « Sans restriction ». Si tu vois un bouton, appuie sur le texte « Autoriser l’utilisation en arrière-plan », pas sur le bouton.</string>
+    <string name="onboarding_battery_hint">Ouvre « Utilisation de la batterie par l’appli » et choisis « Sans restriction ». Si tu vois un interrupteur, appuie sur le texte « Autoriser l’utilisation en arrière-plan », pas sur l’interrupteur.</string>
     <string name="background_tips">Plus d’astuces pour les téléphones %1$s</string>
-    <string name="onboarding_ready">Activé</string>
+    <string name="onboarding_ready">Prêt</string>
     <string name="onboarding_allow">Autoriser</string>
     <string name="onboarding_privacy">Tout reste sur ce téléphone. Aucun accès à Internet. Ne lit jamais quelles applis tu utilises.</string>
     <string name="onboarding_permission_lost">Android a désactivé « Afficher la question sur les autres applis ». Autorise-le à nouveau pour que Pourquoi ? continue à demander.</string>
@@ -191,10 +191,10 @@
 
     <!-- Annoying mode -->
     <string name="prompt_too_fast">Trop vite. Attends les réponses.</string>
-    <string name="prompt_breath_hold">Maintiens le cercle</string>
+    <string name="prompt_breath_hold">Garde le doigt sur le cercle</string>
     <string name="prompt_breath_in">Inspire</string>
     <string name="prompt_breath_out">Expire</string>
-    <string name="prompt_breath_again">Maintiens pendant toute une respiration.</string>
+    <string name="prompt_breath_again">Garde le doigt posé pendant toute une respiration.</string>
     <string name="prompt_drop_here">Dépose ici</string>
     <string name="prompt_type_label">Écris ta raison</string>
     <string name="prompt_type_placeholder">Écris 2 lettres</string>
@@ -205,15 +205,15 @@
     <string name="prompt_confirm_no">Non, retour</string>
     <string name="prompt_question_1">Ça peut attendre ?</string>
     <string name="prompt_question_2">Que vas-tu faire dans les 2 prochaines minutes ?</string>
-    <string name="prompt_question_3">Est-ce le meilleur usage de ce moment ?</string>
+    <string name="prompt_question_3">C’est la meilleure façon d’utiliser ce moment ?</string>
     <string name="prompt_question_4">Que cherches-tu ?</string>
     <string name="prompt_new_trick">Nouveau : %1$s. %2$s</string>
     <string name="annoy_title">Mode agaçant</string>
     <string name="annoy_on">Activé</string>
     <string name="annoy_off">Désactivé</string>
-    <string name="annoy_count">%1$d astuces sur %2$d activées</string>
+    <string name="annoy_count">Astuces activées : %1$d sur %2$d</string>
     <string name="annoy_turn_on">Active-le pour utiliser les %1$d astuces.</string>
-    <string name="annoy_explain">Chaque déverrouillage utilise une astuce, choisie au hasard parmi celles qui sont activées.</string>
+    <string name="annoy_explain">À chaque déverrouillage, l’appli choisit au hasard une des astuces activées.</string>
     <string name="annoy_try">Essayer</string>
     <string name="annoy_try_label">Essayer : %1$s</string>
     <string name="annoy_limit">Fonctionne avec %1$d raisons au plus.</string>
@@ -227,9 +227,9 @@
     <string name="trick_group_words">Mots</string>
     <string name="trick_group_body">Corps</string>
     <string name="trick_pause">Pause</string>
-    <string name="trick_pause_text">Les réponses se réveillent après 1–3 s.</string>
-    <string name="trick_stagger">Réveil échelonné</string>
-    <string name="trick_stagger_text">Chaque réponse se réveille seule. Par habitude en premier.</string>
+    <string name="trick_pause_text">Les réponses s’activent au bout de 1 à 3 s.</string>
+    <string name="trick_stagger">Réponses à tour de rôle</string>
+    <string name="trick_stagger_text">Les réponses s’activent une à une. « Par habitude » en premier.</string>
     <string name="trick_early_reset">Trop tôt, on recommence</string>
     <string name="trick_early_reset_text">Attends les réponses. Un appui trop tôt relance la pause.</string>
     <string name="trick_hold">Maintenir pour choisir</string>
@@ -239,12 +239,12 @@
     <string name="trick_shuffle">Ordre aléatoire</string>
     <string name="trick_shuffle_text">Les réponses ne suivent pas l’heure de la journée.</string>
     <string name="trick_habit_trap">Piège à habitude</string>
-    <string name="trick_habit_trap_text">Par habitude se trouve là où tu appuies le plus.</string>
+    <string name="trick_habit_trap_text">« Par habitude » se trouve là où tu appuies le plus.</string>
     <string name="trick_new_grid">Nouvelle grille</string>
     <string name="trick_new_grid_text">3 colonnes, une liste ou un cercle.</string>
     <string name="trick_wild">Formes et tailles</string>
     <string name="trick_wild_text">Formes, tailles, couleurs et polices folles. Lis avant d’appuyer.</string>
-    <string name="trick_drift">Dérive</string>
+    <string name="trick_drift">Réponses flottantes</string>
     <string name="trick_drift_text">Les réponses flottent lentement. Vise bien.</string>
     <string name="trick_pebbles">Choisis un galet</string>
     <string name="trick_pebbles_text">Les réponses tombent dans le bocal. Touche le galet avec ta raison.</string>
@@ -255,11 +255,11 @@
     <string name="trick_question">Autre question</string>
     <string name="trick_question_text">La question change. Lis-la.</string>
     <string name="trick_tilt">Incline pour répondre</string>
-    <string name="trick_tilt_text">Incline le téléphone pour rouler la bille jusqu’à ta réponse.</string>
-    <string name="trick_breath">Une respiration</string>
-    <string name="trick_breath_text">Maintiens d’abord le cercle pendant une respiration.</string>
-    <string name="trick_drag">Glisse dans le bocal</string>
-    <string name="trick_drag_text">Glisse ta réponse dans le bocal.</string>
+    <string name="trick_tilt_text">Incline le téléphone pour faire rouler la bille jusqu’à ta réponse.</string>
+    <string name="trick_breath">Le temps d’un souffle</string>
+    <string name="trick_breath_text">Garde d’abord le doigt sur le cercle le temps d’inspirer et d’expirer.</string>
+    <string name="trick_drag">Fais glisser dans le bocal</string>
+    <string name="trick_drag_text">Fais glisser ta réponse dans le bocal.</string>
     <string name="annoy_offer_title">Ton pouce connaît cet écran par cœur</string>
     <string name="annoy_offer_text">Le mode agaçant change l’écran à chaque déverrouillage : tu dois regarder avant d’appuyer. Désactive-le à tout moment dans les Paramètres.</string>
     <string name="annoy_offer_add">Activer le mode agaçant</string>
