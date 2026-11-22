@@ -1,6 +1,5 @@
 package cz.kutner.why.ui.today
 
-import android.provider.Settings
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -65,6 +64,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cz.kutner.why.R
 import cz.kutner.why.container
+import cz.kutner.why.ui.animationsOff
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
 import cz.kutner.why.ui.components.Pebble
@@ -143,7 +143,8 @@ private fun PebbleJar(state: TodayUiState) {
             .background(colors.surfaceContainer),
     ) {
         val layout = remember(state.pebbles.size, maxWidth) { jarLayout(state.pebbles.size, maxWidth, maxHeight) }
-        if (animationsOff()) StaticPile(state.pebbles, layout) else FallingPile(state.pebbles, layout)
+        val context = LocalContext.current
+        if (remember { context.animationsOff() }) StaticPile(state.pebbles, layout) else FallingPile(state.pebbles, layout)
 
         // The badge sits top right; only when a large font leaves no room does it wrap below the number.
         FlowRow(
@@ -263,11 +264,6 @@ private fun StaticPile(pebbles: List<PebbleStyle>, layout: JarLayout) {
     }
 }
 
-@Composable
-private fun animationsOff(): Boolean {
-    val resolver = LocalContext.current.contentResolver
-    return remember { Settings.Global.getFloat(resolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f }
-}
 
 @Composable
 private fun UsualBadge(vsUsual: Int) {

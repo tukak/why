@@ -216,9 +216,10 @@
     <string name="annoy_explain">Cada desbloqueo usa un truco, elegido al azar entre los activados.</string>
     <string name="annoy_try">Probar</string>
     <string name="annoy_try_label">Probar %1$s</string>
-    <string name="annoy_skipped">Con TalkBack o sin animaciones se omiten A la deriva, Elige un guijarro e Inclina para responder. Con TalkBack también Arrastra al frasco.</string>
     <string name="annoy_limit">Funciona con hasta %1$d motivos.</string>
     <string name="annoy_limit_over">No disponible con más de %1$d motivos.</string>
+    <string name="annoy_off_screen_reader">No disponible con TalkBack activado.</string>
+    <string name="annoy_off_animations">No disponible sin animaciones.</string>
     <string name="settings_annoy_on">Activado · %1$d de %2$d trucos</string>
     <string name="settings_annoy_off">Desactivado. Cambia la pregunta en cada desbloqueo.</string>
     <string name="trick_group_timing">Tiempo</string>

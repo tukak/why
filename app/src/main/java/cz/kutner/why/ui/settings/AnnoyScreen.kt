@@ -40,12 +40,16 @@ import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.domain.TimeOfDayOrder
 import cz.kutner.why.domain.Trick
 import cz.kutner.why.domain.TrickGroup
+import cz.kutner.why.domain.TrickBlock
 import cz.kutner.why.domain.TrickSetup
+import cz.kutner.why.domain.block
 import cz.kutner.why.domain.startOfDay
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
+import cz.kutner.why.ui.animationsOff
 import cz.kutner.why.ui.description
 import cz.kutner.why.ui.overlay.PromptScreen
+import cz.kutner.why.ui.screenReaderOn
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.timeFormatter
 import cz.kutner.why.ui.title
@@ -61,10 +65,12 @@ fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
     val settings by repo.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
     val reasons by app.unlocks.reasons.collectAsStateWithLifecycle(initialValue = emptyList())
     val answers = reasons.count { !it.archived } + 1
+    val context = LocalContext.current
+    val blocks = Trick.entries.associateWith { it.block(answers, context.screenReaderOn(), context.animationsOff()) }
     val scope = rememberCoroutineScope()
     val colors = MaterialTheme.colorScheme
     val on = settings.annoyingMode
-    val total = Trick.entries.count { answers <= it.maxAnswers }
+    val total = blocks.count { it.value == null }
 
     Column(
         Modifier
@@ -93,7 +99,7 @@ fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
                 Column(Modifier.weight(1f)) {
                     Text(stringResource(if (on) R.string.annoy_on else R.string.annoy_off), style = MaterialTheme.typography.titleLarge)
                     Text(
-                        if (on) stringResource(R.string.annoy_count, settings.tricksOn.count { answers <= it.maxAnswers }, total) else stringResource(R.string.annoy_turn_on, total),
+                        if (on) stringResource(R.string.annoy_count, settings.tricksOn.count { blocks[it] == null }, total) else stringResource(R.string.annoy_turn_on, total),
                         style = MaterialTheme.typography.bodySmall,
                         color = colors.onTertiaryContainer,
                     )
@@ -119,7 +125,7 @@ fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
                             trick = trick,
                             checked = trick in settings.tricksOn,
                             enabled = on,
-                            fits = answers <= trick.maxAnswers,
+                            block = blocks[trick],
                             onCheck = { scope.launch { repo.setTrickOn(trick, it) } },
                             onTry = { onTry(trick) },
                         )
@@ -128,29 +134,31 @@ fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
                 }
             }
         }
-        Text(stringResource(R.string.annoy_skipped), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant, modifier = Modifier.padding(horizontal = 4.dp))
     }
 }
 
 @Composable
-private fun TrickRow(trick: Trick, checked: Boolean, enabled: Boolean, fits: Boolean, onCheck: (Boolean) -> Unit, onTry: () -> Unit) {
+private fun TrickRow(trick: Trick, checked: Boolean, enabled: Boolean, block: TrickBlock?, onCheck: (Boolean) -> Unit, onTry: () -> Unit) {
     val name = stringResource(trick.title)
+    val usable = block == null
+    val maxReasons = trick.maxAnswers - 1
+    val note = when (block) {
+        TrickBlock.TooManyAnswers -> stringResource(R.string.annoy_limit_over, maxReasons)
+        TrickBlock.ScreenReader -> stringResource(R.string.annoy_off_screen_reader)
+        TrickBlock.NoAnimations -> stringResource(R.string.annoy_off_animations)
+        null -> if (trick.maxAnswers != Int.MAX_VALUE) stringResource(R.string.annoy_limit, maxReasons) else null
+    }
     Row(Modifier.padding(vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Column(Modifier.weight(1f)) {
             Text(name, style = MaterialTheme.typography.labelLarge)
             Text(stringResource(trick.description), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            if (trick.maxAnswers != Int.MAX_VALUE) {
-                val maxReasons = trick.maxAnswers - 1
-                Text(
-                    if (fits) stringResource(R.string.annoy_limit, maxReasons) else stringResource(R.string.annoy_limit_over, maxReasons),
-                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            if (note != null) {
+                Text(note, style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         val tryLabel = stringResource(R.string.annoy_try_label, name)
-        FilledTonalButton(onClick = onTry, enabled = fits, modifier = Modifier.semantics { contentDescription = tryLabel }) { Text(stringResource(R.string.annoy_try)) }
-        Switch(checked = checked && fits, enabled = enabled && fits, onCheckedChange = onCheck, modifier = Modifier.semantics { contentDescription = name })
+        FilledTonalButton(onClick = onTry, enabled = usable, modifier = Modifier.semantics { contentDescription = tryLabel }) { Text(stringResource(R.string.annoy_try)) }
+        Switch(checked = checked && usable, enabled = enabled && usable, onCheckedChange = onCheck, modifier = Modifier.semantics { contentDescription = name })
     }
 }
 

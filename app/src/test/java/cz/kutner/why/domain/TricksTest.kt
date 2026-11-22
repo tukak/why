@@ -66,6 +66,17 @@ class TricksTest {
     }
 
     @Test
+    fun `the block names the reason the settings screen shows`() {
+        // Drag does not move by itself, so it still works with animations off; a screen reader cannot drag.
+        assertNull(Trick.DragToJar.block(answers = 7, screenReader = false, reducedMotion = true))
+        assertEquals(TrickBlock.ScreenReader, Trick.DragToJar.block(answers = 7, screenReader = true, reducedMotion = false))
+        assertEquals(TrickBlock.NoAnimations, Trick.Drift.block(answers = 7, screenReader = false, reducedMotion = true))
+        // Too many answers comes first: turning TalkBack off would not help.
+        assertEquals(TrickBlock.TooManyAnswers, Trick.Tilt.block(answers = 18, screenReader = true, reducedMotion = true))
+        assertTrue(Trick.entries.filterNot { it.moves || it.drag }.all { it.block(answers = 99, screenReader = true, reducedMotion = true) == null })
+    }
+
+    @Test
     fun `nothing usable means no trick`() {
         assertNull(pick(enabled = setOf(Trick.Drift, Trick.Tilt), reducedMotion = true))
         assertNull(pick(enabled = emptySet()))

@@ -13,8 +13,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.ServiceInfo
 import android.media.AudioManager
-import android.provider.Settings
-import android.view.accessibility.AccessibilityManager
 import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -40,12 +38,14 @@ import cz.kutner.why.domain.TrickSetup
 import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.domain.answer
 import cz.kutner.why.domain.startOfDay
+import cz.kutner.why.ui.animationsOff
 import cz.kutner.why.ui.overlay.AnnoyOfferScreen
 import cz.kutner.why.ui.overlay.AnswerStats
 import cz.kutner.why.ui.overlay.NudgeScreen
 import cz.kutner.why.ui.overlay.OfferScreen
 import cz.kutner.why.ui.overlay.PromptAnswer
 import cz.kutner.why.ui.overlay.PromptScreen
+import cz.kutner.why.ui.screenReaderOn
 import cz.kutner.why.ui.style
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.WhyTheme
@@ -231,8 +231,8 @@ class UnlockService : LifecycleService() {
             enabled = settings.tricksOn,
             last = lastTrick,
             answers = reasons + 1,
-            screenReader = getSystemService(AccessibilityManager::class.java).isTouchExplorationEnabled,
-            reducedMotion = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f,
+            screenReader = screenReaderOn(),
+            reducedMotion = animationsOff(),
             random = Random.Default,
         ) ?: return null
         lastTrick = trick

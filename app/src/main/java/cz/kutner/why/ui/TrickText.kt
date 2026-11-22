@@ -1,5 +1,8 @@
 package cz.kutner.why.ui
 
+import android.content.Context
+import android.provider.Settings
+import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
 import cz.kutner.why.R
 import cz.kutner.why.domain.Trick
@@ -61,3 +64,9 @@ val TrickGroup.title: Int
 
 @get:StringRes
 val questions = listOf(R.string.prompt_question_1, R.string.prompt_question_2, R.string.prompt_question_3, R.string.prompt_question_4)
+
+/** A screen reader that explores by touch, such as TalkBack, is on. */
+fun Context.screenReaderOn(): Boolean = getSystemService(AccessibilityManager::class.java).isTouchExplorationEnabled
+
+/** The system setting Remove animations is on. */
+fun Context.animationsOff(): Boolean = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f

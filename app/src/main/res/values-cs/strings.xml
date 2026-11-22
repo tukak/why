@@ -226,9 +226,10 @@
     <string name="annoy_explain">Každé odemčení použije jeden trik, náhodně vybraný ze zapnutých.</string>
     <string name="annoy_try">Zkusit</string>
     <string name="annoy_try_label">Zkusit: %1$s</string>
-    <string name="annoy_skipped">S TalkBackem nebo vypnutými animacemi se vynechá Plavání, Vyber oblázek a Nakloň telefon. S TalkBackem i Přetáhni do sklenice.</string>
     <string name="annoy_limit">Funguje s nejvýše %1$d důvody.</string>
     <string name="annoy_limit_over">Nedostupné s více než %1$d důvody.</string>
+    <string name="annoy_off_screen_reader">Nedostupné se zapnutým TalkBackem.</string>
+    <string name="annoy_off_animations">Nedostupné s vypnutými animacemi.</string>
     <string name="settings_annoy_on">Zapnuto · %1$d z %2$d triků</string>
     <string name="settings_annoy_off">Vypnuto. Mění otázku při každém odemčení.</string>
     <string name="trick_group_timing">Načasování</string>

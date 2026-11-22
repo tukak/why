@@ -37,15 +37,23 @@ enum class Trick(val group: TrickGroup, val moves: Boolean = false, val drag: Bo
     }
 }
 
+enum class TrickBlock { TooManyAnswers, ScreenReader, NoAnimations }
+
+/**
+ * Why this trick cannot be used now, or null when it can.
+ * With a screen reader, moving targets and drags cannot be used; with animations off, nothing may move.
+ */
+fun Trick.block(answers: Int, screenReader: Boolean, reducedMotion: Boolean): TrickBlock? = when {
+    answers > maxAnswers -> TrickBlock.TooManyAnswers
+    (moves || drag) && screenReader -> TrickBlock.ScreenReader
+    moves && reducedMotion -> TrickBlock.NoAnimations
+    else -> null
+}
+
 object TrickPicker {
-    /**
-     * A random trick from [enabled] that is not [last], or null when none can be used.
-     * With a screen reader, moving targets and drags cannot be used; with animations off, nothing may move.
-     */
+    /** A random trick from [enabled] that is not [last], or null when none can be used. */
     fun pick(enabled: Set<Trick>, last: Trick?, answers: Int, screenReader: Boolean, reducedMotion: Boolean, random: Random): Trick? {
-        val usable = enabled.filter { t ->
-            answers <= t.maxAnswers && !(t.moves && (screenReader || reducedMotion)) && !(t.drag && screenReader)
-        }
+        val usable = enabled.filter { it.block(answers, screenReader, reducedMotion) == null }
         if (usable.isEmpty()) return null
         return usable.filter { it != last }.ifEmpty { usable }.random(random)
     }
