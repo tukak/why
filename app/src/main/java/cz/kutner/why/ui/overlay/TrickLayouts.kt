@@ -315,10 +315,26 @@ internal fun DriftAnswers(items: List<Choice>, seed: Long, ui: AnswerUi, modifie
     }
 }
 
-/** Level moves toward the current tilt over about [LEVEL_SECONDS], so a held angle stops pulling and a change of angle pulls. */
+/** Level moves slowly toward the current tilt, so a level taken while the phone was still moving fades out. */
 internal fun followLevel(level: Offset, reading: Offset, dt: Float): Offset = level + (reading - level) * (dt / LEVEL_SECONDS).coerceAtMost(1f)
 
-private const val LEVEL_SECONDS = 2f
+/**
+ * The ball's speed in dp/s for a tilt away from level, in m/s² (about 0.17 m/s² per degree).
+ * The tilt sets the speed, not the acceleration, so the ball stops when the phone is level again.
+ */
+internal fun tiltSpeed(tilt: Offset): Offset {
+    val size = tilt.getDistance()
+    if (size <= TILT_DEAD_ZONE) return Offset.Zero
+    val speed = ((size - TILT_DEAD_ZONE) * TILT_DP_PER_SECOND).coerceAtMost(TILT_MAX_DP_PER_SECOND)
+    return tilt * (speed / size)
+}
+
+private const val LEVEL_SECONDS = 8f
+private const val TILT_SMOOTH_SECONDS = 0.1f
+private const val TILT_EASE_SECONDS = 0.12f
+private const val TILT_DEAD_ZONE = 0.5f
+private const val TILT_DP_PER_SECOND = 100f
+internal const val TILT_MAX_DP_PER_SECOND = 260f
 
 /** A figure eight with radius 1. Whole-number frequencies close the loop at t = 2π, where the animation restarts. */
 internal fun driftOffset(t: Float, phase: Float): Pair<Float, Float> = sin(t + phase) to cos(2f * t + phase)
@@ -432,23 +448,23 @@ internal fun TiltAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
         var ball by remember { mutableStateOf(Offset(bounds.width / 2, bounds.height / 2)) }
         LaunchedEffect(bounds) {
             val r = with(density) { radius.toPx() }
-            val pull = with(density) { 300.dp.toPx() }
+            val pxPerDp = density.density
             var velocity = Offset.Zero
             var position = Offset(bounds.width / 2, bounds.height / 2)
             delay(300)
             while (!sensor.hasReading) withFrameNanos { }
             var level = Offset(sensor.ax, sensor.ay)
+            var smooth = level
             var last = withFrameNanos { it }
             while (true) {
                 val now = withFrameNanos { it }
                 val dt = ((now - last) / 1e9f).coerceAtMost(0.05f)
                 last = now
-                val reading = Offset(sensor.ax, sensor.ay)
-                level = followLevel(level, reading, dt)
-                velocity = (velocity + (reading - level) * (pull * dt)) * (1f - 1.5f * dt)
+                smooth += (Offset(sensor.ax, sensor.ay) - smooth) * (dt / TILT_SMOOTH_SECONDS).coerceAtMost(1f)
+                level = followLevel(level, smooth, dt)
+                val target = tiltSpeed(smooth - level) * pxPerDp
+                velocity += (target - velocity) * (dt / TILT_EASE_SECONDS).coerceAtMost(1f)
                 position += velocity * dt
-                if (position.x < r || position.x > bounds.width - r) velocity = velocity.copy(x = -velocity.x * 0.5f)
-                if (position.y < r || position.y > bounds.height - r) velocity = velocity.copy(y = -velocity.y * 0.5f)
                 position = Offset(position.x.coerceIn(r, bounds.width - r), position.y.coerceIn(r, bounds.height - r))
                 ball = position
                 val hit = rects.indexOfFirst { it.inflate(-r / 2).contains(position) }
