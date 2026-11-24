@@ -275,9 +275,9 @@
     <string name="annoy_offer_add">Zapnúť otravný režim</string>
     <string name="annoy_offer_never">Už sa nepýtať</string>
     <plurals name="annoy_offer_count">
-        <item quantity="one">%1$d z tvojich posledných %2$d odpovedí trvalo menej ako sekundu.</item>
-        <item quantity="few">%1$d z tvojich posledných %2$d odpovedí trvali menej ako sekundu.</item>
-        <item quantity="many">%1$d z tvojich posledných %2$d odpovedí trvalo menej ako sekundu.</item>
-        <item quantity="other">%1$d z tvojich posledných %2$d odpovedí trvalo menej ako sekundu.</item>
+        <item quantity="one">%1$d z tvojich posledných %2$d odpovedí trvalo zhruba sekundu alebo menej.</item>
+        <item quantity="few">%1$d z tvojich posledných %2$d odpovedí trvali zhruba sekundu alebo menej.</item>
+        <item quantity="many">%1$d z tvojich posledných %2$d odpovedí trvalo zhruba sekundu alebo menej.</item>
+        <item quantity="other">%1$d z tvojich posledných %2$d odpovedí trvalo zhruba sekundu alebo menej.</item>
     </plurals>
 </resources>

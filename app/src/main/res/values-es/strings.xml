@@ -265,8 +265,8 @@
     <string name="annoy_offer_add">Activar modo molesto</string>
     <string name="annoy_offer_never">No volver a preguntar</string>
     <plurals name="annoy_offer_count">
-        <item quantity="one">%1$d de tus últimas %2$d respuestas tardó menos de un segundo.</item>
-        <item quantity="many">%1$d de tus últimas %2$d respuestas tardaron menos de un segundo.</item>
-        <item quantity="other">%1$d de tus últimas %2$d respuestas tardaron menos de un segundo.</item>
+        <item quantity="one">%1$d de tus últimas %2$d respuestas tardó alrededor de un segundo o menos.</item>
+        <item quantity="many">%1$d de tus últimas %2$d respuestas tardaron alrededor de un segundo o menos.</item>
+        <item quantity="other">%1$d de tus últimas %2$d respuestas tardaron alrededor de un segundo o menos.</item>
     </plurals>
 </resources>

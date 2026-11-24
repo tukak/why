@@ -255,7 +255,7 @@
     <string name="annoy_offer_add">Nervmodus einschalten</string>
     <string name="annoy_offer_never">Nicht mehr fragen</string>
     <plurals name="annoy_offer_count">
-        <item quantity="one">%1$d deiner letzten %2$d Antworten kam in weniger als einer Sekunde.</item>
-        <item quantity="other">%1$d deiner letzten %2$d Antworten kamen in weniger als einer Sekunde.</item>
+        <item quantity="one">%1$d deiner letzten %2$d Antworten kam in etwa einer Sekunde oder schneller.</item>
+        <item quantity="other">%1$d deiner letzten %2$d Antworten kamen in etwa einer Sekunde oder schneller.</item>
     </plurals>
 </resources>

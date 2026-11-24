@@ -1,9 +1,13 @@
 package cz.kutner.why.domain
 
-/** An answer faster than reading the choices comes from the thumb's memory, not from a decision. */
+/**
+ * An answer faster than reading the choices comes from the thumb's memory, not from a decision.
+ * The time starts when the question is created, before the unlock animation ends, so [FAST_MS] includes a few hundred ms
+ * in which nothing can be tapped yet.
+ */
 object FastAnswers {
     const val SAMPLE = 30
-    const val FAST_MS = 1_000L
+    const val FAST_MS = 1_300L
     const val MIN_FAST = 20
 
     /**

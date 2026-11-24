@@ -265,8 +265,8 @@
     <string name="annoy_offer_add">Activer le mode agaçant</string>
     <string name="annoy_offer_never">Ne plus demander</string>
     <plurals name="annoy_offer_count">
-        <item quantity="one">%1$d de tes %2$d dernières réponses a pris moins d’une seconde.</item>
-        <item quantity="many">%1$d de tes %2$d dernières réponses ont pris moins d’une seconde.</item>
-        <item quantity="other">%1$d de tes %2$d dernières réponses ont pris moins d’une seconde.</item>
+        <item quantity="one">%1$d de tes %2$d dernières réponses a pris environ une seconde ou moins.</item>
+        <item quantity="many">%1$d de tes %2$d dernières réponses ont pris environ une seconde ou moins.</item>
+        <item quantity="other">%1$d de tes %2$d dernières réponses ont pris environ une seconde ou moins.</item>
     </plurals>
 </resources>

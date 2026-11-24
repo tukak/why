@@ -265,8 +265,8 @@
     <string name="annoy_offer_add">Ativar modo chato</string>
     <string name="annoy_offer_never">Não perguntar de novo</string>
     <plurals name="annoy_offer_count">
-        <item quantity="one">%1$d das suas últimas %2$d respostas levou menos de um segundo.</item>
-        <item quantity="many">%1$d das suas últimas %2$d respostas levaram menos de um segundo.</item>
-        <item quantity="other">%1$d das suas últimas %2$d respostas levaram menos de um segundo.</item>
+        <item quantity="one">%1$d das suas últimas %2$d respostas levou cerca de um segundo ou menos.</item>
+        <item quantity="many">%1$d das suas últimas %2$d respostas levaram cerca de um segundo ou menos.</item>
+        <item quantity="other">%1$d das suas últimas %2$d respostas levaram cerca de um segundo ou menos.</item>
     </plurals>
 </resources>

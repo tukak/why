@@ -275,9 +275,9 @@
     <string name="annoy_offer_add">Włącz tryb irytujący</string>
     <string name="annoy_offer_never">Nie pytaj więcej</string>
     <plurals name="annoy_offer_count">
-        <item quantity="one">%1$d z twoich ostatnich %2$d odpowiedzi zajęła mniej niż sekundę.</item>
-        <item quantity="few">%1$d z twoich ostatnich %2$d odpowiedzi zajęły mniej niż sekundę.</item>
-        <item quantity="many">%1$d z twoich ostatnich %2$d odpowiedzi zajęło mniej niż sekundę.</item>
-        <item quantity="other">%1$d z twoich ostatnich %2$d odpowiedzi zajęło mniej niż sekundę.</item>
+        <item quantity="one">%1$d z twoich ostatnich %2$d odpowiedzi zajęła około sekundy lub mniej.</item>
+        <item quantity="few">%1$d z twoich ostatnich %2$d odpowiedzi zajęły około sekundy lub mniej.</item>
+        <item quantity="many">%1$d z twoich ostatnich %2$d odpowiedzi zajęło około sekundy lub mniej.</item>
+        <item quantity="other">%1$d z twoich ostatnich %2$d odpowiedzi zajęło około sekundy lub mniej.</item>
     </plurals>
 </resources>

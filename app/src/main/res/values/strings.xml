@@ -255,7 +255,7 @@
     <string name="annoy_offer_add">Turn on annoying mode</string>
     <string name="annoy_offer_never">Don’t ask again</string>
     <plurals name="annoy_offer_count">
-        <item quantity="one">%1$d of your last %2$d answers took less than a second.</item>
-        <item quantity="other">%1$d of your last %2$d answers took less than a second.</item>
+        <item quantity="one">%1$d of your last %2$d answers took about a second or less.</item>
+        <item quantity="other">%1$d of your last %2$d answers took about a second or less.</item>
     </plurals>
 </resources>

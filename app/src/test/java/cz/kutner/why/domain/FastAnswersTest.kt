@@ -28,6 +28,13 @@ class FastAnswersTest {
     }
 
     @Test
+    fun `habit taps on a slower phone still count as fast`() {
+        // The time includes the unlock animation, so a habit tap measures about 0.8-1.3 s.
+        assertEquals(30, offer(latestMs = 1_250, recent = List(30) { 1_250L }))
+        assertNull(offer(latestMs = 1_300, recent = List(30) { 1_300L }))
+    }
+
+    @Test
     fun `too few answers to judge offer nothing`() {
         // A new user taps fast while learning the screen; that is not habit yet.
         assertNull(offer(recent = answers(fast = 29, slow = 0)))
