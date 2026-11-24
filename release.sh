@@ -2,7 +2,8 @@
 # Usage: ./release.sh 1.2.3 "What changed, one line for the store"
 # Sets versionName/versionCode, writes the English changelog, runs tests and lint, commits and tags v1.2.3,
 # builds the signed APK (for GitHub and F-Droid) and AAB from that commit, then pushes, creates the GitHub release
-# and uploads the AAB to the Google Play production track.
+# and uploads the AAB, the release notes and the store texts (fastlane/metadata/android) to the Google Play production
+# track. Images and screenshots stay as they are in Play Console.
 set -euo pipefail
 
 version=${1:-}
@@ -45,5 +46,5 @@ cp app/build/outputs/apk/release/app-release.apk "$apk"
 git push -q origin master "v$version"
 gh release create "v$version" --title "Why? $version" --notes-file $changelog "$apk"
 fastlane supply --package_name cz.kutner.why --json_key $play_key --track production \
-    --aab app/build/outputs/bundle/release/app-release.aab --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
+    --aab app/build/outputs/bundle/release/app-release.aab --skip_upload_images --skip_upload_screenshots
 echo "Released $version (versionCode $code) to GitHub and Google Play. F-Droid builds the tag."
