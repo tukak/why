@@ -211,7 +211,7 @@
     <string name="annoy_title">Modo chato</string>
     <string name="annoy_on">Ativado</string>
     <string name="annoy_off">Desativado</string>
-    <string name="annoy_count">%1$d de %2$d pegadinhas ativadas</string>
+    <string name="annoy_count">Pegadinhas ativadas: %1$d de %2$d</string>
     <string name="annoy_turn_on">Ative para usar todas as %1$d pegadinhas.</string>
     <string name="annoy_explain">A cada desbloqueio, o app sorteia uma das pegadinhas ativadas.</string>
     <string name="annoy_try">Testar</string>
