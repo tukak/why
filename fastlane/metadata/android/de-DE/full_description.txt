@@ -7,6 +7,7 @@ Tippe einen Grund an, tippe „Aus Gewohnheit“ oder schreib deinen eigenen. Mi
 • Dein Glas heute: Bei jedem Entsperren fällt ein Kiesel hinein. Kipp das Handy und die Kiesel rollen.
 • Eine Wochenansicht: Gläser pro Tag, wohin die Zeit ging und zu welchen Zeiten du aus Gewohnheit entsperrst
 • Eine sanfte Nachfrage, wenn du länger bleibst als geplant
+• Nervmodus: Wenn du aus Gewohnheit tippst, ändert jedes Entsperren den Frage-Bildschirm mit einem von 17 Tricks, damit du hinschaust, bevor du tippst
 • Eine Abendbilanz mit den Zahlen des Tages
 • Häufig eingegebene Antworten speicherst du mit einem Tippen als Grund
 

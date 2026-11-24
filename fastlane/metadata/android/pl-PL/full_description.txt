@@ -7,6 +7,7 @@ Kliknij powód, wybierz „Z nawyku” albo wpisz własny. Z dnia na dzień widz
 • Dzisiejszy słoik: każde odblokowanie wrzuca kamyk. Przechyl telefon, a kamyki się poturlają.
 • Widok tygodnia: słoiki dzień po dniu, na co poszedł czas i pory dnia, w których najczęściej odblokowujesz telefon z nawyku
 • Delikatne przypomnienie, gdy spędzasz przy telefonie więcej czasu, niż planujesz
+• Tryb irytujący: gdy dotykasz z nawyku, każde odblokowanie zmienia ekran pytania jedną z 17 sztuczek, więc musisz spojrzeć, zanim dotkniesz
 • Wieczorne podsumowanie z liczbami z całego dnia
 • Często wpisywane odpowiedzi jednym kliknięciem zamienisz w powody
 

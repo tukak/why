@@ -7,6 +7,7 @@ Prečo? sa pri každom odomknutí telefónu opýta jednu otázku: čo ťa sem pr
 • Dnešný pohár: za každé odomknutie pribudne kamienok. Nakloň telefón a kamienky sa kotúľajú.
 • Týždenný prehľad: poháre po dňoch, kam išiel čas a mapa hodín, keď odomykáš zo zvyku
 • Jemné pripomenutie, keď zostaneš dlhšie, než bolo v pláne
+• Otravný režim: keď ťukáš zo zvyku, každé odomknutie zmení obrazovku s otázkou jedným zo 17 trikov, takže sa musíš pozrieť, skôr než ťukneš
 • Večerné zhrnutie s číslami za deň
 • Často písané odpovede môžeš jedným ťuknutím zmeniť na dôvody
 
@@ -16,7 +17,7 @@ Prečo? sa pri každom odomknutí telefónu opýta jednu otázku: čo ťa sem pr
 • Nikdy nečíta, aké aplikácie používaš: zaznamená len odomknutie a vypnutie obrazovky
 
 <b>Povolenia</b>
-• Zobrazenie cez iné aplikácie: na zobrazenie otázky
+• Zobrazovanie cez iné aplikácie: na zobrazenie otázky
 • Upozornenia: Android potrebuje malé upozornenie, aby aplikácia bežala
 • Batéria nastavená na „Bez obmedzení“ (odporúčané), aby Android aplikáciu nezastavil
 

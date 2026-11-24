@@ -7,6 +7,7 @@ Toca un motivo, toca “Por costumbre” o escribe el tuyo. Con los días verás
 • El frasco de hoy: cada desbloqueo deja caer una piedrita. Inclina el teléfono y las piedritas ruedan.
 • Una vista semanal: frascos diarios, en qué se fue el tiempo y a qué horas desbloqueas por costumbre
 • Un aviso amable cuando te quedas más tiempo del que pensabas
+• Modo molesto: si tocas por costumbre, cada desbloqueo cambia la pantalla de la pregunta con uno de 17 trucos, para que mires antes de tocar
 • Un resumen de la noche con las cifras del día
 • Las respuestas que escribes a menudo pueden convertirse en motivos con un toque
 
@@ -16,7 +17,7 @@ Toca un motivo, toca “Por costumbre” o escribe el tuyo. Con los días verás
 • Nunca lee qué apps usas: solo detecta desbloqueos y cuándo se apaga la pantalla
 
 <b>Permisos</b>
-• Mostrar sobre otras apps: para mostrar la pregunta
+• Mostrar sobre otras aplicaciones: para mostrar la pregunta
 • Notificaciones: Android necesita una pequeña notificación para mantener la app activa
 • Batería en “Sin restricciones” (recomendado), para que Android no detenga la app
 

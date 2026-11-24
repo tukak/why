@@ -7,6 +7,7 @@ Choisis une raison, touche « Par habitude » ou écris la tienne. Au fil de
 • Le bocal du jour : chaque déverrouillage y fait tomber un galet. Penche le téléphone et les galets roulent.
 • Une vue de la semaine : bocaux du jour, où est passé le temps, et les heures où tu déverrouilles par habitude
 • Un petit point d’étape quand tu restes plus longtemps que prévu
+• Mode agaçant : si tu appuies par habitude, chaque déverrouillage change l’écran de la question avec l’une des 17 astuces, pour que tu regardes avant d’appuyer
 • Un bilan du soir avec les chiffres du jour
 • Les réponses que tu écris souvent deviennent des raisons en un appui
 
