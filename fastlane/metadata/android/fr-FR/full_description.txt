@@ -1,20 +1,20 @@
 Pourquoi ? te pose une question chaque fois que tu déverrouilles ton téléphone : qu’est-ce qui t’amène ?
 
-Choisis une raison, touche « Par habitude » ou écris la tienne. Au fil des jours, tu vois ce qui t’attire vraiment vers ton téléphone, et à quel moment.
+Choisis une raison, touche « Par habitude » ou écris la tienne. Au fil des jours, tu vois ce qui te fait vraiment prendre ton téléphone, et quand.
 
-<b>Ce que tu obtiens</b>
+<b>Ce que fait l’appli</b>
 • Une question après chaque déverrouillage, avec tes raisons triées selon l’heure
 • Le bocal du jour : chaque déverrouillage y fait tomber un galet. Penche le téléphone et les galets roulent.
-• Une vue de la semaine : bocaux du jour, où est passé le temps, et les heures où tu déverrouilles par habitude
-• Un petit point d’étape quand tu restes plus longtemps que prévu
-• Mode agaçant : si tu appuies par habitude, chaque déverrouillage change l’écran de la question avec l’une des 17 astuces, pour que tu regardes avant d’appuyer
+• Une vue de la semaine : un bocal par jour, où est passé le temps, et quand tu déverrouilles par habitude
+• Un petit rappel quand tu passes plus de temps que prévu sur ton téléphone
+• Mode agaçant, pour quand ton pouce répond tout seul : à chaque déverrouillage, l’une des 17 astuces change la façon dont la question s’affiche, pour que tu regardes avant d’appuyer
 • Un bilan du soir avec les chiffres du jour
 • Les réponses que tu écris souvent deviennent des raisons en un appui
 
-<b>Privé par conception</b>
+<b>Ta vie privée d’abord</b>
 • Tout reste sur ton téléphone
 • Pas d’autorisation Internet, pas de compte, pas de pub, pas de pistage
-• Ne lit jamais quelles applis tu utilises : elle repère seulement les déverrouillages et la mise en veille de l’écran
+• Ne regarde jamais quelles applis tu utilises : elle repère seulement les déverrouillages et la mise en veille de l’écran
 
 <b>Autorisations</b>
 • Superposition sur d’autres applis : pour montrer la question

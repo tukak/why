@@ -1,20 +1,20 @@
 ¿Por qué? te hace una pregunta cada vez que desbloqueas el teléfono: ¿qué te trae por aquí?
 
-Toca un motivo, toca “Por costumbre” o escribe el tuyo. Con los días verás qué te lleva de verdad al teléfono, y cuándo.
+Toca un motivo, toca “Por costumbre” o escribe el tuyo. Con el tiempo verás qué te hace coger el teléfono de verdad, y cuándo.
 
 <b>Qué incluye</b>
 • Una pregunta después de cada desbloqueo, con tus motivos ordenados según la hora del día
 • El frasco de hoy: cada desbloqueo deja caer una piedrita. Inclina el teléfono y las piedritas ruedan.
-• Una vista semanal: frascos diarios, en qué se fue el tiempo y a qué horas desbloqueas por costumbre
-• Un aviso amable cuando te quedas más tiempo del que pensabas
-• Modo molesto: si tocas por costumbre, cada desbloqueo cambia la pantalla de la pregunta con uno de 17 trucos, para que mires antes de tocar
-• Un resumen de la noche con las cifras del día
+• Una vista semanal: frascos diarios, en qué se fue el tiempo y cuándo desbloqueas por costumbre
+• Un pequeño aviso cuando llevas más tiempo con el teléfono del que pensabas
+• Modo molesto, para cuando tu pulgar responde solo: en cada desbloqueo, uno de los 17 trucos cambia cómo se muestra la pregunta, para que mires antes de tocar
+• Un resumen por la noche con las cifras del día
 • Las respuestas que escribes a menudo pueden convertirse en motivos con un toque
 
-<b>Privada por diseño</b>
+<b>Privacidad desde el diseño</b>
 • Todo se queda en tu teléfono
-• Sin permiso de internet, sin cuentas, sin anuncios, sin rastreo
-• Nunca lee qué apps usas: solo detecta desbloqueos y cuándo se apaga la pantalla
+• Sin acceso a internet, sin cuentas, sin anuncios, sin rastreo
+• Nunca comprueba qué apps usas: solo detecta desbloqueos y cuándo se apaga la pantalla
 
 <b>Permisos</b>
 • Mostrar sobre otras aplicaciones: para mostrar la pregunta

@@ -6,15 +6,15 @@ Tippe einen Grund an, tippe „Aus Gewohnheit“ oder schreib deinen eigenen. Mi
 • Eine Frage nach jedem Entsperren, deine Gründe sortiert nach Tageszeit
 • Dein Glas heute: Bei jedem Entsperren fällt ein Kiesel hinein. Kipp das Handy und die Kiesel rollen.
 • Eine Wochenansicht: Gläser pro Tag, wohin die Zeit ging und zu welchen Zeiten du aus Gewohnheit entsperrst
-• Eine sanfte Nachfrage, wenn du länger bleibst als geplant
-• Nervmodus: Wenn du aus Gewohnheit tippst, ändert jedes Entsperren den Frage-Bildschirm mit einem von 17 Tricks, damit du hinschaust, bevor du tippst
+• Eine kurze Nachfrage, wenn du länger am Handy bist als geplant
+• Nervmodus, wenn dein Daumen von allein antwortet: Bei jedem Entsperren verändert einer von 17 Tricks den Bildschirm mit der Frage, damit du hinschaust, bevor du tippst
 • Eine Abendbilanz mit den Zahlen des Tages
 • Häufig eingegebene Antworten speicherst du mit einem Tippen als Grund
 
 <b>Privat von Grund auf</b>
 • Alles bleibt auf deinem Handy
 • Keine Internetberechtigung, keine Konten, keine Werbung, kein Tracking
-• Liest nie, welche Apps du nutzt: Die App bemerkt nur Entsperren und Bildschirm aus
+• Schaut nie nach, welche Apps du nutzt: Die App merkt nur, wenn du entsperrst und wenn der Bildschirm ausgeht
 
 <b>Berechtigungen</b>
 • Über anderen Apps einblenden: um die Frage anzuzeigen
