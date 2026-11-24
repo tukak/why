@@ -31,7 +31,6 @@ import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.domain.Answer
 import cz.kutner.why.domain.FastAnswers
 import cz.kutner.why.domain.PromptPolicy
-import cz.kutner.why.domain.TimeOfDayOrder
 import cz.kutner.why.domain.Trick
 import cz.kutner.why.domain.TrickPicker
 import cz.kutner.why.domain.TrickSetup
@@ -39,6 +38,7 @@ import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.domain.answer
 import cz.kutner.why.domain.startOfDay
 import cz.kutner.why.ui.animationsOff
+import cz.kutner.why.ui.hasMotionSensor
 import cz.kutner.why.ui.overlay.AnnoyOfferScreen
 import cz.kutner.why.ui.overlay.AnswerStats
 import cz.kutner.why.ui.overlay.NudgeScreen
@@ -177,7 +177,7 @@ class UnlockService : LifecycleService() {
     }
 
     private suspend fun loadChoices(now: Long): PromptChoices =
-        app.unlocks.promptChoices(TimeOfDayOrder(now, app.clock.zone), answersSince = now - ORDER_HISTORY_MS)
+        app.unlocks.promptChoices(now, app.clock.zone)
 
     private suspend fun onScreenOff() {
         unlockWatch?.cancel()
@@ -199,7 +199,7 @@ class UnlockService : LifecycleService() {
         val time = timeFormatter(this).format(Instant.ofEpochMilli(now).atZone(app.clock.zone))
         val setup = pickTrick(settings, choices.reasons.size)
         val showHint = setup != null && setup.trick !in settings.tricksSeen
-        if (showHint) app.settings.markTrickSeen(setup.trick)
+        if (showHint) lifecycleScope.launch { app.settings.markTrickSeen(setup.trick) }
         showThemed(settings) {
             PromptScreen(
                 time = time,
@@ -234,6 +234,7 @@ class UnlockService : LifecycleService() {
             screenReader = screenReaderOn(),
             reducedMotion = animationsOff(),
             random = Random.Default,
+            motionSensor = hasMotionSensor(),
         ) ?: return null
         lastTrick = trick
         return TrickSetup.create(trick, reasons, Random.Default)
@@ -284,13 +285,11 @@ class UnlockService : LifecycleService() {
         }
     }
 
-    private suspend fun fastAnswers(settings: AppSettings, answerMs: Long): Int? = FastAnswers.offer(
-        latestMs = answerMs,
-        recent = app.unlocks.recentPlainAnswerTimes(FastAnswers.SAMPLE),
-        annoyingMode = settings.annoyingMode,
-        offerAfter = settings.annoyOfferAfter,
-        now = app.clock.millis(),
-    )
+    private suspend fun fastAnswers(settings: AppSettings, answerMs: Long): Int? {
+        val now = app.clock.millis()
+        if (!FastAnswers.mayOffer(answerMs, settings.annoyingMode, settings.annoyOfferAfter, now)) return null
+        return FastAnswers.offer(answerMs, app.unlocks.recentPlainAnswerTimes(FastAnswers.SAMPLE), settings.annoyingMode, settings.annoyOfferAfter, now)
+    }
 
     private fun showAnnoyOffer(fast: Int, settings: AppSettings) {
         showThemed(settings) {
@@ -406,7 +405,6 @@ class UnlockService : LifecycleService() {
         private const val UNLOCKED_EARLY = "cz.kutner.why.UNLOCKED_EARLY"
         private val UNLOCK_WATCH_STEP = 100.milliseconds
         private val UNLOCK_WATCH_LIMIT = 60.seconds
-        private val ORDER_HISTORY_MS = 30.days.inWholeMilliseconds
 
         /** False when Android does not allow a start from the background right now. */
         fun start(context: Context): Boolean = try {

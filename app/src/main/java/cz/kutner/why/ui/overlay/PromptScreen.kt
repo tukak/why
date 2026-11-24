@@ -47,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -101,7 +102,7 @@ fun PromptScreen(
     onPause: () -> Unit,
 ) {
     val colors = MaterialTheme.colorScheme
-    val usable = setup?.takeIf { it.reasons == reasons.size && reasons.size + 1 <= it.trick.maxAnswers }
+    val usable = setup?.takeIf { it.reasons == reasons.size }
     val state = remember(usable) { PromptState(usable) }
     val trick = state.trick
     val habitLabel = stringResource(R.string.habit)
@@ -112,14 +113,26 @@ fun PromptScreen(
     val scramble = rememberScramble(state, choices)
     GateEffects(state)
 
-    val deliver: (Pair<PromptAnswer, AnswerStats>?) -> Unit = { result -> if (result != null) onAnswer(result.first, result.second) }
-    val ui = AnswerUi(
-        awake = { state.awake(it.index) },
-        tap = { c -> deliver(state.tap(c.index, c.reason?.let { PromptAnswer.Picked(it) } ?: PromptAnswer.Habit, c.label)) },
-        label = { c -> scramble(c) },
-        hold = trick == Trick.Hold,
-    )
-    val submitText = { text: String -> deliver(state.tap(PromptState.TYPED, PromptAnswer.Typed(text.trim()), text.trim())) }
+    val answer by rememberUpdatedState(onAnswer)
+    val deliver: (Pair<PromptAnswer, AnswerStats>?) -> Unit = { result -> if (result != null) answer(result.first, result.second) }
+    val ui = remember(state, scramble) {
+        AnswerUi(
+            awake = { state.awake(it.index) },
+            tap = { c -> deliver(state.tap(c.index, c.reason?.let { PromptAnswer.Picked(it) } ?: PromptAnswer.Habit, c.label)) },
+            label = scramble,
+            hold = trick == Trick.Hold,
+        )
+    }
+    val submitText = submit@{ text: String ->
+        if (trick == Trick.TypeIt) {
+            // The field searches the answers here: Done picks the match, and saves the text only when nothing matches.
+            val found = typeItMatches(text, ordered)
+            val pick = found.singleOrNull() ?: found.firstOrNull { it.label.equals(text.trim(), ignoreCase = true) }
+            if (pick != null) return@submit ui.tap(pick)
+            if (found.isNotEmpty()) return@submit
+        }
+        deliver(state.tap(PromptState.TYPED, PromptAnswer.Typed(text.trim()), text.trim()))
+    }
 
     Box(Modifier.fillMaxSize().background(colors.background)) {
         Column(
@@ -189,7 +202,7 @@ private val FILLING = setOf(Trick.Wild, Trick.Drift, Trick.Pebbles, Trick.Tilt, 
 @Composable
 private fun Answers(state: PromptState, setup: TrickSetup?, ordered: List<Choice>, ui: AnswerUi) {
     when {
-        setup == null -> GridAnswers(ordered.dropLast(1), ordered.last(), 2, false, ui)
+        setup == null -> GridAnswers(ordered.dropLast(1), ordered.last(), 2, ui)
         setup.trick == Trick.Breath && state.openAt == null -> BreathGate(
             onDone = state::open,
             onTooShort = { state.message = R.string.prompt_breath_again },
@@ -201,20 +214,25 @@ private fun Answers(state: PromptState, setup: TrickSetup?, ordered: List<Choice
         setup.trick == Trick.DragToJar -> DragAnswers(ordered, ui)
         setup.trick == Trick.NewGrid -> when (setup.gridKind) {
             GridKind.Circle -> CircleAnswers(ordered, ui)
-            GridKind.ThreeColumns -> GridAnswers(ordered, null, 3, false, ui)
-            GridKind.List -> GridAnswers(ordered, null, 1, true, ui)
+            GridKind.ThreeColumns -> GridAnswers(ordered, null, 3, ui)
+            GridKind.List -> GridAnswers(ordered, null, 1, ui)
         }
         setup.trick == Trick.TypeIt -> {
-            val query = state.typed.trim()
-            val found = if (query.length < 2) emptyList() else ordered.filter { it.label.contains(query, ignoreCase = true) }
+            val found = typeItMatches(state.typed, ordered)
             if (found.isEmpty()) {
-                TypeHelp(if (query.length < 2) R.string.prompt_type_help else R.string.prompt_type_no_match)
+                TypeHelp(if (state.typed.trim().length < 2) R.string.prompt_type_help else R.string.prompt_type_no_match)
             } else {
-                GridAnswers(found, null, 2, false, ui)
+                GridAnswers(found, null, 2, ui)
             }
         }
-        else -> GridAnswers(ordered.dropLast(1), ordered.last(), 2, false, ui)
+        else -> GridAnswers(ordered.dropLast(1), ordered.last(), 2, ui)
     }
+}
+
+/** The answers that contain [typed], once at least 2 letters are typed. */
+private fun typeItMatches(typed: String, ordered: List<Choice>): List<Choice> {
+    val query = typed.trim()
+    return if (query.length < 2) emptyList() else ordered.filter { it.label.contains(query, ignoreCase = true) }
 }
 
 /** Starts the waits of the timing tricks. */
@@ -242,7 +260,7 @@ private fun GateEffects(state: PromptState) {
 @Composable
 private fun rememberScramble(state: PromptState, choices: List<Choice>): (Choice) -> String {
     val setup = state.setup
-    if (setup?.trick != Trick.Scramble) return { it.label }
+    if (setup?.trick != Trick.Scramble) return remember { { it.label } }
     val progress = remember { Animatable(0f) }
     LaunchedEffect(Unit) {
         progress.animateTo(1f, tween(TrickSetup.SCRAMBLE_MS.toInt(), easing = LinearEasing))
@@ -254,8 +272,8 @@ private fun rememberScramble(state: PromptState, choices: List<Choice>): (Choice
             c.label.indices.shuffled(r) to c.label.indices.shuffled(r)
         }
     }
-    val p = progress.value
-    return { c -> mixes[c.index].let { (order, source) -> scrambled(c.label, order, source, p) } }
+    // The progress is read where a label is shown, so only the labels change on each frame.
+    return remember(mixes) { { c -> mixes[c.index].let { (order, source) -> scrambled(c.label, order, source, progress.value) } } }
 }
 
 @Composable

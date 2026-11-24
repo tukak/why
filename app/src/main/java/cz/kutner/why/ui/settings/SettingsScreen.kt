@@ -53,7 +53,6 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.settings.AppSettings
 import cz.kutner.why.data.settings.ThemeMode
-import cz.kutner.why.domain.Trick
 import cz.kutner.why.ui.components.BackgroundHelp
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
@@ -140,10 +139,11 @@ fun SettingsScreen(onBack: () -> Unit, onAnnoy: () -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 Column(Modifier.weight(1f)) {
+                    val blocks = trickBlocks()
                     Text(stringResource(R.string.annoy_title), style = MaterialTheme.typography.labelLarge)
                     Text(
                         if (settings.annoyingMode) {
-                            stringResource(R.string.settings_annoy_on, settings.tricksOn.size, Trick.entries.size)
+                            stringResource(R.string.settings_annoy_on, settings.tricksOn.count { blocks[it] == null }, blocks.count { it.value == null })
                         } else {
                             stringResource(R.string.settings_annoy_off)
                         },

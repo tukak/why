@@ -230,6 +230,7 @@
     <string name="annoy_limit_over">Ten psikus nie działa, jeśli masz więcej niż %1$d powodów.</string>
     <string name="annoy_off_screen_reader">Niedostępne przy włączonym TalkBack.</string>
     <string name="annoy_off_animations">Niedostępne przy wyłączonych animacjach.</string>
+    <string name="annoy_off_sensor">Niedostępne: urządzenie nie ma czujnika ruchu.</string>
     <string name="settings_annoy_on">Włączony · %1$d z %2$d psikusów</string>
     <string name="settings_annoy_off">Wyłączony. Zmienia pytanie przy każdym odblokowaniu.</string>
     <string name="trick_group_timing">Czas</string>

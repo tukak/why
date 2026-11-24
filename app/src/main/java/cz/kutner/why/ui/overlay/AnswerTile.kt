@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import cz.kutner.why.data.db.Reason
 import cz.kutner.why.ui.theme.PebbleStyle
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
 
 /** One answer on the question screen: a reason, or "Just habit" when [reason] is null. [index] is its number in a [cz.kutner.why.domain.TrickSetup]. */
 data class Choice(val index: Int, val label: String, val style: PebbleStyle, val reason: Reason?)
@@ -125,13 +126,19 @@ internal fun FitText(text: String, style: TextStyle, maxSize: TextUnit, modifier
 /** Like a stepped auto size, but a size that breaks a word inside counts as too big. */
 private data class WholeWords(val min: TextUnit, val max: TextUnit) : TextAutoSize {
     override fun TextAutoSizeLayoutScope.getFontSize(constraints: Constraints, text: AnnotatedString): TextUnit {
-        var size = max.value
-        while (size > min.value) {
-            val layout = performLayout(constraints, text, size.sp)
-            if (!layout.hasVisualOverflow && layout.keepsWords(text.text)) return size.sp
-            size -= STEP
+        // Candidate i is max - i * STEP; the largest size that fits is the smallest i that fits.
+        val count = ceil((max.value - min.value) / STEP).toInt()
+        fun fits(i: Int): Boolean {
+            val layout = performLayout(constraints, text, (max.value - i * STEP).sp)
+            return !layout.hasVisualOverflow && layout.keepsWords(text.text)
         }
-        return min
+        var lo = 0
+        var hi = count
+        while (lo < hi) {
+            val mid = (lo + hi) / 2
+            if (fits(mid)) hi = mid else lo = mid + 1
+        }
+        return if (lo < count) (max.value - lo * STEP).sp else min
     }
 }
 

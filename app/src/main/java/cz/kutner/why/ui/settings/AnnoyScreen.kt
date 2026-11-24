@@ -21,9 +21,11 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,36 +39,30 @@ import cz.kutner.why.R
 import cz.kutner.why.container
 import cz.kutner.why.data.PromptChoices
 import cz.kutner.why.data.settings.AppSettings
-import cz.kutner.why.domain.TimeOfDayOrder
 import cz.kutner.why.domain.Trick
 import cz.kutner.why.domain.TrickGroup
 import cz.kutner.why.domain.TrickBlock
 import cz.kutner.why.domain.TrickSetup
-import cz.kutner.why.domain.block
 import cz.kutner.why.domain.startOfDay
 import cz.kutner.why.ui.components.Icons
 import cz.kutner.why.ui.components.LineIcon
-import cz.kutner.why.ui.animationsOff
 import cz.kutner.why.ui.description
 import cz.kutner.why.ui.overlay.PromptScreen
-import cz.kutner.why.ui.screenReaderOn
+import cz.kutner.why.ui.trickBlock
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.timeFormatter
 import cz.kutner.why.ui.title
 import java.time.Instant
 import kotlin.random.Random
-import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.launch
 
 @Composable
 fun AnnoyScreen(onBack: () -> Unit, onTry: (Trick) -> Unit) {
-    val app = LocalContext.current.container
+    val context = LocalContext.current
+    val app = context.container
     val repo = app.settings
     val settings by repo.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
-    val reasons by app.unlocks.reasons.collectAsStateWithLifecycle(initialValue = emptyList())
-    val answers = reasons.count { !it.archived } + 1
-    val context = LocalContext.current
-    val blocks = Trick.entries.associateWith { it.block(answers, context.screenReaderOn(), context.animationsOff()) }
+    val blocks = trickBlocks()
     val scope = rememberCoroutineScope()
     val colors = MaterialTheme.colorScheme
     val on = settings.annoyingMode
@@ -144,6 +140,7 @@ private fun TrickRow(trick: Trick, checked: Boolean, enabled: Boolean, block: Tr
     val maxReasons = trick.maxAnswers - 1
     val note = when (block) {
         TrickBlock.TooManyAnswers -> stringResource(R.string.annoy_limit_over, maxReasons)
+        TrickBlock.NoSensor -> stringResource(R.string.annoy_off_sensor)
         TrickBlock.ScreenReader -> stringResource(R.string.annoy_off_screen_reader)
         TrickBlock.NoAnimations -> stringResource(R.string.annoy_off_animations)
         null -> if (trick.maxAnswers != Int.MAX_VALUE) stringResource(R.string.annoy_limit, maxReasons) else null
@@ -162,21 +159,36 @@ private fun TrickRow(trick: Trick, checked: Boolean, enabled: Boolean, block: Tr
     }
 }
 
+/** Why each trick cannot run on this phone now, or null when it can. */
+@Composable
+internal fun trickBlocks(): Map<Trick, TrickBlock?> {
+    val context = LocalContext.current
+    val reasons by context.container.unlocks.reasons.collectAsStateWithLifecycle(initialValue = emptyList())
+    val answers = reasons.count { !it.archived } + 1
+    return Trick.entries.associateWith { context.trickBlock(it, answers) }
+}
+
 /** The question screen with one trick and the real reasons, to see the trick without an unlock. Any answer goes back. */
 @Composable
 fun TryTrickScreen(trick: Trick, onBack: () -> Unit) {
     val context = LocalContext.current
+    // The leaving screen still takes taps while it animates out; a second tap must not close the screen below.
+    var left by remember { mutableStateOf(false) }
+    val back = { if (!left) { left = true; onBack() } }
     val app = context.container
     val now = remember { app.clock.millis() }
     val loaded by produceState<Pair<PromptChoices, Int>?>(null) {
-        val choices = app.unlocks.promptChoices(TimeOfDayOrder(now, app.clock.zone), answersSince = now - 30.days.inWholeMilliseconds)
+        val choices = app.unlocks.promptChoices(now, app.clock.zone)
         value = choices to app.unlocks.countSince(startOfDay(now, app.clock.zone))
     }
     val (choices, count) = loaded ?: run {
         Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background))
         return
     }
-    val setup = remember(choices) { TrickSetup.create(trick, choices.reasons.size, Random.Default) }
+    val setup = remember(choices) {
+        TrickSetup.create(trick, choices.reasons.size, Random.Default)
+            .takeIf { context.trickBlock(trick, choices.reasons.size + 1) == null }
+    }
     PromptScreen(
         time = timeFormatter(context).format(Instant.ofEpochMilli(now).atZone(app.clock.zone)),
         unlockNumber = count,
@@ -184,8 +196,8 @@ fun TryTrickScreen(trick: Trick, onBack: () -> Unit) {
         typedBefore = choices.typed,
         setup = setup,
         showHint = true,
-        onAnswer = { _, _ -> onBack() },
-        onOpenApp = onBack,
-        onPause = onBack,
+        onAnswer = { _, _ -> back() },
+        onOpenApp = back,
+        onPause = back,
     )
 }

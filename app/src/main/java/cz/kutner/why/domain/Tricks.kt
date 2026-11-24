@@ -5,30 +5,38 @@ import kotlin.random.Random
 enum class TrickGroup { Timing, Layout, Words, Body }
 
 /** Layouts that place every answer on screen at once get too small above this many answers on a small phone. */
-const val MAX_PLACED = 17
+private const val MAX_PLACED = 17
 
 /**
  * One way annoying mode changes the question screen, so a tap from habit does not land.
  * The names are stored; do not rename them.
- * [moves]: the answers move or roll. [drag]: answering needs a drag. [maxAnswers]: more answers do not fit the layout.
+ * [moves]: the answers move or roll. [animated]: the trick is an animation, which ends at once with animations off.
+ * [drag]: answering needs a drag. [sensor]: answering needs the motion sensor. [maxAnswers]: more answers do not fit the layout.
  */
-enum class Trick(val group: TrickGroup, val moves: Boolean = false, val drag: Boolean = false, val maxAnswers: Int = Int.MAX_VALUE) {
+enum class Trick(
+    val group: TrickGroup,
+    val moves: Boolean = false,
+    val animated: Boolean = false,
+    val drag: Boolean = false,
+    val sensor: Boolean = false,
+    val maxAnswers: Int = Int.MAX_VALUE,
+) {
     Pause(TrickGroup.Timing),
     Stagger(TrickGroup.Timing),
     EarlyReset(TrickGroup.Timing),
-    Hold(TrickGroup.Timing),
+    Hold(TrickGroup.Timing, animated = true),
     SecondCheck(TrickGroup.Timing),
     Shuffle(TrickGroup.Layout),
     HabitTrap(TrickGroup.Layout),
     NewGrid(TrickGroup.Layout),
-    Wild(TrickGroup.Layout),
+    Wild(TrickGroup.Layout, maxAnswers = MAX_PLACED),
     Drift(TrickGroup.Layout, moves = true, maxAnswers = MAX_PLACED),
     Pebbles(TrickGroup.Layout, moves = true, maxAnswers = MAX_PLACED),
-    Scramble(TrickGroup.Words),
+    Scramble(TrickGroup.Words, animated = true),
     TypeIt(TrickGroup.Words),
     Question(TrickGroup.Words),
-    Tilt(TrickGroup.Body, moves = true, maxAnswers = MAX_PLACED),
-    Breath(TrickGroup.Body),
+    Tilt(TrickGroup.Body, moves = true, sensor = true, maxAnswers = MAX_PLACED),
+    Breath(TrickGroup.Body, animated = true),
     DragToJar(TrickGroup.Body, drag = true, maxAnswers = MAX_PLACED),
     ;
 
@@ -37,23 +45,24 @@ enum class Trick(val group: TrickGroup, val moves: Boolean = false, val drag: Bo
     }
 }
 
-enum class TrickBlock { TooManyAnswers, ScreenReader, NoAnimations }
+enum class TrickBlock { TooManyAnswers, NoSensor, ScreenReader, NoAnimations }
 
 /**
  * Why this trick cannot be used now, or null when it can.
- * With a screen reader, moving targets and drags cannot be used; with animations off, nothing may move.
+ * With a screen reader, moving targets and drags cannot be used; with animations off, nothing may move or animate.
  */
-fun Trick.block(answers: Int, screenReader: Boolean, reducedMotion: Boolean): TrickBlock? = when {
+fun Trick.block(answers: Int, screenReader: Boolean, reducedMotion: Boolean, motionSensor: Boolean = true): TrickBlock? = when {
     answers > maxAnswers -> TrickBlock.TooManyAnswers
+    sensor && !motionSensor -> TrickBlock.NoSensor
     (moves || drag) && screenReader -> TrickBlock.ScreenReader
-    moves && reducedMotion -> TrickBlock.NoAnimations
+    (moves || animated) && reducedMotion -> TrickBlock.NoAnimations
     else -> null
 }
 
 object TrickPicker {
     /** A random trick from [enabled] that is not [last], or null when none can be used. */
-    fun pick(enabled: Set<Trick>, last: Trick?, answers: Int, screenReader: Boolean, reducedMotion: Boolean, random: Random): Trick? {
-        val usable = enabled.filter { it.block(answers, screenReader, reducedMotion) == null }
+    fun pick(enabled: Set<Trick>, last: Trick?, answers: Int, screenReader: Boolean, reducedMotion: Boolean, random: Random, motionSensor: Boolean = true): Trick? {
+        val usable = enabled.filter { it.block(answers, screenReader, reducedMotion, motionSensor) == null }
         if (usable.isEmpty()) return null
         return usable.filter { it != last }.ifEmpty { usable }.random(random)
     }

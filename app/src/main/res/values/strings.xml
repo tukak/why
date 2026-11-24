@@ -210,6 +210,7 @@
     <string name="annoy_limit_over" tools:ignore="PluralsCandidate">Not available with more than %1$d reasons.</string>
     <string name="annoy_off_screen_reader">Not available with TalkBack on.</string>
     <string name="annoy_off_animations">Not available with animations turned off.</string>
+    <string name="annoy_off_sensor">Not available: this device has no motion sensor.</string>
     <string name="settings_annoy_on" tools:ignore="PluralsCandidate">On · %1$d of %2$d tricks</string>
     <string name="settings_annoy_off">Off. Changes the question at every unlock.</string>
     <string name="trick_group_timing">Timing</string>

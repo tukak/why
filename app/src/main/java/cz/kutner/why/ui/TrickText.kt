@@ -1,11 +1,15 @@
 package cz.kutner.why.ui
 
 import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.provider.Settings
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
 import cz.kutner.why.R
 import cz.kutner.why.domain.Trick
+import cz.kutner.why.domain.TrickBlock
+import cz.kutner.why.domain.block
 import cz.kutner.why.domain.TrickGroup
 
 @get:StringRes
@@ -68,5 +72,11 @@ val questions = listOf(R.string.prompt_question_1, R.string.prompt_question_2, R
 /** A screen reader that explores by touch, such as TalkBack, is on. */
 fun Context.screenReaderOn(): Boolean = getSystemService(AccessibilityManager::class.java).isTouchExplorationEnabled
 
-/** The system setting Remove animations is on. */
+/** Animations are off: Remove animations, developer options or a battery saver set their duration to 0. */
 fun Context.animationsOff(): Boolean = Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) == 0f
+
+/** The phone has the accelerometer that tilting needs. */
+fun Context.hasMotionSensor(): Boolean = getSystemService(SensorManager::class.java)?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null
+
+/** Why [trick] cannot run on this phone now with [answers] answers, or null when it can. */
+fun Context.trickBlock(trick: Trick, answers: Int): TrickBlock? = trick.block(answers, screenReaderOn(), animationsOff(), hasMotionSensor())

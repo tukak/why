@@ -16,7 +16,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -43,7 +42,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object ReasonsKey : NavKey
 @Serializable data object SettingsKey : NavKey
 @Serializable data object AnnoyKey : NavKey
-@Serializable data class TryTrickKey(val trick: String) : NavKey
+@Serializable data class TryTrickKey(val trick: Trick) : NavKey
 
 private data class Tab(val key: NavKey, val label: Int, val icon: String)
 
@@ -78,11 +77,10 @@ fun WhyNavigation() {
                     SettingsScreen(onBack = { backStack.removeLastOrNull() }, onAnnoy = { backStack.add(AnnoyKey) })
                 }
                 entry<AnnoyKey>(metadata = deeper) {
-                    AnnoyScreen(onBack = { backStack.removeLastOrNull() }, onTry = { backStack.add(TryTrickKey(it.name)) })
+                    AnnoyScreen(onBack = { backStack.removeLastOrNull() }, onTry = { backStack.add(TryTrickKey(it)) })
                 }
                 entry<TryTrickKey>(metadata = deeper) { key ->
-                    val trick = Trick.of(key.trick)
-                    if (trick == null) LaunchedEffect(Unit) { backStack.removeLastOrNull() } else TryTrickScreen(trick, onBack = { backStack.removeLastOrNull() })
+                    TryTrickScreen(key.trick, onBack = { backStack.removeLastOrNull() })
                 }
             },
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding()),

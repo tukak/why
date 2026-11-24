@@ -7,16 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -52,16 +46,6 @@ fun AnnoyOfferScreen(fast: Int, total: Int, onDecide: (OfferDecision) -> Unit) {
             }
             Text(stringResource(R.string.annoy_offer_text), style = MaterialTheme.typography.bodyMedium, color = colors.onSurfaceVariant)
         }
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Button(onClick = { onDecide(OfferDecision.Add) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-                Text(stringResource(R.string.annoy_offer_add), style = MaterialTheme.typography.labelLarge)
-            }
-            FilledTonalButton(onClick = { onDecide(OfferDecision.NotNow) }, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-                Text(stringResource(R.string.offer_not_now), style = MaterialTheme.typography.labelLarge)
-            }
-        }
-        TextButton(onClick = { onDecide(OfferDecision.Never) }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(stringResource(R.string.annoy_offer_never), color = colors.onSurfaceVariant)
-        }
+        OfferButtons(stringResource(R.string.annoy_offer_add), stringResource(R.string.annoy_offer_never), onDecide)
     }
 }

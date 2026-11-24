@@ -44,9 +44,21 @@ class TricksTest {
     }
 
     @Test
-    fun `with animations off nothing that moves is picked`() {
-        // Moving answers can make people with motion sensitivity feel sick.
-        repeat(500) { seed -> assertTrue(pick(reducedMotion = true, seed = seed)?.moves == false) }
+    fun `with animations off nothing that moves or animates is picked`() {
+        // Moving answers can make people with motion sensitivity feel sick, and an animated trick ends at once with
+        // animations off, so a hold or a breath would answer on touch.
+        repeat(500) { seed ->
+            val trick = pick(reducedMotion = true, seed = seed)!!
+            assertTrue(!trick.moves && !trick.animated, "$trick")
+        }
+        assertEquals(TrickBlock.NoAnimations, Trick.Hold.block(answers = 7, screenReader = false, reducedMotion = true))
+    }
+
+    @Test
+    fun `without a motion sensor tilt is never picked`() {
+        // The ball cannot move, and tilt answers cannot be tapped, so the question could not be answered.
+        repeat(500) { seed -> assertNotEquals(Trick.Tilt, TrickPicker.pick(all, null, 7, false, false, Random(seed), motionSensor = false)) }
+        assertEquals(TrickBlock.NoSensor, Trick.Tilt.block(answers = 7, screenReader = false, reducedMotion = false, motionSensor = false))
     }
 
     @Test
@@ -73,7 +85,8 @@ class TricksTest {
         assertEquals(TrickBlock.NoAnimations, Trick.Drift.block(answers = 7, screenReader = false, reducedMotion = true))
         // Too many answers comes first: turning TalkBack off would not help.
         assertEquals(TrickBlock.TooManyAnswers, Trick.Tilt.block(answers = 18, screenReader = true, reducedMotion = true))
-        assertTrue(Trick.entries.filterNot { it.moves || it.drag }.all { it.block(answers = 99, screenReader = true, reducedMotion = true) == null })
+        // Tricks that neither move, animate, drag nor place every answer at once work for everyone.
+        assertTrue(Trick.entries.filterNot { it.moves || it.animated || it.drag || it.maxAnswers != Int.MAX_VALUE }.all { it.block(answers = 99, screenReader = true, reducedMotion = true, motionSensor = false) == null })
     }
 
     @Test

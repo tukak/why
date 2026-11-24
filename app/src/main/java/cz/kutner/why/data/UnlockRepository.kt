@@ -10,6 +10,8 @@ import cz.kutner.why.domain.TimeOfDayOrder
 import cz.kutner.why.domain.TypedReasons
 import cz.kutner.why.ui.theme.PebbleShape
 import cz.kutner.why.ui.theme.ReasonColor
+import java.time.ZoneId
+import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 
@@ -31,9 +33,11 @@ class UnlockRepository(
             TypedReasons.due(TypedReasons.group(entries), offers, reasons)
         }
 
-    suspend fun promptChoices(order: TimeOfDayOrder, answersSince: Long): PromptChoices {
+    /** The reasons in the order the question shows them at [now], and the typed answers to suggest. */
+    suspend fun promptChoices(now: Long, zone: ZoneId): PromptChoices {
+        val order = TimeOfDayOrder(now, zone)
         val active = reasonDao.active()
-        val answers = unlockDao.reasonAnswers(answersSince).map { it.reasonId to it.unlockedAt }
+        val answers = unlockDao.reasonAnswers(now - ORDER_HISTORY_MS).map { it.reasonId to it.unlockedAt }
         val typed = TypedReasons.suggestions(TypedReasons.group(unlockDao.customEntries()), active, order)
         val ordered = order.order(active, answers)
         return PromptChoices(ordered, typed)
@@ -113,3 +117,5 @@ class UnlockRepository(
 
     fun eventsSince(from: Long): Flow<List<UnlockEvent>> = unlockDao.observeSince(from)
 }
+
+private val ORDER_HISTORY_MS = 30.days.inWholeMilliseconds

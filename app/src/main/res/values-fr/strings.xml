@@ -220,6 +220,7 @@
     <string name="annoy_limit_over">Indisponible avec plus de %1$d raisons.</string>
     <string name="annoy_off_screen_reader">Indisponible avec TalkBack activé.</string>
     <string name="annoy_off_animations">Indisponible sans animations.</string>
+    <string name="annoy_off_sensor">Indisponible : cet appareil n’a pas de capteur de mouvement.</string>
     <string name="settings_annoy_on">Activé · %1$d sur %2$d taquineries</string>
     <string name="settings_annoy_off">Désactivé. Change la question à chaque déverrouillage.</string>
     <string name="trick_group_timing">Temps</string>

@@ -19,7 +19,10 @@ sealed interface PromptAnswer {
     data class Typed(val text: String) : PromptAnswer
 }
 
-/** [answerMs] counts from when the answer could be tapped; [earlyTaps] are taps before that. */
+/**
+ * [answerMs] counts from when the answer woke up, or, for an answer that never slept, from when the question was created,
+ * which is before the unlock animation ends. [earlyTaps] are taps before the answer woke up.
+ */
 data class AnswerStats(val answerMs: Long, val earlyTaps: Int)
 
 /** When each answer wakes up, and what the taps on a question screen did so far. */

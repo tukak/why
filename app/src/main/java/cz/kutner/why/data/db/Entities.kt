@@ -23,7 +23,7 @@ data class Reason(
  * Answer states: [reasonId] set, [isHabit] true, [customText] set, or [isAppCheck] true (unlocked to open this app).
  * All empty means unanswered.
  * [customKey] is [customText] normalized once on save, so grouping typed answers needs no text processing.
- * [answerMs] is the time from when the answers could be tapped to the answer.
+ * [answerMs] is the time to the answer from when it woke up, or from when the question was created if it never slept.
  * [earlyTaps] counts taps on answers that could not be tapped yet; [trick] is the annoying-mode trick shown, if any.
  */
 @Entity(tableName = "unlock_event", indices = [Index("unlockedAt"), Index("customKey")])

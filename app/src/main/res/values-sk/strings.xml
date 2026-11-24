@@ -230,6 +230,7 @@
     <string name="annoy_limit_over">Nefunguje, ak máš viac ako %1$d dôvodov.</string>
     <string name="annoy_off_screen_reader">Nedostupné so zapnutým TalkBackom.</string>
     <string name="annoy_off_animations">Nedostupné s vypnutými animáciami.</string>
+    <string name="annoy_off_sensor">Nedostupné: zariadenie nemá pohybový senzor.</string>
     <string name="settings_annoy_on">Zapnuté · %1$d z %2$d schválností</string>
     <string name="settings_annoy_off">Vypnuté. Mení otázku pri každom odomknutí.</string>
     <string name="trick_group_timing">Načasovanie</string>

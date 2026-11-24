@@ -15,7 +15,11 @@ object FastAnswers {
      * [recent] is newest first, includes [latestMs], and holds only answers given without a trick.
      */
     fun offer(latestMs: Long, recent: List<Long>, annoyingMode: Boolean, offerAfter: Long, now: Long): Int? {
-        if (annoyingMode || now < offerAfter || latestMs >= FAST_MS || recent.size < SAMPLE) return null
+        if (!mayOffer(latestMs, annoyingMode, offerAfter, now) || recent.size < SAMPLE) return null
         return recent.take(SAMPLE).count { it < FAST_MS }.takeIf { it >= MIN_FAST }
     }
+
+    /** False when no history can lead to an offer, so the recent answers need not be read. */
+    fun mayOffer(latestMs: Long, annoyingMode: Boolean, offerAfter: Long, now: Long): Boolean =
+        !annoyingMode && now >= offerAfter && latestMs < FAST_MS
 }

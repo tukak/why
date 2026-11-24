@@ -41,6 +41,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -113,8 +114,9 @@ internal class AnswerUi(
 
 /** The usual two-column grid, also used for three columns and a one-column list. [wide] goes below the grid. */
 @Composable
-internal fun GridAnswers(items: List<Choice>, wide: Choice?, columns: Int, list: Boolean, ui: AnswerUi, modifier: Modifier = Modifier) {
+internal fun GridAnswers(items: List<Choice>, wide: Choice?, columns: Int, ui: AnswerUi, modifier: Modifier = Modifier) {
     val colors = MaterialTheme.colorScheme
+    val list = columns == 1
     Column(modifier) {
         val grid = rememberScrollState()
         Box(Modifier.weight(1f, fill = false)) {
@@ -122,7 +124,7 @@ internal fun GridAnswers(items: List<Choice>, wide: Choice?, columns: Int, list:
                 items.chunked(columns).forEachIndexed { row, group ->
                     Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         group.forEachIndexed { col, choice ->
-                            GridChip(choice, row * columns + col, columns, list, ui, Modifier.weight(1f))
+                            GridChip(choice, row * columns + col, columns, ui, Modifier.weight(1f))
                         }
                         repeat(columns - group.size) { Spacer(Modifier.weight(1f)) }
                     }
@@ -146,7 +148,8 @@ internal fun GridAnswers(items: List<Choice>, wide: Choice?, columns: Int, list:
 }
 
 @Composable
-private fun GridChip(choice: Choice, index: Int, columns: Int, list: Boolean, ui: AnswerUi, modifier: Modifier) {
+private fun GridChip(choice: Choice, index: Int, columns: Int, ui: AnswerUi, modifier: Modifier) {
+    val list = columns == 1
     val appear = remember { Animatable(0f) }
     LaunchedEffect(Unit) {
         delay(index * 15L)
@@ -266,7 +269,7 @@ private val COMPACT_SHAPE = RoundedCornerShape(20.dp)
 internal fun CircleAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier.fillMaxSize()) {
         // Tiles at 30° steps clear their neighbours vertically only if a tile is at most a fifth of the height.
-        val h = min(76.dp, maxHeight * 0.2f - 5.dp).coerceAtLeast(34.dp)
+        val h = min(76.dp, maxHeight * 0.2f - 5.dp).coerceAtLeast(MIN_TILE_HEIGHT)
         val w = min(132.dp, maxWidth * 0.32f)
         val rx = maxWidth / 2 - w / 2 - 4.dp
         val ry = maxHeight / 2 - h / 2 - 4.dp
@@ -290,7 +293,7 @@ internal fun DriftAnswers(items: List<Choice>, seed: Long, ui: AnswerUi, modifie
     val transition = rememberInfiniteTransition(label = "drift")
     BoxWithConstraints(modifier.fillMaxSize()) {
         val columns = gridColumns(items.size)
-        val rows = ceil(items.size / columns.toFloat()).toInt().coerceAtLeast(1)
+        val rows = rowsFor(items.size, columns)
         val cellW = maxWidth / columns
         val cellH = maxHeight / rows
         // Crowded cells swing less, so the answers keep their size.
@@ -339,6 +342,11 @@ internal const val TILT_MAX_DP_PER_SECOND = 260f
 /** A figure eight with radius 1. Whole-number frequencies close the loop at t = 2π, where the animation restarts. */
 internal fun driftOffset(t: Float, phase: Float): Pair<Float, Float> = sin(t + phase) to cos(2f * t + phase)
 
+private fun rowsFor(count: Int, columns: Int): Int = ceil(count / columns.toFloat()).toInt().coerceAtLeast(1)
+
+/** Below this a compact answer has no room for a readable label. */
+private val MIN_TILE_HEIGHT = 34.dp
+
 /** Two columns keep answers large; with many answers three columns keep them tall enough to read. */
 private fun gridColumns(answers: Int): Int = if (answers > 12) 3 else 2
 
@@ -364,11 +372,11 @@ internal fun PebbleJar(items: List<Choice>, seed: Long, ui: AnswerUi, modifier: 
         val slots = items.indices.shuffled(r)
         items.indices.map { slots[it] to (r.nextFloat() * 20f - 10f) }
     }
-    val rows = ceil(items.size / 3f).toInt().coerceAtLeast(1)
+    val rows = rowsFor(items.size, 3)
     val outline = MaterialTheme.colorScheme.outlineVariant
     BoxWithConstraints(modifier.fillMaxSize()) {
         val w = min(maxWidth * 0.27f, 112.dp)
-        val h = min(72.dp, (maxHeight - 30.dp) / (rows + 0.4f) - 8.dp).coerceAtLeast(34.dp)
+        val h = min(72.dp, (maxHeight - 30.dp) / (rows + 0.4f) - 8.dp).coerceAtLeast(MIN_TILE_HEIGHT)
         val slotCenters = items.indices.map { slot ->
             val row = slot / 3
             val inRow = minOf(3, items.size - row * 3)
@@ -398,27 +406,34 @@ internal fun PebbleJar(items: List<Choice>, seed: Long, ui: AnswerUi, modifier: 
             drawPath(path, outline, style = Stroke(3.dp.toPx()))
             drawRoundRect(outline, Offset(left - 8.dp.toPx(), y - 5.dp.toPx()), Size(right - left + 16.dp.toPx(), 10.dp.toPx()), CornerRadius(5.dp.toPx()))
         }
-        val fallFrom = with(density) { -maxHeight.toPx() }
         items.forEachIndexed { i, choice ->
             val (slot, rotation) = looks[i]
             val (fx, cy) = slotCenters[slot]
+            // Each pebble appears just above the rim when its turn comes, so none waits in the air above the jar.
+            val fallFrom = with(density) { (rim - h - cy).toPx() }
+            val fadeIn = with(density) { (h * 0.6f).toPx() }
+            var dropped by remember { mutableStateOf(false) }
             val fall = remember { Animatable(fallFrom) }
             LaunchedEffect(Unit) {
                 delay(i * 90L)
+                dropped = true
                 fall.animateTo(0f, spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow))
             }
-            CompactAnswer(
-                choice,
-                ui,
-                Modifier
-                    .offset(maxWidth * fx - w / 2, cy - h / 2)
-                    .graphicsLayer {
-                        translationY = fall.value
-                        rotationZ = rotation
-                    }
-                    .size(w, h),
-                pebbleOutlines[i % pebbleOutlines.size],
-            )
+            if (dropped) {
+                CompactAnswer(
+                    choice,
+                    ui,
+                    Modifier
+                        .offset(maxWidth * fx - w / 2, cy - h / 2)
+                        .graphicsLayer {
+                            translationY = fall.value
+                            alpha = ((fall.value - fallFrom) / fadeIn).coerceIn(0f, 1f)
+                            rotationZ = rotation
+                        }
+                        .size(w, h),
+                    pebbleOutlines[i % pebbleOutlines.size],
+                )
+            }
         }
     }
 }
@@ -430,14 +445,13 @@ internal fun TiltAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
     val tap by rememberUpdatedState(ui.tap)
     val ballColor = MaterialTheme.colorScheme.onSurface
     BoxWithConstraints(modifier.fillMaxSize()) {
-        val leftCount = ceil(items.size / 2f).toInt().coerceAtLeast(1)
-        val rows = leftCount
+        val rows = rowsFor(items.size, 2)
         val w = min(maxWidth * 0.36f, 140.dp)
-        val h = min(64.dp, maxHeight / rows - 4.dp).coerceAtLeast(34.dp)
+        val h = min(64.dp, maxHeight / rows - 4.dp).coerceAtLeast(MIN_TILE_HEIGHT)
         val rowH = maxHeight / rows
-        val places = items.mapIndexed { i, _ ->
-            val left = i < leftCount
-            val row = if (left) i else i - leftCount
+        val places = items.indices.map { i ->
+            val left = i < rows
+            val row = if (left) i else i - rows
             val x = if (left) 4.dp else maxWidth - w - 4.dp
             x to rowH * row + (rowH - h) / 2
         }
@@ -448,6 +462,7 @@ internal fun TiltAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
         var ball by remember { mutableStateOf(Offset(bounds.width / 2, bounds.height / 2)) }
         LaunchedEffect(bounds) {
             val r = with(density) { radius.toPx() }
+            val targets = rects.map { it.inflate(-r / 2) }
             val pxPerDp = density.density
             var velocity = Offset.Zero
             var position = Offset(bounds.width / 2, bounds.height / 2)
@@ -467,7 +482,7 @@ internal fun TiltAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
                 position += velocity * dt
                 position = Offset(position.x.coerceIn(r, bounds.width - r), position.y.coerceIn(r, bounds.height - r))
                 ball = position
-                val hit = rects.indexOfFirst { it.inflate(-r / 2).contains(position) }
+                val hit = targets.indexOfFirst { it.contains(position) }
                 if (hit >= 0) {
                     tap(items[hit])
                     break
@@ -498,10 +513,10 @@ internal fun DragAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
         val jarH = min(maxHeight * 0.28f, 110.dp)
         val area = maxHeight - jarH - 16.dp
         val columns = gridColumns(items.size)
-        val rows = ceil(items.size / columns.toFloat()).toInt().coerceAtLeast(1)
+        val rows = rowsFor(items.size, columns)
         val cellW = maxWidth / columns
         val cellH = area / rows
-        val h = min(56.dp, cellH - 8.dp).coerceAtLeast(34.dp)
+        val h = min(56.dp, cellH - 8.dp).coerceAtLeast(MIN_TILE_HEIGHT)
         val w = cellW - 10.dp
         val density = LocalDensity.current
         val jar = with(density) { Rect(Offset(((maxWidth - jarW) / 2).toPx(), (maxHeight - jarH).toPx()), Size(jarW.toPx(), jarH.toPx())) }
@@ -520,6 +535,7 @@ internal fun DragAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
             val home = with(density) { Offset(x.toPx(), y.toPx()) }
             val half = with(density) { Offset(w.toPx() / 2, h.toPx() / 2) }
             val drag = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
+            val dragging by remember { derivedStateOf { drag.value != Offset.Zero } }
             val scope = rememberCoroutineScope()
             CompactAnswer(
                 choice,
@@ -527,12 +543,13 @@ internal fun DragAnswers(items: List<Choice>, ui: AnswerUi, modifier: Modifier =
                 Modifier
                     .offset(x, y)
                     .offset { IntOffset(drag.value.x.roundToInt(), drag.value.y.roundToInt()) }
-                    .zIndex(if (drag.value != Offset.Zero) 1f else 0f)
+                    .zIndex(if (dragging) 1f else 0f)
                     .graphicsLayer {
                         shadowElevation = if (drag.value != Offset.Zero) 12f else 0f
                         shape = COMPACT_SHAPE
                     }
-                    .pointerInput(Unit) {
+                    // Keyed on the places, so the drop test follows the jar when the keyboard or a resize moves it.
+                    .pointerInput(jar, home, half) {
                         detectDragGestures(
                             onDrag = { change, amount ->
                                 change.consume()
@@ -604,15 +621,18 @@ internal fun BreathGate(onDone: () -> Unit, onTooShort: () -> Unit, modifier: Mo
                         .background(tones.ink.copy(alpha = 0.85f), CircleShape),
                 )
             }
-            val p = progress.value
-            Text(
-                stringResource(
+            val phase by remember {
+                derivedStateOf {
+                    val p = progress.value
                     when {
                         p == 0f -> R.string.prompt_breath_hold
                         p < 0.5f -> R.string.prompt_breath_in
                         else -> R.string.prompt_breath_out
-                    },
-                ),
+                    }
+                }
+            }
+            Text(
+                stringResource(phase),
                 style = MaterialTheme.typography.titleLarge,
                 textAlign = TextAlign.Center,
             )
@@ -757,7 +777,7 @@ internal fun WildAnswers(items: List<Choice>, seed: Long, ui: AnswerUi, modifier
         val placeables = measurables.mapIndexed { i, m ->
             m.measure(Constraints.fixed(sizes[i].width.roundToInt(), sizes[i].height.roundToInt()))
         }
-        val total = rows.sumOf { row -> row.maxOf { sizes[it].height }.toDouble() }.toFloat() + gy * (rows.size - 1)
+        val total = heightOf(sizes, rows)
         layout(constraints.maxWidth, constraints.maxHeight) {
             var y = ((height - total) / 2).coerceAtLeast(0f)
             rows.forEach { row ->
