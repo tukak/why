@@ -6,6 +6,7 @@ Tippe einen Grund an, tippe „Aus Gewohnheit“ oder schreib deinen eigenen. Mi
 • Eine Frage nach jedem Entsperren, deine Gründe sortiert nach Tageszeit
 • Dein Glas heute: Bei jedem Entsperren fällt ein Kiesel hinein. Kipp das Handy und die Kiesel rollen.
 • Eine Wochenansicht: Gläser pro Tag, wohin die Zeit ging und zu welchen Zeiten du aus Gewohnheit entsperrst
+• Verlauf: Schau dir jede frühere Woche an, sieh Trends seit deinem Start und exportiere alles als CSV-Datei
 • Eine kurze Nachfrage, wenn du länger am Handy bist als geplant
 • Nervmodus, wenn dein Daumen von allein antwortet: Bei jedem Entsperren verändert eine von 17 kleinen Gemeinheiten den Bildschirm mit der Frage, damit du hinschaust, bevor du tippst
 • Eine Abendbilanz mit den Zahlen des Tages
