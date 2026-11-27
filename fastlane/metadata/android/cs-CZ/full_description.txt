@@ -6,6 +6,7 @@ Klepni na důvod, na „Jen ze zvyku“, nebo napiš vlastní. Postupně uvidí�
 • Otázku po každém odemknutí s důvody seřazenými podle denní doby
 • Dnešní sklenici: každé odemknutí do ní přidá kamínek. Nakloň telefon a kamínky se kutálí.
 • Týdenní přehled: denní sklenice, kam šel čas a kdy odemykáš ze zvyku
+• Historie: podívej se na kterýkoli týden, sleduj trendy od začátku a vše exportuj jako soubor CSV
 • Nenápadnou připomínku, když jsi u telefonu déle, než bylo v plánu
 • Otravný režim pro chvíle, kdy už odpovídáš automaticky: při každém odemknutí změní obrazovku s otázkou jednou ze 17 schválností, takže se musíš podívat, než klepneš
 • Večerní shrnutí s čísly za den

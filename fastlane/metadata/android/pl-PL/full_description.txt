@@ -6,6 +6,7 @@ Wybierz powód, dotknij „Z nawyku” albo wpisz własny. Z czasem zobaczysz, c
 • Pytanie po każdym odblokowaniu, z powodami ułożonymi według pory dnia
 • Dzisiejszy słoik: każde odblokowanie wrzuca kamyk. Przechyl telefon, a kamyki się poturlają.
 • Widok tygodnia: słoiki dzień po dniu, na co poszedł czas i kiedy odblokowujesz telefon z nawyku
+• Historia: wróć do dowolnego tygodnia, zobacz trendy od początku i wyeksportuj wszystko jako plik CSV
 • Delikatne przypomnienie, gdy spędzasz przy telefonie więcej czasu, niż planujesz
 • Tryb irytujący na chwile, gdy odpowiadasz już automatycznie: przy każdym odblokowaniu jeden z 17 psikusów zmienia ekran z pytaniem, więc zanim dotkniesz, musisz spojrzeć
 • Wieczorne podsumowanie z liczbami z całego dnia

@@ -6,6 +6,7 @@ Tap a reason, tap "Just habit", or type your own. Over time, you'll see what rea
 • A question after each unlock, with your reasons sorted for the time of day
 • Today's jar: every unlock drops a pebble. Tilt the phone and the pebbles roll.
 • A week view: daily jars, where the time went, and your habit hours
+• History: look back at any week, see trends since you started, and export everything as a CSV file
 • A gentle check-in when you stay longer than you planned
 • Annoying mode, for when your thumb answers on its own: each unlock shakes up the question screen with one of 17 tricks, so you look before you tap
 • An evening summary with the day's numbers

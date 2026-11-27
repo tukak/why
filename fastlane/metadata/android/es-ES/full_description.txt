@@ -6,6 +6,7 @@ Toca un motivo, toca “Por costumbre” o escribe el tuyo. Con el tiempo verás
 • Una pregunta después de cada desbloqueo, con tus motivos ordenados según la hora del día
 • El frasco de hoy: cada desbloqueo deja caer una piedrita. Inclina el teléfono y las piedritas ruedan.
 • Una vista semanal: frascos diarios, en qué se fue el tiempo y cuándo desbloqueas por costumbre
+• Historial: vuelve a cualquier semana, mira las tendencias desde que empezaste y exporta todo en un archivo CSV
 • Un pequeño aviso cuando llevas más tiempo con el teléfono del que pensabas
 • Modo molesto, para cuando tu pulgar responde solo: en cada desbloqueo, una de las 17 travesuras cambia cómo se muestra la pregunta, para que mires antes de tocar
 • Un resumen por la noche con las cifras del día
