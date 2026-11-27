@@ -34,7 +34,9 @@ import cz.kutner.why.ui.settings.AnnoyScreen
 import cz.kutner.why.ui.settings.SettingsScreen
 import cz.kutner.why.ui.settings.TryTrickScreen
 import cz.kutner.why.ui.today.TodayScreen
+import cz.kutner.why.ui.week.AllWeeksScreen
 import cz.kutner.why.ui.week.WeekScreen
+import java.time.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable data object TodayKey : NavKey
@@ -43,6 +45,8 @@ import kotlinx.serialization.Serializable
 @Serializable data object SettingsKey : NavKey
 @Serializable data object AnnoyKey : NavKey
 @Serializable data class TryTrickKey(val trick: Trick) : NavKey
+@Serializable data object AllWeeksKey : NavKey
+@Serializable data class WeekOfKey(val epochDay: Long) : NavKey
 
 private data class Tab(val key: NavKey, val label: Int, val icon: String)
 
@@ -71,7 +75,14 @@ fun WhyNavigation() {
             predictivePopTransitionSpec = { fadeThrough() },
             entryProvider = entryProvider {
                 entry<TodayKey> { TodayScreen(onSettings = { backStack.add(SettingsKey) }) }
-                entry<WeekKey> { WeekScreen() }
+                entry<WeekKey> { WeekScreen(onAllWeeks = { backStack.add(AllWeeksKey) }) }
+                entry<AllWeeksKey>(metadata = deeper) {
+                    AllWeeksScreen(onBack = { backStack.removeLastOrNull() }, onWeek = { backStack.add(WeekOfKey(it.toEpochDay())) })
+                }
+                entry<WeekOfKey>(metadata = deeper) { key ->
+                    val back = { backStack.removeLastOrNull(); Unit }
+                    WeekScreen(onAllWeeks = back, initial = LocalDate.ofEpochDay(key.epochDay), onBack = back)
+                }
                 entry<ReasonsKey> { ReasonsScreen() }
                 entry<SettingsKey>(metadata = deeper) {
                     SettingsScreen(onBack = { backStack.removeLastOrNull() }, onAnnoy = { backStack.add(AnnoyKey) })

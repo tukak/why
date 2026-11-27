@@ -82,6 +82,70 @@
     <string name="week_habit_hours">Quand tu déverrouilles par habitude</string>
     <string name="week_habit_hours_period">Déverrouillages par habitude, 4 dernières semaines</string>
     <string name="week_habit_peak">Surtout de %1$s à %2$s</string>
+    <string name="week_habit_hours_until">Déverrouillages par habitude, 4 semaines jusqu’au %s</string>
+    <string name="week_last">La semaine dernière</string>
+    <string name="week_so_far">%s · jusqu’ici</string>
+    <string name="week_previous">Semaine précédente</string>
+    <string name="week_next">Semaine suivante</string>
+    <string name="week_back_to_now">Revenir à cette semaine</string>
+    <plurals name="week_fewer_now">
+        <item quantity="one">%d de moins que la semaine dernière à la même heure</item>
+        <item quantity="many">%d de moins que la semaine dernière à la même heure</item>
+        <item quantity="other">%d de moins que la semaine dernière à la même heure</item>
+    </plurals>
+    <plurals name="week_more_now">
+        <item quantity="one">%d de plus que la semaine dernière à la même heure</item>
+        <item quantity="many">%d de plus que la semaine dernière à la même heure</item>
+        <item quantity="other">%d de plus que la semaine dernière à la même heure</item>
+    </plurals>
+    <string name="week_same_now">autant que la semaine dernière à la même heure</string>
+    <plurals name="week_fewer_before">
+        <item quantity="one">%d de moins que la semaine d’avant</item>
+        <item quantity="many">%d de moins que la semaine d’avant</item>
+        <item quantity="other">%d de moins que la semaine d’avant</item>
+    </plurals>
+    <plurals name="week_more_before">
+        <item quantity="one">%d de plus que la semaine d’avant</item>
+        <item quantity="many">%d de plus que la semaine d’avant</item>
+        <item quantity="other">%d de plus que la semaine d’avant</item>
+    </plurals>
+    <string name="week_same_before">autant que la semaine d’avant</string>
+    <string name="week_earlier">Semaines précédentes</string>
+    <string name="week_all_weeks">Toutes les semaines</string>
+    <string name="week_now">en cours</string>
+    <string name="week_of">Semaine du %s</string>
+    <string name="week_earlier_caption">Hauteur du bocal : déverrouillages par jour. Orange : par habitude.</string>
+
+    <string name="history_range_3m">3 mois</string>
+    <string name="history_range_1y">1 an</string>
+    <string name="history_range_all">Tout</string>
+    <string name="history_since">Depuis tes débuts, le %s</string>
+    <string name="history_last_3m">3 derniers mois</string>
+    <string name="history_last_1y">Dernière année</string>
+    <string name="history_unlocks_per_day">déverrouillages par jour</string>
+    <string name="history_screen_per_day">temps d’écran par jour</string>
+    <string name="history_fewer_unlocks">moins de déverrouillages</string>
+    <string name="history_more_unlocks">plus de déverrouillages</string>
+    <string name="history_less_habit">moins d’habitude</string>
+    <string name="history_more_habit">plus d’habitude</string>
+    <string name="history_less_screen">moins de temps d’écran</string>
+    <string name="history_more_screen">plus de temps d’écran</string>
+    <string name="history_list_two">%1$s et %2$s</string>
+    <string name="history_list_three">%1$s, %2$s et %3$s</string>
+    <string name="history_but">%1$s, mais %2$s</string>
+    <string name="history_same">À peu près comme au début.</string>
+    <string name="history_shelf">Ton étagère</string>
+    <string name="history_shelf_hint">Un bocal par semaine. Touche un bocal pour ouvrir cette semaine.</string>
+    <string name="history_chart_unlocks">Déverrouillages par jour</string>
+    <string name="history_chart_habit">Part par habitude</string>
+    <string name="history_chart_habit_hint">Sur tous les déverrouillages, sur une échelle de 0 à 100 %.</string>
+    <string name="history_chart_screen">Temps d’écran par jour</string>
+    <string name="history_chart_screen_hint">Du déverrouillage à l’extinction de l’écran, additionné.</string>
+    <string name="history_this_week">cette semaine</string>
+    <string name="history_first_week">Semaine 1 sur 2</string>
+    <string name="history_first_title">Les tendances arrivent la semaine prochaine.</string>
+    <string name="history_first_started">Tu as commencé le %s.</string>
+    <string name="history_coming">Dès ta deuxième semaine</string>
 
     <string name="reasons_title">Raisons</string>
     <string name="reasons_subtitle">Tes raisons les plus fréquentes d’abord. Au déverrouillage, l’ordre s’adapte à l’heure.</string>
@@ -138,6 +202,17 @@
     <string name="reflection_as_usual">Autant que d’habitude</string>
     <string name="settings_background">Arrière-plan</string>
     <string name="settings_battery_ok">L’utilisation de la batterie est sans restriction.</string>
+    <string name="settings_data">Tes données</string>
+    <string name="settings_export">Exporter l’historique</string>
+    <string name="settings_export_hint">Chaque déverrouillage dans un fichier CSV (UTF-8), pour un tableur. Tu choisis où l’enregistrer.</string>
+    <string name="settings_export_button">Exporter</string>
+    <plurals name="settings_export_count">
+        <item quantity="one">%1$d déverrouillage depuis le %2$s.</item>
+        <item quantity="many">%1$d déverrouillages depuis le %2$s.</item>
+        <item quantity="other">%1$d déverrouillages depuis le %2$s.</item>
+    </plurals>
+    <string name="settings_export_done">Enregistré.</string>
+    <string name="settings_export_failed">Impossible d’enregistrer le fichier.</string>
     <string name="settings_free_title">Gratuit. Sans pub. Sans pistage.</string>
     <string name="settings_free_text">Si ça t’aide, un café m’aidera aussi.</string>
     <string name="settings_coffee">Offre-moi un café</string>

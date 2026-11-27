@@ -75,6 +75,18 @@ interface UnlockDao {
     @Query("SELECT * FROM unlock_event WHERE unlockedAt >= :from ORDER BY unlockedAt")
     fun observeSince(from: Long): Flow<List<UnlockEvent>>
 
+    @Query("SELECT * FROM unlock_event WHERE unlockedAt >= :from AND unlockedAt < :to ORDER BY unlockedAt")
+    fun observeBetween(from: Long, to: Long): Flow<List<UnlockEvent>>
+
+    @Query("SELECT * FROM unlock_event ORDER BY unlockedAt")
+    suspend fun all(): List<UnlockEvent>
+
+    @Query("SELECT MIN(unlockedAt) FROM unlock_event")
+    fun observeFirstUnlock(): Flow<Long?>
+
+    @Query("SELECT COUNT(*) FROM unlock_event")
+    fun observeCount(): Flow<Int>
+
     @Query("SELECT id, customText AS text, customKey AS `key`, unlockedAt FROM unlock_event WHERE customKey IS NOT NULL")
     suspend fun customEntries(): List<CustomEntry>
 

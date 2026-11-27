@@ -87,6 +87,74 @@
     <string name="week_habit_hours">Kedy odomykáš zo zvyku</string>
     <string name="week_habit_hours_period">Odomknutia zo zvyku, posledné 4 týždne</string>
     <string name="week_habit_peak">Najčastejšie %1$s–%2$s</string>
+    <string name="week_habit_hours_until">Odomknutia zo zvyku, 4 týždne do %s</string>
+    <string name="week_last">Minulý týždeň</string>
+    <string name="week_so_far">%s · zatiaľ</string>
+    <string name="week_previous">Predchádzajúci týždeň</string>
+    <string name="week_next">Ďalší týždeň</string>
+    <string name="week_back_to_now">Späť na tento týždeň</string>
+    <plurals name="week_fewer_now">
+        <item quantity="one">o %d menej ako minulý týždeň v tomto čase</item>
+        <item quantity="few">o %d menej ako minulý týždeň v tomto čase</item>
+        <item quantity="many">o %d menej ako minulý týždeň v tomto čase</item>
+        <item quantity="other">o %d menej ako minulý týždeň v tomto čase</item>
+    </plurals>
+    <plurals name="week_more_now">
+        <item quantity="one">o %d viac ako minulý týždeň v tomto čase</item>
+        <item quantity="few">o %d viac ako minulý týždeň v tomto čase</item>
+        <item quantity="many">o %d viac ako minulý týždeň v tomto čase</item>
+        <item quantity="other">o %d viac ako minulý týždeň v tomto čase</item>
+    </plurals>
+    <string name="week_same_now">rovnako ako minulý týždeň v tomto čase</string>
+    <plurals name="week_fewer_before">
+        <item quantity="one">o %d menej ako týždeň predtým</item>
+        <item quantity="few">o %d menej ako týždeň predtým</item>
+        <item quantity="many">o %d menej ako týždeň predtým</item>
+        <item quantity="other">o %d menej ako týždeň predtým</item>
+    </plurals>
+    <plurals name="week_more_before">
+        <item quantity="one">o %d viac ako týždeň predtým</item>
+        <item quantity="few">o %d viac ako týždeň predtým</item>
+        <item quantity="many">o %d viac ako týždeň predtým</item>
+        <item quantity="other">o %d viac ako týždeň predtým</item>
+    </plurals>
+    <string name="week_same_before">rovnako ako týždeň predtým</string>
+    <string name="week_earlier">Predchádzajúce týždne</string>
+    <string name="week_all_weeks">Všetky týždne</string>
+    <string name="week_now">teraz</string>
+    <string name="week_of">Týždeň od %s</string>
+    <string name="week_earlier_caption">Výška pohára: odomknutia za deň. Oranžová: len zo zvyku.</string>
+
+    <string name="history_range_3m">3 mesiace</string>
+    <string name="history_range_1y">1 rok</string>
+    <string name="history_range_all">Všetko</string>
+    <string name="history_since">Od začiatku: %s</string>
+    <string name="history_last_3m">Posledné 3 mesiace</string>
+    <string name="history_last_1y">Posledný rok</string>
+    <string name="history_unlocks_per_day">odomknutí za deň</string>
+    <string name="history_screen_per_day">na obrazovke za deň</string>
+    <string name="history_fewer_unlocks">menej odomknutí</string>
+    <string name="history_more_unlocks">viac odomknutí</string>
+    <string name="history_less_habit">menej zvyku</string>
+    <string name="history_more_habit">viac zvyku</string>
+    <string name="history_less_screen">menej času na obrazovke</string>
+    <string name="history_more_screen">viac času na obrazovke</string>
+    <string name="history_list_two">%1$s a %2$s</string>
+    <string name="history_list_three">%1$s, %2$s a %3$s</string>
+    <string name="history_but">%1$s, ale %2$s</string>
+    <string name="history_same">Zhruba rovnako ako na začiatku.</string>
+    <string name="history_shelf">Tvoja polica</string>
+    <string name="history_shelf_hint">Jeden pohár za týždeň. Ťuknutím na pohár otvoríš ten týždeň.</string>
+    <string name="history_chart_unlocks">Odomknutia za deň</string>
+    <string name="history_chart_habit">Podiel zo zvyku</string>
+    <string name="history_chart_habit_hint">Zo všetkých odomknutí, na škále 0–100 %.</string>
+    <string name="history_chart_screen">Čas na obrazovke za deň</string>
+    <string name="history_chart_screen_hint">Od odomknutia po zhasnutie obrazovky, spolu.</string>
+    <string name="history_this_week">tento týždeň</string>
+    <string name="history_first_week">Týždeň 1 z 2</string>
+    <string name="history_first_title">Trendy začnú budúci týždeň.</string>
+    <string name="history_first_started">Prvé odomknutie: %s.</string>
+    <string name="history_coming">Od druhého týždňa tu bude</string>
 
     <string name="reasons_title">Dôvody</string>
     <string name="reasons_subtitle">Najpoužívanejšie navrchu. Pri odomknutí sa zoradia podľa dennej doby.</string>
@@ -146,6 +214,18 @@
     <string name="reflection_as_usual">Rovnako ako zvyčajne</string>
     <string name="settings_background">Na pozadí</string>
     <string name="settings_battery_ok">Využitie batérie je neobmedzené.</string>
+    <string name="settings_data">Tvoje dáta</string>
+    <string name="settings_export">Export histórie</string>
+    <string name="settings_export_hint">Každé odomknutie ako súbor CSV (UTF-8) pre tabuľku. Kam ho uložiť, vyberieš ty.</string>
+    <string name="settings_export_button">Exportovať</string>
+    <plurals name="settings_export_count">
+        <item quantity="one">%1$d odomknutie od %2$s.</item>
+        <item quantity="few">%1$d odomknutia od %2$s.</item>
+        <item quantity="many">%1$d odomknutia od %2$s.</item>
+        <item quantity="other">%1$d odomknutí od %2$s.</item>
+    </plurals>
+    <string name="settings_export_done">Uložené.</string>
+    <string name="settings_export_failed">Súbor sa nepodarilo uložiť.</string>
     <string name="settings_free_title">Zadarmo. Bez reklám. Bez sledovania.</string>
     <string name="settings_free_text">Ak pomáha tebe, káva pomôže mne.</string>
     <string name="settings_coffee">Kúp mi kávu</string>

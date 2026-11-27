@@ -12,13 +12,14 @@
 ## Afterwards
 - [x] Evening reflection: one quiet notification with the day's numbers, default on at 21:00. Settings: on/off and time (20–23 h).
 - [x] Habit hours: weekday × hour heat map of habit unlocks on the Week screen, last 4 weeks, with the peak hour.
+- [x] History: step through calendar weeks on the Week tab; All weeks screen with a shelf of weekly jars and trends (unlocks per day, just-habit share, screen time per day).
+- [x] Export my data (CSV through the system file picker).
 
 ## Ideas, not decided
 - [ ] Smart nudge timing per reason (from its typical session length).
 - [ ] Breathing pause after repeated habit unlocks.
 - [ ] Quiet hours / bedtime mode.
 - [ ] Kind daily goal with a forgiving streak.
-- [ ] Export my data (CSV through the system file picker).
 - [x] Health check: after the system stops the app, restart the service on the next process start; if Android blocks it, a "Questions are off" notification restarts it with one tap.
 - [ ] One-tap battery exemption dialog (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS). Play allows it only when Doze breaks the core function; decide before a store release.
 - [ ] Jar fallback above ~390 pebbles a day.

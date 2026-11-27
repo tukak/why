@@ -77,6 +77,66 @@
     <string name="week_habit_hours">Wann du aus Gewohnheit entsperrst</string>
     <string name="week_habit_hours_period">Aus Gewohnheit entsperrt, letzte 4 Wochen</string>
     <string name="week_habit_peak">Am häufigsten %1$s–%2$s</string>
+    <string name="week_habit_hours_until">Aus Gewohnheit entsperrt, 4 Wochen bis %s</string>
+    <string name="week_last">Letzte Woche</string>
+    <string name="week_so_far">%s · bisher</string>
+    <string name="week_previous">Frühere Woche</string>
+    <string name="week_next">Spätere Woche</string>
+    <string name="week_back_to_now">Zurück zu dieser Woche</string>
+    <plurals name="week_fewer_now">
+        <item quantity="one">%d weniger als letzte Woche um diese Zeit</item>
+        <item quantity="other">%d weniger als letzte Woche um diese Zeit</item>
+    </plurals>
+    <plurals name="week_more_now">
+        <item quantity="one">%d mehr als letzte Woche um diese Zeit</item>
+        <item quantity="other">%d mehr als letzte Woche um diese Zeit</item>
+    </plurals>
+    <string name="week_same_now">so viele wie letzte Woche um diese Zeit</string>
+    <plurals name="week_fewer_before">
+        <item quantity="one">%d weniger als die Woche davor</item>
+        <item quantity="other">%d weniger als die Woche davor</item>
+    </plurals>
+    <plurals name="week_more_before">
+        <item quantity="one">%d mehr als die Woche davor</item>
+        <item quantity="other">%d mehr als die Woche davor</item>
+    </plurals>
+    <string name="week_same_before">so viele wie die Woche davor</string>
+    <string name="week_earlier">Frühere Wochen</string>
+    <string name="week_all_weeks">Alle Wochen</string>
+    <string name="week_now">jetzt</string>
+    <string name="week_of">Woche ab %s</string>
+    <string name="week_earlier_caption">Glashöhe: Entsperrungen pro Tag. Orange: aus Gewohnheit.</string>
+
+    <string name="history_range_3m">3 Monate</string>
+    <string name="history_range_1y">1 Jahr</string>
+    <string name="history_range_all">Alle</string>
+    <string name="history_since">Seit deinem Start am %s</string>
+    <string name="history_last_3m">Letzte 3 Monate</string>
+    <string name="history_last_1y">Letztes Jahr</string>
+    <string name="history_unlocks_per_day">Entsperrungen pro Tag</string>
+    <string name="history_screen_per_day">Bildschirmzeit pro Tag</string>
+    <string name="history_fewer_unlocks">weniger Entsperrungen</string>
+    <string name="history_more_unlocks">mehr Entsperrungen</string>
+    <string name="history_less_habit">weniger aus Gewohnheit</string>
+    <string name="history_more_habit">mehr aus Gewohnheit</string>
+    <string name="history_less_screen">weniger Bildschirmzeit</string>
+    <string name="history_more_screen">mehr Bildschirmzeit</string>
+    <string name="history_list_two">%1$s und %2$s</string>
+    <string name="history_list_three">%1$s, %2$s und %3$s</string>
+    <string name="history_but">%1$s, aber %2$s</string>
+    <string name="history_same">Ungefähr wie am Anfang.</string>
+    <string name="history_shelf">Dein Regal</string>
+    <string name="history_shelf_hint">Ein Glas pro Woche. Tippe auf ein Glas, um die Woche zu öffnen.</string>
+    <string name="history_chart_unlocks">Entsperrungen pro Tag</string>
+    <string name="history_chart_habit">Anteil aus Gewohnheit</string>
+    <string name="history_chart_habit_hint">Von allen Entsperrungen, auf einer Skala von 0–100 %.</string>
+    <string name="history_chart_screen">Bildschirmzeit pro Tag</string>
+    <string name="history_chart_screen_hint">Vom Entsperren bis der Bildschirm ausgeht, zusammengezählt.</string>
+    <string name="history_this_week">diese Woche</string>
+    <string name="history_first_week">Woche 1 von 2</string>
+    <string name="history_first_title">Trends gibt es ab nächster Woche.</string>
+    <string name="history_first_started">Du hast am %s angefangen.</string>
+    <string name="history_coming">Ab deiner zweiten Woche</string>
 
     <string name="reasons_title">Gründe</string>
     <string name="reasons_subtitle">Hier stehen die häufigsten Gründe oben. Beim Entsperren richtet sich die Reihenfolge nach der Tageszeit.</string>
@@ -130,6 +190,16 @@
     <string name="reflection_as_usual">So oft wie sonst</string>
     <string name="settings_background">Hintergrund</string>
     <string name="settings_battery_ok">Akkunutzung ist uneingeschränkt.</string>
+    <string name="settings_data">Deine Daten</string>
+    <string name="settings_export">Verlauf exportieren</string>
+    <string name="settings_export_hint">Jede Entsperrung als CSV-Datei (UTF-8) für eine Tabelle. Du wählst, wo sie gespeichert wird.</string>
+    <string name="settings_export_button">Exportieren</string>
+    <plurals name="settings_export_count">
+        <item quantity="one">%1$d Entsperrung seit %2$s.</item>
+        <item quantity="other">%1$d Entsperrungen seit %2$s.</item>
+    </plurals>
+    <string name="settings_export_done">Gespeichert.</string>
+    <string name="settings_export_failed">Die Datei konnte nicht gespeichert werden.</string>
     <string name="settings_free_title">Kostenlos. Keine Werbung. Kein Tracking.</string>
     <string name="settings_free_text">Wenn sie dir hilft, hilft mir ein Kaffee.</string>
     <string name="settings_coffee">Kaffee spendieren</string>
