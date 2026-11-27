@@ -82,6 +82,70 @@
     <string name="week_habit_hours">Quando você desbloqueia por hábito</string>
     <string name="week_habit_hours_period">Desbloqueios só por hábito, últimas 4 semanas</string>
     <string name="week_habit_peak">Mais comum entre %1$s e %2$s</string>
+    <string name="week_habit_hours_until">Desbloqueios só por hábito, 4 semanas até %s</string>
+    <string name="week_last">Semana passada</string>
+    <string name="week_so_far">%s · até agora</string>
+    <string name="week_previous">Semana anterior</string>
+    <string name="week_next">Semana seguinte</string>
+    <string name="week_back_to_now">Voltar para esta semana</string>
+    <plurals name="week_fewer_now">
+        <item quantity="one">%d a menos que na semana passada até agora</item>
+        <item quantity="many">%d a menos que na semana passada até agora</item>
+        <item quantity="other">%d a menos que na semana passada até agora</item>
+    </plurals>
+    <plurals name="week_more_now">
+        <item quantity="one">%d a mais que na semana passada até agora</item>
+        <item quantity="many">%d a mais que na semana passada até agora</item>
+        <item quantity="other">%d a mais que na semana passada até agora</item>
+    </plurals>
+    <string name="week_same_now">igual à semana passada até agora</string>
+    <plurals name="week_fewer_before">
+        <item quantity="one">%d a menos que na semana anterior</item>
+        <item quantity="many">%d a menos que na semana anterior</item>
+        <item quantity="other">%d a menos que na semana anterior</item>
+    </plurals>
+    <plurals name="week_more_before">
+        <item quantity="one">%d a mais que na semana anterior</item>
+        <item quantity="many">%d a mais que na semana anterior</item>
+        <item quantity="other">%d a mais que na semana anterior</item>
+    </plurals>
+    <string name="week_same_before">igual à semana anterior</string>
+    <string name="week_earlier">Semanas anteriores</string>
+    <string name="week_all_weeks">Todas as semanas</string>
+    <string name="week_now">agora</string>
+    <string name="week_of">Semana de %s</string>
+    <string name="week_earlier_caption">Altura do pote: desbloqueios por dia. Laranja: só por hábito.</string>
+
+    <string name="history_range_3m">3 meses</string>
+    <string name="history_range_1y">1 ano</string>
+    <string name="history_range_all">Tudo</string>
+    <string name="history_since">Desde que você começou, em %s</string>
+    <string name="history_last_3m">Últimos 3 meses</string>
+    <string name="history_last_1y">Último ano</string>
+    <string name="history_unlocks_per_day">desbloqueios por dia</string>
+    <string name="history_screen_per_day">tempo de tela por dia</string>
+    <string name="history_fewer_unlocks">menos desbloqueios</string>
+    <string name="history_more_unlocks">mais desbloqueios</string>
+    <string name="history_less_habit">menos hábito</string>
+    <string name="history_more_habit">mais hábito</string>
+    <string name="history_less_screen">menos tempo de tela</string>
+    <string name="history_more_screen">mais tempo de tela</string>
+    <string name="history_list_two">%1$s e %2$s</string>
+    <string name="history_list_three">%1$s, %2$s e %3$s</string>
+    <string name="history_but">%1$s, mas %2$s</string>
+    <string name="history_same">Mais ou menos como no começo.</string>
+    <string name="history_shelf">Sua prateleira</string>
+    <string name="history_shelf_hint">Um pote por semana. Toque em um pote para abrir aquela semana.</string>
+    <string name="history_chart_unlocks">Desbloqueios por dia</string>
+    <string name="history_chart_habit">Parte só por hábito</string>
+    <string name="history_chart_habit_hint">De todos os desbloqueios, numa escala de 0–100%.</string>
+    <string name="history_chart_screen">Tempo de tela por dia</string>
+    <string name="history_chart_screen_hint">Do desbloqueio até a tela apagar, somado.</string>
+    <string name="history_this_week">esta semana</string>
+    <string name="history_first_week">Semana 1 de 2</string>
+    <string name="history_first_title">As tendências começam na próxima semana.</string>
+    <string name="history_first_started">Você começou em %s.</string>
+    <string name="history_coming">A partir da sua segunda semana</string>
 
     <string name="reasons_title">Motivos</string>
     <string name="reasons_subtitle">Os mais usados vêm primeiro. Ao desbloquear, a ordem muda conforme o horário.</string>
@@ -138,6 +202,17 @@
     <string name="reflection_as_usual">O mesmo tanto de sempre</string>
     <string name="settings_background">Segundo plano</string>
     <string name="settings_battery_ok">O uso da bateria está sem restrições.</string>
+    <string name="settings_data">Seus dados</string>
+    <string name="settings_export">Exportar histórico</string>
+    <string name="settings_export_hint">Cada desbloqueio em um arquivo CSV (UTF-8) para uma planilha. Você escolhe onde salvar.</string>
+    <string name="settings_export_button">Exportar</string>
+    <plurals name="settings_export_count">
+        <item quantity="one">%1$d desbloqueio desde %2$s.</item>
+        <item quantity="many">%1$d desbloqueios desde %2$s.</item>
+        <item quantity="other">%1$d desbloqueios desde %2$s.</item>
+    </plurals>
+    <string name="settings_export_done">Salvo.</string>
+    <string name="settings_export_failed">Não foi possível salvar o arquivo.</string>
     <string name="settings_free_title">Grátis. Sem anúncios. Sem rastreamento.</string>
     <string name="settings_free_text">Se te ajuda, um café me ajuda.</string>
     <string name="settings_coffee">Me pague um café</string>

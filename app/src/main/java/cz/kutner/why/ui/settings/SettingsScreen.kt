@@ -1,6 +1,8 @@
 package cz.kutner.why.ui.settings
 
 import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,6 +41,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLocale
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -63,7 +66,13 @@ import cz.kutner.why.ui.theme.BloomLight
 import cz.kutner.why.ui.theme.PebbleStyle
 import cz.kutner.why.ui.theme.ReasonColor
 import cz.kutner.why.ui.timeFormatter
+import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.launch
 
 private const val DONATE_URL = "https://ko-fi.com/tukak"
@@ -192,6 +201,8 @@ fun SettingsScreen(onBack: () -> Unit, onAnnoy: () -> Unit) {
             }
         }
 
+        ExportSection()
+
         Row(
             Modifier.fillMaxWidth().background(ReasonColor.Ember.tones.container, RoundedCornerShape(28.dp)).padding(18.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -211,6 +222,52 @@ fun SettingsScreen(onBack: () -> Unit, onAnnoy: () -> Unit) {
                 Text(stringResource(R.string.settings_coffee), textAlign = TextAlign.Center, modifier = Modifier.padding(start = 6.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun ExportSection() {
+    val context = LocalContext.current
+    val app = context.container
+    val colors = MaterialTheme.colorScheme
+    val scope = rememberCoroutineScope()
+    val total by app.unlocks.unlockTotal.collectAsStateWithLifecycle(initialValue = 0)
+    val first by app.unlocks.firstUnlock.collectAsStateWithLifecycle(initialValue = null)
+    var result by remember { mutableStateOf<Int?>(null) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        scope.launch {
+            val saved = withContext(Dispatchers.IO) {
+                runCatching {
+                    checkNotNull(context.contentResolver.openOutputStream(uri, "wt")).bufferedWriter(Charsets.UTF_8).use { app.unlocks.exportCsv(it, app.clock.zone) }
+                }.isSuccess
+            }
+            result = if (saved) R.string.settings_export_done else R.string.settings_export_failed
+        }
+    }
+    Section(stringResource(R.string.settings_data)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.settings_export), style = MaterialTheme.typography.labelLarge)
+                Text(stringResource(R.string.settings_export_hint), style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+            }
+            Button(onClick = { launcher.launch("why-history-${LocalDate.now(app.clock)}.csv") }, enabled = total > 0) {
+                Text(stringResource(R.string.settings_export_button))
+            }
+        }
+        val since = first
+        if (since != null) {
+            val locale = LocalLocale.current.platformLocale
+            val date = remember(locale, since) {
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale).format(Instant.ofEpochMilli(since).atZone(app.clock.zone))
+            }
+            Text(
+                LocalResources.current.getQuantityString(R.plurals.settings_export_count, total, total, date),
+                style = MaterialTheme.typography.bodySmall,
+                color = colors.onSurfaceVariant,
+            )
+        }
+        result?.let { Text(stringResource(it), style = MaterialTheme.typography.labelLarge) }
     }
 }
 

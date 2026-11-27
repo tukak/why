@@ -69,6 +69,8 @@ object Icons {
     const val ArrowLeft = "M19 12H5 M11 6l-6 6 6 6"
     const val ArrowDown = "M12 5v14 M6 13l6 6 6-6"
     const val ArrowUp = "M12 19V5 M6 11l6-6 6 6"
+    const val ChevronLeft = "M15 6l-6 6 6 6"
+    const val ChevronRight = "M9 6l6 6-6 6"
     const val Check = "M5 12l5 5L20 7"
     const val Layers = "M12 3l9 5-9 5-9-5 9-5z M3 13l9 5 9-5"
     const val Battery = "M8 6h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z M10 3h4 M9 14l2 2 4-4"

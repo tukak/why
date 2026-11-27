@@ -86,11 +86,11 @@ data class WeekSummary(
     val timeByAnswer: Map<Answer, Long>,
 )
 
-fun summarizeWeek(events: List<UnlockEvent>, now: Long, zone: ZoneId): WeekSummary {
-    val today = Instant.ofEpochMilli(now).atZone(zone).toLocalDate()
+/** The calendar week that begins on [start]; [events] must hold only that week. */
+fun summarizeWeek(events: List<UnlockEvent>, start: LocalDate, now: Long, zone: ZoneId): WeekSummary {
     val byDate = events.groupBy { Instant.ofEpochMilli(it.unlockedAt).atZone(zone).toLocalDate() }
-    val days = (6 downTo 0).map { back ->
-        val date = today.minusDays(back.toLong())
+    val days = (0L until 7).map { offset ->
+        val date = start.plusDays(offset)
         DayBar(date, byDate[date].orEmpty())
     }
     val habit = events.filter { it.answer == Answer.Habit }

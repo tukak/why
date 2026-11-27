@@ -87,6 +87,74 @@
     <string name="week_habit_hours">Kiedy odblokowujesz z nawyku</string>
     <string name="week_habit_hours_period">Odblokowania z nawyku, ostatnie 4 tygodnie</string>
     <string name="week_habit_peak">Najczęściej %1$s–%2$s</string>
+    <string name="week_habit_hours_until">Odblokowania z nawyku, 4 tygodnie do %s</string>
+    <string name="week_last">Poprzedni tydzień</string>
+    <string name="week_so_far">%s · na razie</string>
+    <string name="week_previous">Wcześniejszy tydzień</string>
+    <string name="week_next">Późniejszy tydzień</string>
+    <string name="week_back_to_now">Wróć do tego tygodnia</string>
+    <plurals name="week_fewer_now">
+        <item quantity="one">o %d mniej niż w zeszłym tygodniu o tej porze</item>
+        <item quantity="few">o %d mniej niż w zeszłym tygodniu o tej porze</item>
+        <item quantity="many">o %d mniej niż w zeszłym tygodniu o tej porze</item>
+        <item quantity="other">o %d mniej niż w zeszłym tygodniu o tej porze</item>
+    </plurals>
+    <plurals name="week_more_now">
+        <item quantity="one">o %d więcej niż w zeszłym tygodniu o tej porze</item>
+        <item quantity="few">o %d więcej niż w zeszłym tygodniu o tej porze</item>
+        <item quantity="many">o %d więcej niż w zeszłym tygodniu o tej porze</item>
+        <item quantity="other">o %d więcej niż w zeszłym tygodniu o tej porze</item>
+    </plurals>
+    <string name="week_same_now">tyle samo co w zeszłym tygodniu o tej porze</string>
+    <plurals name="week_fewer_before">
+        <item quantity="one">o %d mniej niż tydzień wcześniej</item>
+        <item quantity="few">o %d mniej niż tydzień wcześniej</item>
+        <item quantity="many">o %d mniej niż tydzień wcześniej</item>
+        <item quantity="other">o %d mniej niż tydzień wcześniej</item>
+    </plurals>
+    <plurals name="week_more_before">
+        <item quantity="one">o %d więcej niż tydzień wcześniej</item>
+        <item quantity="few">o %d więcej niż tydzień wcześniej</item>
+        <item quantity="many">o %d więcej niż tydzień wcześniej</item>
+        <item quantity="other">o %d więcej niż tydzień wcześniej</item>
+    </plurals>
+    <string name="week_same_before">tyle samo co tydzień wcześniej</string>
+    <string name="week_earlier">Wcześniejsze tygodnie</string>
+    <string name="week_all_weeks">Wszystkie tygodnie</string>
+    <string name="week_now">teraz</string>
+    <string name="week_of">Tydzień od %s</string>
+    <string name="week_earlier_caption">Wysokość słoika: odblokowania dziennie. Pomarańczowy: z nawyku.</string>
+
+    <string name="history_range_3m">3 miesiące</string>
+    <string name="history_range_1y">1 rok</string>
+    <string name="history_range_all">Wszystko</string>
+    <string name="history_since">Od początku: %s</string>
+    <string name="history_last_3m">Ostatnie 3 miesiące</string>
+    <string name="history_last_1y">Ostatni rok</string>
+    <string name="history_unlocks_per_day">odblokowań dziennie</string>
+    <string name="history_screen_per_day">na ekranie dziennie</string>
+    <string name="history_fewer_unlocks">mniej odblokowań</string>
+    <string name="history_more_unlocks">więcej odblokowań</string>
+    <string name="history_less_habit">mniejszy udział nawyku</string>
+    <string name="history_more_habit">większy udział nawyku</string>
+    <string name="history_less_screen">mniej czasu na ekranie</string>
+    <string name="history_more_screen">więcej czasu na ekranie</string>
+    <string name="history_list_two">%1$s i %2$s</string>
+    <string name="history_list_three">%1$s, %2$s i %3$s</string>
+    <string name="history_but">%1$s, ale %2$s</string>
+    <string name="history_same">Mniej więcej tak samo jak na początku.</string>
+    <string name="history_shelf">Twoja półka</string>
+    <string name="history_shelf_hint">Jeden słoik na tydzień. Dotknij słoika, aby otworzyć ten tydzień.</string>
+    <string name="history_chart_unlocks">Odblokowania dziennie</string>
+    <string name="history_chart_habit">Udział z nawyku</string>
+    <string name="history_chart_habit_hint">Ze wszystkich odblokowań, w skali 0–100 %.</string>
+    <string name="history_chart_screen">Czas na ekranie dziennie</string>
+    <string name="history_chart_screen_hint">Od odblokowania do wygaszenia ekranu, łącznie.</string>
+    <string name="history_this_week">ten tydzień</string>
+    <string name="history_first_week">Tydzień 1 z 2</string>
+    <string name="history_first_title">Trendy pojawią się w przyszłym tygodniu.</string>
+    <string name="history_first_started">Pierwsze odblokowanie: %s.</string>
+    <string name="history_coming">Od drugiego tygodnia pojawią się tu</string>
 
     <string name="reasons_title">Powody</string>
     <string name="reasons_subtitle">Najczęstsze na górze. Przy odblokowaniu układają się według pory dnia.</string>
@@ -146,6 +214,18 @@
     <string name="reflection_as_usual">Tyle co zwykle</string>
     <string name="settings_background">Działanie w tle</string>
     <string name="settings_battery_ok">Aplikacja może działać w tle bez ograniczeń.</string>
+    <string name="settings_data">Twoje dane</string>
+    <string name="settings_export">Eksport historii</string>
+    <string name="settings_export_hint">Każde odblokowanie jako plik CSV (UTF-8) do arkusza. Miejsce zapisu wybierasz ty.</string>
+    <string name="settings_export_button">Eksportuj</string>
+    <plurals name="settings_export_count">
+        <item quantity="one">%1$d odblokowanie od %2$s.</item>
+        <item quantity="few">%1$d odblokowania od %2$s.</item>
+        <item quantity="many">%1$d odblokowań od %2$s.</item>
+        <item quantity="other">%1$d odblokowania od %2$s.</item>
+    </plurals>
+    <string name="settings_export_done">Zapisano.</string>
+    <string name="settings_export_failed">Nie udało się zapisać pliku.</string>
     <string name="settings_free_title">Za darmo. Bez reklam. Bez śledzenia.</string>
     <string name="settings_free_text">Pomaga ci? Mnie pomoże kawa.</string>
     <string name="settings_coffee">Postaw mi kawę</string>

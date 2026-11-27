@@ -77,6 +77,66 @@
     <string name="week_habit_hours">Habit hours</string>
     <string name="week_habit_hours_period">Just-habit unlocks, last 4 weeks</string>
     <string name="week_habit_peak">Most often %1$s–%2$s</string>
+    <string name="week_habit_hours_until">Just-habit unlocks, 4 weeks to %s</string>
+    <string name="week_last">Last week</string>
+    <string name="week_so_far">%s · so far</string>
+    <string name="week_previous">Earlier week</string>
+    <string name="week_next">Later week</string>
+    <string name="week_back_to_now">Back to this week</string>
+    <plurals name="week_fewer_now">
+        <item quantity="one">%d fewer than last week by now</item>
+        <item quantity="other">%d fewer than last week by now</item>
+    </plurals>
+    <plurals name="week_more_now">
+        <item quantity="one">%d more than last week by now</item>
+        <item quantity="other">%d more than last week by now</item>
+    </plurals>
+    <string name="week_same_now">same as last week by now</string>
+    <plurals name="week_fewer_before">
+        <item quantity="one">%d fewer than the week before</item>
+        <item quantity="other">%d fewer than the week before</item>
+    </plurals>
+    <plurals name="week_more_before">
+        <item quantity="one">%d more than the week before</item>
+        <item quantity="other">%d more than the week before</item>
+    </plurals>
+    <string name="week_same_before">same as the week before</string>
+    <string name="week_earlier">Earlier weeks</string>
+    <string name="week_all_weeks">All weeks</string>
+    <string name="week_now">now</string>
+    <string name="week_of">Week of %s</string>
+    <string name="week_earlier_caption">Jar height: unlocks per day. Orange: just habit.</string>
+
+    <string name="history_range_3m">3 months</string>
+    <string name="history_range_1y">1 year</string>
+    <string name="history_range_all">All</string>
+    <string name="history_since">Since you started on %s</string>
+    <string name="history_last_3m">Last 3 months</string>
+    <string name="history_last_1y">Last year</string>
+    <string name="history_unlocks_per_day">unlocks per day</string>
+    <string name="history_screen_per_day">screen time per day</string>
+    <string name="history_fewer_unlocks">fewer unlocks</string>
+    <string name="history_more_unlocks">more unlocks</string>
+    <string name="history_less_habit">less habit</string>
+    <string name="history_more_habit">more habit</string>
+    <string name="history_less_screen">less screen time</string>
+    <string name="history_more_screen">more screen time</string>
+    <string name="history_list_two">%1$s and %2$s</string>
+    <string name="history_list_three">%1$s, %2$s and %3$s</string>
+    <string name="history_but">%1$s, but %2$s</string>
+    <string name="history_same">About the same as when you started.</string>
+    <string name="history_shelf">Your shelf</string>
+    <string name="history_shelf_hint">One jar per week. Tap a jar to open that week.</string>
+    <string name="history_chart_unlocks">Unlocks per day</string>
+    <string name="history_chart_habit">Just-habit share</string>
+    <string name="history_chart_habit_hint">Of all sessions, on a scale of 0–100%.</string>
+    <string name="history_chart_screen">Screen time per day</string>
+    <string name="history_chart_screen_hint">From unlock to screen off, added up.</string>
+    <string name="history_this_week">this week</string>
+    <string name="history_first_week">Week 1 of 2</string>
+    <string name="history_first_title">Trends start next week.</string>
+    <string name="history_first_started">You started on %s.</string>
+    <string name="history_coming">Coming from your second week</string>
 
     <string name="reasons_title">Reasons</string>
     <string name="reasons_subtitle">Most used first. When you unlock, they are sorted for the time of day.</string>
@@ -130,6 +190,16 @@
     <string name="reflection_as_usual">As many as usual</string>
     <string name="settings_background">Background</string>
     <string name="settings_battery_ok">Battery usage is unrestricted.</string>
+    <string name="settings_data">Your data</string>
+    <string name="settings_export">Export history</string>
+    <string name="settings_export_hint">Every unlock as a CSV file (UTF-8), for a spreadsheet. You choose where to save it.</string>
+    <string name="settings_export_button">Export</string>
+    <plurals name="settings_export_count">
+        <item quantity="one">%1$d unlock since %2$s.</item>
+        <item quantity="other">%1$d unlocks since %2$s.</item>
+    </plurals>
+    <string name="settings_export_done">Saved.</string>
+    <string name="settings_export_failed">Could not save the file.</string>
     <string name="settings_free_title">Free. No ads. No tracking.</string>
     <string name="settings_free_text">If it helps you, a coffee helps me.</string>
     <string name="settings_coffee">Buy me a coffee</string>

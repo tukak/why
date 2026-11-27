@@ -80,21 +80,23 @@ class StatsTest {
             event(at(today, 12), lengthMinutes = 4, text = "Pay for parking"),
             event(at(today, 13), lengthMinutes = 30),
         )
-        val week = summarizeWeek(events, at(today, 23), zone)
+        val monday = today.minusDays(2)
+        val week = summarizeWeek(events, monday, at(today, 23), zone)
         assertEquals(10 * minute, week.habitAvgMillis)
         assertEquals(3 * minute, week.reasonAvgMillis)
         assertEquals(20 * minute, week.timeByAnswer[Answer.Habit])
         assertEquals(7, week.days.size)
-        assertEquals(today, week.days.last().date)
-        assertEquals(5, week.days.last().events.size)
-        assertEquals(2, week.days.last().events.count { it.answer == Answer.Habit })
+        assertEquals(monday, week.days.first().date)
+        assertEquals(today, week.days[2].date)
+        assertEquals(5, week.days[2].events.size)
+        assertEquals(2, week.days[2].events.count { it.answer == Answer.Habit })
     }
 
     @Test
     fun `opening the app from the question is its own answer, not a habit, and counts as a reason`() {
         val check = UnlockEvent(unlockedAt = at(today, 9), lockedAt = at(today, 9) + 2 * minute, isAppCheck = true)
         assertEquals(Answer.AppCheck, check.answer)
-        val week = summarizeWeek(listOf(check), at(today, 12), zone)
+        val week = summarizeWeek(listOf(check), today.minusDays(2), at(today, 12), zone)
         assertNull(week.habitAvgMillis)
         assertEquals(2 * minute, week.reasonAvgMillis)
     }

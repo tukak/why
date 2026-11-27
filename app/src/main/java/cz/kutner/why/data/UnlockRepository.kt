@@ -8,12 +8,14 @@ import cz.kutner.why.data.db.UnlockDao
 import cz.kutner.why.data.db.UnlockEvent
 import cz.kutner.why.domain.TimeOfDayOrder
 import cz.kutner.why.domain.TypedReasons
+import cz.kutner.why.domain.writeHistoryCsv
 import cz.kutner.why.ui.theme.PebbleShape
 import cz.kutner.why.ui.theme.ReasonColor
 import java.time.ZoneId
 import kotlin.time.Duration.Companion.days
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 
 enum class OfferDecision { Add, NotNow, Never }
 
@@ -116,6 +118,17 @@ class UnlockRepository(
     suspend fun countSince(from: Long): Int = unlockDao.countSince(from)
 
     fun eventsSince(from: Long): Flow<List<UnlockEvent>> = unlockDao.observeSince(from)
+
+    /** From [from] included to [to] excluded. */
+    fun eventsBetween(from: Long, to: Long): Flow<List<UnlockEvent>> = unlockDao.observeBetween(from, to)
+
+    val firstUnlock: Flow<Long?> = unlockDao.observeFirstUnlock()
+
+    val unlockTotal: Flow<Int> = unlockDao.observeCount()
+
+    suspend fun exportCsv(out: Appendable, zone: ZoneId) {
+        writeHistoryCsv(out, unlockDao.all(), reasonDao.observeAll().first().associateBy { it.id }, zone)
+    }
 }
 
 private val ORDER_HISTORY_MS = 30.days.inWholeMilliseconds
